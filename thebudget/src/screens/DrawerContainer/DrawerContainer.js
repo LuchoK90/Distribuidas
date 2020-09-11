@@ -11,7 +11,7 @@ export default class DrawerContainer extends React.Component {
       <View style={styles.content}>
         <View style={styles.container}>
           <MenuButton
-            title="HOME"
+            title="DASHBOARD"
             source={require('../../../assets/icons/home.png')}
             onPress={() => {
               navigation.navigate('Home');
@@ -19,7 +19,7 @@ export default class DrawerContainer extends React.Component {
             }}
           />
           <MenuButton
-            title="CATEGORIES"
+            title="INGRESOS"
             source={require('../../../assets/icons/category.png')}
             onPress={() => {
               navigation.navigate('Categories');
@@ -27,7 +27,55 @@ export default class DrawerContainer extends React.Component {
             }}
           />
           <MenuButton
-            title="SEARCH"
+            title="EGRESOS"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+           <MenuButton
+            title="TARJETAS"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+           <MenuButton
+            title="CUENTAS BANCARIAS"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+           <MenuButton
+            title="INVERSIONES"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+           <MenuButton
+            title="PRÉSTAMOS"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+          <MenuButton
+            title="PRESUPUESTO"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+              navigation.navigate('Search');
+              navigation.closeDrawer();
+            }}
+          />
+           <MenuButton
+            title="SALIR"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
               navigation.navigate('Search');
