@@ -5,8 +5,8 @@ import {createStackNavigator} from 'react-navigation-stack'
 import {createStackNavigator} from '@react-navigation/stack'
 import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
-import HomeScreen from '../screens/Home/HomeScreen';
-import CategoriesScreen from '../screens/Categories/CategoriesScreen';
+import Dashboard from '../screens/Home/HomeScreen';
+import Ingresos from '../screens/Ingreso/Ingreso';
 import RecipeScreen from '../screens/Recipe/RecipeScreen';
 import RecipesListScreen from '../screens/RecipesList/RecipesListScreen';
 import DrawerContainer from '../screens/DrawerContainer/DrawerContainer';
@@ -41,8 +41,8 @@ function MainNavigator() {
 
 const MainNavigator = createStackNavigator(
   {
-    Home: HomeScreen,
-    Categories: CategoriesScreen,
+    Dashboard: Dashboard,
+    Ingresos: Ingresos,
     Recipe: RecipeScreen,
     RecipesList: RecipesListScreen,
     Ingredient: IngredientScreen,

@@ -14,7 +14,7 @@ export default class DrawerContainer extends React.Component {
             title="DASHBOARD"
             source={require('../../../assets/icons/home.png')}
             onPress={() => {
-              navigation.navigate('Home');
+              navigation.navigate('Dashboard');
               navigation.closeDrawer();
             }}
           />
