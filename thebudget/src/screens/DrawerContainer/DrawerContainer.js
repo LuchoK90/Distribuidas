@@ -22,7 +22,7 @@ export default class DrawerContainer extends React.Component {
             title="INGRESOS"
             source={require('../../../assets/icons/category.png')}
             onPress={() => {
-              navigation.navigate('Categories');
+              navigation.navigate('Ingresos');
               navigation.closeDrawer();
             }}
           />
