@@ -3,19 +3,19 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 250,
+    height: 270,
     width: '100%',
     marginTop: 10,
     padding: 14,
-    borderColor: 'lightblue',
+    borderColor: 'gray',
     borderWidth: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-    // backgroundColor: '#2cd18a'
+    alignItems: 'center',
+    backgroundColor: 'lightblue'
   },
   text: {
-    fontSize: 14,
-    color: 'gray'
+    fontSize: 17,
+    color: 'white'
   }
 });
 

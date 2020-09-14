@@ -7,12 +7,22 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
 import Dashboard from '../screens/Home/HomeScreen';
 import Ingresos from '../screens/Ingreso/Ingreso';
-import RecipeScreen from '../screens/Recipe/RecipeScreen';
+import CuentasBancarias from '../screens/CuentaBancaria/CuentaBancaria';
+import Transferencias from '../screens/Transferencias/Transferencias';
 import RecipesListScreen from '../screens/RecipesList/RecipesListScreen';
 import DrawerContainer from '../screens/DrawerContainer/DrawerContainer';
 import IngredientScreen from '../screens/Ingredient/IngredientScreen';
+import NuevaCuenta from '../screens/NuevaCuenta/NuevaCuenta';
 import SearchScreen from '../screens/Search/SearchScreen';
 import IngredientsDetailsScreen from '../screens/IngredientsDetails/IngredientsDetailsScreen';
+import Inversiones from '../screens/Inversiones/Inversiones';
+import Invertir from '../screens/Invertir/Invertir';
+import AgregarPlazoFijo from '../screens/AgregarPlazoFijo/AgregarPlazoFijo';
+import AgregarTitulo from '../screens/AgregarTitulo/AgregarTitulo';
+import AgregarAcciones from '../screens/AgregarAcciones/AgregarAcciones';
+import Prestamos from '../screens/Prestamos/Prestamos';
+import OtorgarPrestamo from '../screens/OtorgarPrestamo/OtorgarPrestamo';
+import SolicitarPrestamo from '../screens/SolicitarPrestamo/SolicitarPrestamo';
 
 /* const Stack = createStackNavigator();
 
@@ -43,11 +53,21 @@ const MainNavigator = createStackNavigator(
   {
     Dashboard: Dashboard,
     Ingresos: Ingresos,
-    Recipe: RecipeScreen,
+    CuentasBancarias: CuentasBancarias,
+    Transferencias: Transferencias,
     RecipesList: RecipesListScreen,
     Ingredient: IngredientScreen,
-    Search: SearchScreen,
-    IngredientsDetails: IngredientsDetailsScreen
+    Search: SearchScreen, 
+    IngredientsDetails: IngredientsDetailsScreen,
+    NuevaCuenta: NuevaCuenta,
+    Invertir: Invertir,
+    AgregarPlazoFijo: AgregarPlazoFijo,
+    AgregarAcciones: AgregarAcciones,
+    AgregarTitulo: AgregarTitulo,
+    Prestamos: Prestamos,
+    OtorgarPrestamo: OtorgarPrestamo,
+    SolicitarPrestamo: SolicitarPrestamo,
+    Inversiones: Inversiones
   },
   {
     initialRouteName: 'Dashboard',

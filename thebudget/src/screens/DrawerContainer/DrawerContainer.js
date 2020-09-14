@@ -46,7 +46,7 @@ export default class DrawerContainer extends React.Component {
             title="CUENTAS BANCARIAS"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('CuentasBancarias');
               navigation.closeDrawer();
             }}
           />
@@ -54,7 +54,7 @@ export default class DrawerContainer extends React.Component {
             title="INVERSIONES"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('Inversiones');
               navigation.closeDrawer();
             }}
           />
@@ -62,7 +62,7 @@ export default class DrawerContainer extends React.Component {
             title="PRÉSTAMOS"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('Prestamos');
               navigation.closeDrawer();
             }}
           />

@@ -8,7 +8,7 @@ export default class ViewIngredientsButton extends React.Component {
     return (
       <TouchableHighlight underlayColor='lightblue' onPress={this.props.onPress}>
         <View style={styles.container}>
-          <Text style={styles.text}>Realizar Transferencia</Text>
+          <Text style={styles.text}>Confirmar</Text>
         </View>
       </TouchableHighlight>
     );

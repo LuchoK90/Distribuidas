@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
   infoRecipeName: {
     fontSize: 28,
     margin: 10,
+    marginTop: 60,
+    marginBottom:0,
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center'
