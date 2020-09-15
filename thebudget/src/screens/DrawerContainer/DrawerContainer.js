@@ -10,6 +10,14 @@ export default class DrawerContainer extends React.Component {
     return (
       <View style={styles.content}>
         <View style={styles.container}>
+        <MenuButton
+            title="LOGIN"
+            source={require('../../../assets/icons/dashboard.png')}
+            onPress={() => {
+              navigation.navigate('Login');
+              navigation.closeDrawer();
+            }}
+          />
           <MenuButton
             title="DASHBOARD"
             source={require('../../../assets/icons/dashboard.png')}
@@ -70,7 +78,7 @@ export default class DrawerContainer extends React.Component {
             title="PRESUPUESTO"
             source={require('../../../assets/icons/presupuesto.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('PresupuestoView');
               navigation.closeDrawer();
             }}
           />

@@ -7,6 +7,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
 import Dashboard from '../screens/Home/HomeScreen';
 import CuentasBancarias from '../screens/CuentaBancaria/CuentaBancaria';
+import Login from '../screens/Login/Login';
 import Transferencias from '../screens/Transferencias/Transferencias';
 import RecipesListScreen from '../screens/RecipesList/RecipesListScreen';
 import DrawerContainer from '../screens/DrawerContainer/DrawerContainer';
@@ -28,6 +29,8 @@ import EgresoView from '../screens/Egreso/EgresoView';
 import Tarjeta from '../screens/Tarjeta/Tarjeta';
 import TarjetaView from '../screens/Tarjeta/TarjetaView';
 import IngresoView from '../screens/Ingreso/IngresoView';
+import Presupuesto from '../screens/Presupuesto/Presupuesto';
+import PresupuestoView from '../screens/Presupuesto/PresupuestoView';
 
 /* const Stack = createStackNavigator();
 
@@ -57,6 +60,7 @@ function MainNavigator() {
 const MainNavigator = createStackNavigator(
   {
     Dashboard: Dashboard,
+    Login: Login,
     CuentasBancarias: CuentasBancarias,
     Transferencias: Transferencias,
     RecipesList: RecipesListScreen,
@@ -77,7 +81,9 @@ const MainNavigator = createStackNavigator(
     Ingreso: Ingreso,
     TarjetaView: TarjetaView,
     IngresoView: IngresoView,
-    Tarjeta: Tarjeta
+    Tarjeta: Tarjeta,
+    Presupuesto: Presupuesto,
+    PresupuestoView: PresupuestoView,
   },
   {
     initialRouteName: 'Dashboard',
