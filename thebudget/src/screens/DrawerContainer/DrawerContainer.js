@@ -22,7 +22,7 @@ export default class DrawerContainer extends React.Component {
             title="INGRESOS"
             source={require('../../../assets/icons/category.png')}
             onPress={() => {
-              navigation.navigate('Ingresos');
+              navigation.navigate('IngresoView');
               navigation.closeDrawer();
             }}
           />
@@ -30,7 +30,7 @@ export default class DrawerContainer extends React.Component {
             title="EGRESOS"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('EgresoView');
               navigation.closeDrawer();
             }}
           />
@@ -38,7 +38,7 @@ export default class DrawerContainer extends React.Component {
             title="TARJETAS"
             source={require('../../../assets/icons/search.png')}
             onPress={() => {
-              navigation.navigate('Search');
+              navigation.navigate('TarjetaView');
               navigation.closeDrawer();
             }}
           />

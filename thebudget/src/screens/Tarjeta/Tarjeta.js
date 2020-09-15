@@ -1,10 +1,10 @@
-import React, { Component, useState }  from 'react';
+import React , { Component } from 'react';
 import {
   FlatList,
   Text,
   View,
   Image,
-  TouchableHighlight, TextInput, Switch
+  TouchableHighlight, TextInput
 } from 'react-native';
 import hola from './styles';
 import { categories } from '../../data/dataArrays';
@@ -15,11 +15,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
   Dropdown }
   from 'react-native-material-dropdown';
-  import { Checkbox } from 'react-native-paper';
 
 
 
-export default class Ingreso extends React.Component {
+export default class Tarjeta extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: 'true',
@@ -32,7 +31,7 @@ export default class Ingreso extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Ingreso'
+    title: 'Tarjeta'
   };
 
   constructor(props) {
@@ -47,61 +46,56 @@ export default class Ingreso extends React.Component {
       text: ''
     })
   }
-  MyComponent = () => {
-    const [checked, setChecked] = React.useState(false);
-  
-    return (
-      <View style={styles.periodico}>
-      <Checkbox 
-        status={checked ? 'checked' : 'unchecked'}
-        onPress={() => {
-          setChecked(!checked);
-        }}
-      />
-      <Text>Periódico</Text>
-      </View>
-    );
-  };
 
   render(){
     const { navigation } = this.props;
-    let medioCobro=[{
-      value: '74144/78998',
+    let emisor=[{
+      value: 'Visa',
     },{
-      value: '74889/12321',
+      value: 'MasterCard',
     },{
-      value: '46546/45645',
+      value: 'Cabal',
     },{
-      value: 'Efectivo',
-    },]
-    let detalle=[{
-      value: 'Sueldo',
-    },{
-      value: 'Facturación Autónomo',
-    },{
-      value: 'Alquiler Propiedad',
+      value: 'American Express',
     }]
-    
     return(
       <View style={styles.viewContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder='Monto'
+          placeholder='Banco'
+          clearButtonMode='always'
+        />
+        <Dropdown 
+          label='Seleccionar entidad emisora'
+          data={emisor}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder='Últimos 4 números'
           clearButtonMode='always'
           keyboardType='number-pad'
         />
-        <Dropdown 
-          label='Seleccionar Detalle'
-          data={detalle}
+        <TextInput
+          style={styles.textInput}
+          placeholder='Fecha Vencimiento'
+          clearButtonMode='always'
+          keyboardType='number-pad'
         />
-        <Dropdown 
-          label='Seleccionar medio de cobro'
-          data={medioCobro}
+        <TextInput
+          style={styles.textInput}
+          placeholder='Fecha cierre resumen'
+          clearButtonMode='always'
+          keyboardType='number-pad'
         />
-        <this.MyComponent></this.MyComponent>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Fecha vencimiento resumen'
+          clearButtonMode='always'
+          keyboardType='number-pad'
+        />
         <Button 
         title="Guardar"
-        onPress={() => navigation.navigate('IngresoView')}
+        onPress={() => navigation.navigate('TarjetaView')}
         />  
       </View>
     );
@@ -109,7 +103,6 @@ export default class Ingreso extends React.Component {
 } 
 //onPress={navigation.navigate('IngredientsDetails', {  })}
 //onPress={() => Alert.alert('Simple Button pressed')}
-//onPress={() => navigation.navigate('IngresoView')}
           //onPress={this.submitAndClear}
 
      /*      <Dropdown 
@@ -205,19 +198,6 @@ const styles = StyleSheet.create({
     //borderColor: 'gray',
     paddingLeft: 20,
     margin: 10
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  periodico:{
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20
   }
-
 })
-
-
 AppRegistry.registerComponent('clear-text', () => ChangeText)

@@ -1,10 +1,10 @@
-import React, { Component, useState }  from 'react';
+import React , { Component , useState} from 'react';
 import {
   FlatList,
   Text,
   View,
   Image,
-  TouchableHighlight, TextInput, Switch
+  TouchableHighlight, TextInput
 } from 'react-native';
 import hola from './styles';
 import { categories } from '../../data/dataArrays';
@@ -19,7 +19,7 @@ import {
 
 
 
-export default class Ingreso extends React.Component {
+export default class Egreso extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: 'true',
@@ -32,7 +32,7 @@ export default class Ingreso extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Ingreso'
+    title: 'Egreso'
   };
 
   constructor(props) {
@@ -47,6 +47,7 @@ export default class Ingreso extends React.Component {
       text: ''
     })
   }
+
   MyComponent = () => {
     const [checked, setChecked] = React.useState(false);
   
@@ -65,23 +66,53 @@ export default class Ingreso extends React.Component {
 
   render(){
     const { navigation } = this.props;
-    let medioCobro=[{
-      value: '74144/78998',
+    let gasto=[{
+      value: 'Luz',
     },{
-      value: '74889/12321',
+      value: 'Gas',
     },{
-      value: '46546/45645',
+      value: 'Cable',
     },{
-      value: 'Efectivo',
-    },]
-    let detalle=[{
-      value: 'Sueldo',
+      value: 'Teléfono',
     },{
-      value: 'Facturación Autónomo',
+      value: 'Impuestos Nacionales',
     },{
-      value: 'Alquiler Propiedad',
+      value: 'Impuestos Provinciales',
+    },{
+      value: 'UADE',
+    },{
+      value: 'Obra Social',
+    },{
+      value: 'Comida',
+    },{
+      value: 'Varios',
+    },{
+      value: 'Comida',
+    },{
+      value: 'Viáticos',
+    },{
+      value: 'Entretenimiento',
     }]
-    
+    let moneda=[{
+      value: 'Peso Argentino ($)',
+    },{
+      value: 'Dólar Estadounidense (u$s)',
+    },{
+      value: 'Euro',
+    }]
+    let medioPago=[{
+      value: 'Contado',
+    },{
+      value: 'Tarjeta Débito',
+    },{
+      value: 'Tarjeta Crédito',
+    },{
+      value: 'Débito Automático',
+    },{
+      value: 'Transferencia',
+    },{
+      value: 'MercadoPago',
+    }]
     return(
       <View style={styles.viewContainer}>
         <TextInput
@@ -91,17 +122,27 @@ export default class Ingreso extends React.Component {
           keyboardType='number-pad'
         />
         <Dropdown 
-          label='Seleccionar Detalle'
-          data={detalle}
+          label='Seleccionar tipo de gasto'
+          data={gasto}
         />
         <Dropdown 
-          label='Seleccionar medio de cobro'
-          data={medioCobro}
+          label='Seleccionar medio de pago'
+          data={medioPago}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder='Cuotas'
+          clearButtonMode='always'
+          keyboardType='number-pad'
         />
         <this.MyComponent></this.MyComponent>
         <Button 
+        title="Adjuntar comprobante"
+        //onPress={() => navigation.navigate('EgresoView')}
+        />
+        <Button 
         title="Guardar"
-        onPress={() => navigation.navigate('IngresoView')}
+        onPress={() => navigation.navigate('EgresoView')}
         />  
       </View>
     );
@@ -109,7 +150,6 @@ export default class Ingreso extends React.Component {
 } 
 //onPress={navigation.navigate('IngredientsDetails', {  })}
 //onPress={() => Alert.alert('Simple Button pressed')}
-//onPress={() => navigation.navigate('IngresoView')}
           //onPress={this.submitAndClear}
 
      /*      <Dropdown 
@@ -206,18 +246,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     margin: 10
   },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
   periodico:{
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20
   }
-
 })
-
-
 AppRegistry.registerComponent('clear-text', () => ChangeText)

@@ -6,7 +6,6 @@ import {createStackNavigator} from '@react-navigation/stack'
 import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
 import Dashboard from '../screens/Home/HomeScreen';
-import Ingresos from '../screens/Ingreso/Ingreso';
 import CuentasBancarias from '../screens/CuentaBancaria/CuentaBancaria';
 import Transferencias from '../screens/Transferencias/Transferencias';
 import RecipesListScreen from '../screens/RecipesList/RecipesListScreen';
@@ -23,6 +22,12 @@ import AgregarAcciones from '../screens/AgregarAcciones/AgregarAcciones';
 import Prestamos from '../screens/Prestamos/Prestamos';
 import OtorgarPrestamo from '../screens/OtorgarPrestamo/OtorgarPrestamo';
 import SolicitarPrestamo from '../screens/SolicitarPrestamo/SolicitarPrestamo';
+import Ingreso from '../screens/Ingreso/Ingreso';
+import Egreso from '../screens/Egreso/Egreso';
+import EgresoView from '../screens/Egreso/EgresoView';
+import Tarjeta from '../screens/Tarjeta/Tarjeta';
+import TarjetaView from '../screens/Tarjeta/TarjetaView';
+import IngresoView from '../screens/Ingreso/IngresoView';
 
 /* const Stack = createStackNavigator();
 
@@ -52,7 +57,6 @@ function MainNavigator() {
 const MainNavigator = createStackNavigator(
   {
     Dashboard: Dashboard,
-    Ingresos: Ingresos,
     CuentasBancarias: CuentasBancarias,
     Transferencias: Transferencias,
     RecipesList: RecipesListScreen,
@@ -67,7 +71,13 @@ const MainNavigator = createStackNavigator(
     Prestamos: Prestamos,
     OtorgarPrestamo: OtorgarPrestamo,
     SolicitarPrestamo: SolicitarPrestamo,
-    Inversiones: Inversiones
+    Inversiones: Inversiones,
+    EgresoView: EgresoView,
+    Egreso: Egreso,
+    Ingreso: Ingreso,
+    TarjetaView: TarjetaView,
+    IngresoView: IngresoView,
+    Tarjeta: Tarjeta
   },
   {
     initialRouteName: 'Dashboard',
