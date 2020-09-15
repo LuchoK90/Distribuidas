@@ -72,7 +72,7 @@ export default class RecipeScreen extends React.Component {
          <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Tarjeta Asociada</Text>
          </View>
-         <SelectTarjeta/>
+         <InputCBUDestino/>
          <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Saldo</Text>
          </View>

@@ -12,7 +12,7 @@ export default class DrawerContainer extends React.Component {
         <View style={styles.container}>
           <MenuButton
             title="DASHBOARD"
-            source={require('../../../assets/icons/home.png')}
+            source={require('../../../assets/icons/dashboard.png')}
             onPress={() => {
               navigation.navigate('Dashboard');
               navigation.closeDrawer();
@@ -20,7 +20,7 @@ export default class DrawerContainer extends React.Component {
           />
           <MenuButton
             title="INGRESOS"
-            source={require('../../../assets/icons/category.png')}
+            source={require('../../../assets/icons/ingresos.png')}
             onPress={() => {
               navigation.navigate('IngresoView');
               navigation.closeDrawer();
@@ -28,7 +28,7 @@ export default class DrawerContainer extends React.Component {
           />
           <MenuButton
             title="EGRESOS"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/egresos.png')}
             onPress={() => {
               navigation.navigate('EgresoView');
               navigation.closeDrawer();
@@ -36,7 +36,7 @@ export default class DrawerContainer extends React.Component {
           />
            <MenuButton
             title="TARJETAS"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/cards.png')}
             onPress={() => {
               navigation.navigate('TarjetaView');
               navigation.closeDrawer();
@@ -44,7 +44,7 @@ export default class DrawerContainer extends React.Component {
           />
            <MenuButton
             title="CUENTAS BANCARIAS"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/cuentas.png')}
             onPress={() => {
               navigation.navigate('CuentasBancarias');
               navigation.closeDrawer();
@@ -52,7 +52,7 @@ export default class DrawerContainer extends React.Component {
           />
            <MenuButton
             title="INVERSIONES"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/inversiones.png')}
             onPress={() => {
               navigation.navigate('Inversiones');
               navigation.closeDrawer();
@@ -60,7 +60,7 @@ export default class DrawerContainer extends React.Component {
           />
            <MenuButton
             title="PRÉSTAMOS"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/prestamos.png')}
             onPress={() => {
               navigation.navigate('Prestamos');
               navigation.closeDrawer();
@@ -68,7 +68,7 @@ export default class DrawerContainer extends React.Component {
           />
           <MenuButton
             title="PRESUPUESTO"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/presupuesto.png')}
             onPress={() => {
               navigation.navigate('Search');
               navigation.closeDrawer();
@@ -76,7 +76,7 @@ export default class DrawerContainer extends React.Component {
           />
            <MenuButton
             title="SALIR"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/exit.png')}
             onPress={() => {
               navigation.navigate('Search');
               navigation.closeDrawer();
