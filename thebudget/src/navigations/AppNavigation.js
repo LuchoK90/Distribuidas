@@ -88,7 +88,7 @@ const MainNavigator = createStackNavigator(
     GastosAcumulados:GastosAcumulados
   },
   {
-    initialRouteName: 'Dashboard',
+    initialRouteName: 'Login',
     // headerMode: 'float',
     defaulfNavigationOptions: ({ navigation }) => ({
       headerTitleStyle: {

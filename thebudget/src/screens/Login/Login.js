@@ -2,16 +2,17 @@ import React from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import MenuImage from '../../components/MenuImage/MenuImage';
+import { Button } from 'react-native-paper';
 
 export default class CategoriesScreen extends React.Component {
-    static navigationOptions = ({ navigation }) => ({
+   /*  static navigationOptions = ({ navigation }) => ({
         title: 'Login',
         headerLeft: () => <MenuImage
             onPress={() => {
                 navigation.openDrawer();
             }}
         />
-    });
+    }); */
 
     constructor(props) {
         super(props);
@@ -23,6 +24,7 @@ export default class CategoriesScreen extends React.Component {
     }
 
     render() {
+        const { navigation } = this.props;
         return (
 
             <View style={styles.container}>
@@ -48,7 +50,8 @@ export default class CategoriesScreen extends React.Component {
                 </View>
 
                 <TouchableOpacity style={styles.loginBtn}>
-                    <Text style={styles.loginText}>LOGIN</Text>
+                    <Button style={styles.loginText} onPress={() => navigation.navigate('Dashboard')}>LOGIN</Button>
+                    
                 </TouchableOpacity>
 
             </View>
