@@ -31,6 +31,7 @@ import TarjetaView from '../screens/Tarjeta/TarjetaView';
 import IngresoView from '../screens/Ingreso/IngresoView';
 import Presupuesto from '../screens/Presupuesto/Presupuesto';
 import PresupuestoView from '../screens/Presupuesto/PresupuestoView';
+import GastosAcumulados from '../screens/Tarjeta/GastosAcumulados';
 
 /* const Stack = createStackNavigator();
 
@@ -84,6 +85,7 @@ const MainNavigator = createStackNavigator(
     Tarjeta: Tarjeta,
     Presupuesto: Presupuesto,
     PresupuestoView: PresupuestoView,
+    GastosAcumulados:GastosAcumulados
   },
   {
     initialRouteName: 'Dashboard',
