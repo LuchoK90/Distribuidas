@@ -33,7 +33,7 @@ export default class TarjetaView extends React.Component {
 
       <View style={styles.container}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.elemento}>DÉBITO</Text>
+        <Text style={styles.elemento}>VISA</Text>
         <Text style={styles.elemento}>LIMITE: 3000</Text>
         <Text style={styles.elemento}>TARJETA: {item.tarjeta}</Text>
         <Text style={styles.elemento}>ACUMULADO: $ {item.saldo}</Text>

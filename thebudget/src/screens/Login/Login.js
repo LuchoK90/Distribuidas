@@ -30,7 +30,7 @@ export default class CategoriesScreen extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.logo}>Budget GO</Text>
 
-                <Image style={styles.infoPhoto} source={require('../../../assets/images/login.jpg')} />
+                <Image style={styles.infoPhoto} source={require('../../../assets/images/login.jpeg')} />
 
                 <View style={styles.inputView} >
                     <TextInput

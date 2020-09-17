@@ -94,13 +94,14 @@ export default class Presupuesto extends React.Component {
           keyboardType='number-pad'
         />
         <Dropdown 
-          label='Rubro'
-          data={rubro}
-        />
-        <Dropdown 
           label='Categoría'
           data={categoria}
         />
+        <Dropdown 
+          label='Rubro'
+          data={rubro}
+        />
+        
         
         <Button 
         title="Guardar"
