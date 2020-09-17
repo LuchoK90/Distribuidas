@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     fontSize:50,
     color:"#270570",
+    textAlign: 'center'
   },
   inputView:{
     width:"80%",

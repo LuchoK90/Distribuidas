@@ -28,9 +28,9 @@ export default class CategoriesScreen extends React.Component {
         return (
 
             <View style={styles.container}>
-                <Text style={styles.logo}>My budget App</Text>
+                <Text style={styles.logo}>Budget GO</Text>
 
-                <Image style={styles.infoPhoto} source={require('../../../assets/images/dolar.jpg')} />
+                <Image style={styles.infoPhoto} source={require('../../../assets/images/login.jpg')} />
 
                 <View style={styles.inputView} >
                     <TextInput

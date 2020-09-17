@@ -65,18 +65,24 @@ export default class Presupuesto extends React.Component {
   render(){
     const { navigation } = this.props;
     let categoria=[{
-      value: 'Gas',
+      value: 'Servicios',
     },{
-      value: 'municipal',
+      value: 'Impuestos',
     },{
-      value: 'Seguro',
+      value: 'Otros',
     }]
     let rubro=[{
-      value: 'Servicios',
+      value: 'Luz',
     },{
       value: 'Alquiler',
     },{
-      value: 'Auto',
+      value: 'Gas',
+    },{
+      value: 'Municipal',
+    },{
+      value: 'Provincial',
+    },{
+      value: 'Otro',
     }]
     
     return(
