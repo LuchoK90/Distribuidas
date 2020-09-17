@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     },
     
     HeadStyle: {
-        backgroundColor: '#DDD5F5'
+        backgroundColor: 'lightblue'
     }
 });
 

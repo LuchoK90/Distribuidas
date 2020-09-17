@@ -6,6 +6,8 @@ import {Table, Row, Rows} from 'react-native-table-component';
 import {BarChart, Grid} from 'react-native-svg-charts';
 import {PieChart} from "react-native-chart-kit";
 import {Dimensions} from "react-native";
+import {VictoryChart, VictoryGroup, VictoryBar, VictoryLegend, VictoryPie} from "victory-native";
+
 const screenWidth = Dimensions.get("window").width;
 
 export default class HomeScreen extends React.Component {
@@ -44,35 +46,35 @@ export default class HomeScreen extends React.Component {
                 legendFontSize: 15
             },
             {
-                name: "Tarjeta de Credito",
+                name: "TC",
                 population: 1000,
                 color: "#523563",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
-                name: "Tarjeta de Débito",
+                name: "TD",
                 population: 1000,
                 color: "#a3bf0a",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
-                name: "Débito Automático",
+                name: "Débito A.",
                 population: 500,
                 color: "#d14e57",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
-                name: "Transferencia",
+                name: "Transf.",
                 population: 750,
                 color: "#ecb3ff",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
-                name: "Mercado Pago",
+                name: "MP",
                 population: 500,
                 color: "#c78164",
                 legendFontColor: "#7F7F7F",
@@ -90,15 +92,15 @@ export default class HomeScreen extends React.Component {
         const HeadTable = ['Banco', 'N° Cuenta', 'Moneda', 'Saldo'];
         const DataTable = [
             ['Santander', '10', '$', '50.000,00'],
-            ['Frances', '20', 'U$S', '200,00'],
-            ['ICBC', '20', '€', '200,00']
+            ['Frances', '20', '$', '200,00'],
+            ['ICBC', '30', '$', '200,00']
         ]
 
         const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Moneda', 'Monto'];
         const DataTable_2 = [
-            ['Egresos', 'Gas', '20-09-2020', '$', '5.000,00'],
-            ['Inversiones', 'Plazo Fijo', '21-09-2020', 'U$S', '1.000,00'],
-            ['Prestamos', 'Cuota 2', '22-09-2020', '$', '2.000,00'],
+            ['Egresos', 'Gas', '20-09', '$', '5.000,00'],
+            ['Inversion', 'Plazo Fijo', '21-09', '$', '1.000,00'],
+            ['Prestamos', 'Cuota 2', '22-09', '$', '2.000,00'],
         ]
 
         const data1_ = [100, 50, 30, 100]
@@ -119,6 +121,21 @@ export default class HomeScreen extends React.Component {
         ]
 
 
+        const data_prueba = {
+            planned: [
+                {x: 'Ingresos', y: 6000},
+                {x: 'Egresos', y: 4000},
+                {x: 'Inversiones', y: 1000},
+                {x: 'Prestamos', y: 2000},
+            ],        
+            actual: [
+                {x: 'Ingresos', y: 5000},
+                {x: 'Egresos', y: 8000},
+                {x: 'Inversiones', y: 1000},
+                {x: 'Prestamos', y: 1000},
+            ],
+        };
+
         return (
 
             <ScrollView>
@@ -132,7 +149,7 @@ export default class HomeScreen extends React.Component {
                     height={220}
                     chartConfig={chartConfig}
                     accessor="population"
-                    backgroundColor="#DDD5F5"
+                    backgroundColor="transparent"
                     paddingLeft="15"
                     absolute
                 />
@@ -150,16 +167,47 @@ export default class HomeScreen extends React.Component {
                 </Table>
 
                 <Text style={styles.graficosNombre}>{'Desvíos'}</Text>
-                <BarChart style={{ height: 200 }}
-                    data={barData}
-                    yAccessor={({ item }) => item.value}
-                    svg={{
-                        fill: '#DDD5F5',
-                    }}
-                    contentInset={{ top: 30, bottom: 30 }}>
-                    <Grid />
-                </BarChart>
 
+                <VictoryChart>
+                 
+                    <VictoryGroup offset={20}>
+                        <VictoryBar 
+                            data ={data_prueba.actual} 
+                                style={{
+                                    data: {
+                                        fill: 'lightblue',
+                                    },
+                                }}
+                        />
+                        <VictoryBar 
+                            data ={data_prueba.planned} 
+                            style={{
+                                data: {
+                                    fill: '#270570',
+                                },
+                            }}
+                        />
+                    </VictoryGroup>
+                    <VictoryLegend 
+                        x={Dimensions.get('screen').width / 2 - 100}
+                        orientation = "horizontal"
+                        gutter={20}
+                        data={[
+                            {
+                                name: 'Real',
+                                symbol:{
+                                    fill: 'lightblue',
+                                },
+                            },
+                            {
+                                name: 'Presupuestado',
+                                symbol:{
+                                    fill: '#270570',
+                                },
+                            },
+                        ]}   
+                    />
+                </VictoryChart>   
             </ScrollView>
 
         );
