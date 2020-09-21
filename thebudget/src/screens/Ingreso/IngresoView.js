@@ -91,15 +91,6 @@ export default class IngresoView extends React.Component {
             <DataTable.Cell>Alquiler Propiedad</DataTable.Cell>
             <DataTable.Cell numeric>22000</DataTable.Cell>
             </DataTable.Row>
-
-            <DataTable.Pagination
-            page={1}
-            numberOfPages={3}
-            onPageChange={page => {
-                console.log(page);
-            }}
-            label="1-2 of 6"
-            />
         </DataTable>
       </View>
     );

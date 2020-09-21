@@ -184,7 +184,7 @@ export default class Ingreso extends React.Component {
     let { image } = this.state;
     const { selectedItems } = this.state;
     return (
-      <View>
+      <View style={styles.viewContainer}>
       
       <TextInput
       style={styles.textInput}
@@ -193,7 +193,7 @@ export default class Ingreso extends React.Component {
       keyboardType='number-pad'
     />
 
-    <Dropdown 
+    <Dropdown
       label='Seleccionar Detalle'
       data={detalle}
       mul
@@ -203,15 +203,15 @@ export default class Ingreso extends React.Component {
       data={medioCobro}
     />
     <this.MyComponent></this.MyComponent>
-    <ElegirFecha title="hasta"></ElegirFecha>
+    <ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
     <Dropdown 
       label='Periodicidad'
       data={meses}
       mul
     />
-    <Button title="Adjuntar Comprobante" onPress={this._pickImage} />
+    <Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={this._pickImage} />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    
+      <View style={{marginTop:20}}>
     <Button 
     title="Guardar"
     onPress={() => navigation.navigate('IngresoView')}
@@ -219,6 +219,7 @@ export default class Ingreso extends React.Component {
      
     
 
+     </View>
     
 
 
@@ -398,7 +399,8 @@ const styles = StyleSheet.create({
   viewContainer: {
     width: '90%',
     marginLeft: 20,
-    marginTop: 20
+    marginTop: 20,
+    padding: 10
   },
   textInput: {
     height: 40,

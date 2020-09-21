@@ -50,8 +50,10 @@ export default class CategoriesScreen extends React.Component {
                 </View>
 
                 <TouchableOpacity style={styles.loginBtn}>
-                    <Button style={styles.loginText} onPress={() => navigation.navigate('Dashboard')}>LOGIN</Button>
-                    
+                    <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>LOGIN</Text></Button>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.loginBtn}>
+                    <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>REGISTRARSE</Text></Button>
                 </TouchableOpacity>
 
             </View>

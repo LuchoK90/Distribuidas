@@ -34,7 +34,7 @@ export default class PresupuestoView extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'PresupuestoView'
+    title: 'Presupuesto'
   };
 
   constructor(props) {
@@ -70,7 +70,7 @@ export default class PresupuestoView extends React.Component {
         <DataTable>
             <DataTable.Header>
             <DataTable.Title>Mes</DataTable.Title>    
-            <DataTable.Title>Rubro</DataTable.Title>
+     
             <DataTable.Title>Categoría</DataTable.Title>
             <DataTable.Title numeric>Presup.</DataTable.Title>
             <DataTable.Title numeric>Real</DataTable.Title>
@@ -78,21 +78,11 @@ export default class PresupuestoView extends React.Component {
 
             <DataTable.Row>
             <DataTable.Cell>Sept.</DataTable.Cell>
-            <DataTable.Cell>Servicios</DataTable.Cell>
+ 
             <DataTable.Cell>Gas</DataTable.Cell>
             <DataTable.Cell numeric>1000</DataTable.Cell>
             <DataTable.Cell numeric>30000</DataTable.Cell>
             </DataTable.Row>
-
-
-            <DataTable.Pagination
-            page={1}
-            numberOfPages={3}
-            onPageChange={page => {
-                console.log(page);
-            }}
-            label="1-2 of 6"
-            />
         </DataTable>
       </View>
     );

@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   categoriesItemContainer: {
     flex: 1,
     margin: 10,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     height: 215,
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
   },
   categoriesPhoto: {
     width: '100%',
-    height: 155,
+    height: 105,
     borderRadius: 20,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   logo:{
     fontWeight:"bold",
     fontSize:50,
-    color:"#270570",
+    color:"#0e84e6",
     textAlign: 'center'
   },
   inputView:{
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   loginBtn:{
     width:"80%",
-    backgroundColor:"#270570",
+    backgroundColor:"#0e84e6",
     borderRadius:25,
     height:50,
     marginTop:20,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   infoPhoto: {
-    height: '40%',
+    height: '30%',
     width: '80%',
     marginTop:10,
   },

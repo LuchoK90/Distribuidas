@@ -91,6 +91,11 @@ export default class RecipeScreen extends React.Component {
            
            <Text style={styles.infoRecipe}>Ingrese monto a transferir ($)</Text>
          </View>
+         <InputCBUDestino/>
+         <View style={{marginTop:20}}>
+           
+           <Text style={styles.infoRecipe}>Ingrese Descripción</Text>
+         </View>
           <InputCBUDestino/>
           <View style={styles.infoContainer}>
             <BotonRealizarTransferencia
