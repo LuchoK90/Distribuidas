@@ -15,8 +15,10 @@ import {
   Dropdown }
   from 'react-native-material-dropdown';
   import { Checkbox } from 'react-native-paper';
-
-
+  import BotonPresupuestarIngresos from '../../components/botonPresupuestarIngresos/botonPresupuestarIngresos';
+  import BotonPresupuestarEgresos from '../../components/botonPresupuestarEgresos/botonPresupuestarEgresos';
+  import BotonPresupuestarInversiones from '../../components/botonPresupuestarInversiones/botonPresupuestarInversiones';
+  import BotonPresupuestarPrestamo from '../../components/botonPresupuestarPrestamo/botonPresupuestarPrestamo';
 
 export default class Presupuesto extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -31,7 +33,7 @@ export default class Presupuesto extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Presupuesto'
+    title: 'Seleccione Rubro'
   };
 
   constructor(props) {
@@ -62,6 +64,22 @@ export default class Presupuesto extends React.Component {
     );
   };
 
+  onPressPresupuestarIngresos = item => {
+    this.props.navigation.navigate('PresupuestarIngresos');
+  };
+
+  onPressPresupuestarEgresos = item => {
+    this.props.navigation.navigate('PresupuestarEgresos');
+  };
+
+  onPressPresupuestarInversiones = item => {
+    this.props.navigation.navigate('PresupuestarInversiones');
+  };
+
+  onPressPresupuestarPrestamos = item => {
+    this.props.navigation.navigate('PresupuestarPrestamos');
+  };
+
   render(){
     const { navigation } = this.props;
     let categoria=[{
@@ -82,28 +100,30 @@ export default class Presupuesto extends React.Component {
     }]
     
     return(
-      <View style={styles.viewContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder='Monto'
-          clearButtonMode='always'
-          keyboardType='number-pad'
-        />
-        <Dropdown 
-          label='Rubro'
-          data={rubro}
-        />
-        <Dropdown 
-          label='Categoría'
-          data={categoria}
-        />
+      <View style={styles.viewContainer}>        
+       <BotonPresupuestarIngresos 
+               onPress={() => {
+                this.onPressPresupuestarIngresos();
+              }}
+            /> 
+           
+            <BotonPresupuestarEgresos
+               onPress={() => {
+                this.onPressPresupuestarEgresos();
+              }}
+            />
         
-        
-        
-        <Button 
-        title="Guardar"
-        onPress={() => navigation.navigate('PresupuestoView')}
-        />  
+            <BotonPresupuestarInversiones
+               onPress={() => {
+                this.onPressPresupuestarInversiones();
+              }}
+            />
+
+<BotonPresupuestarPrestamo
+               onPress={() => {
+                this.onPressPresupuestarPrestamos();
+              }}
+            />
       </View>
     );
   }

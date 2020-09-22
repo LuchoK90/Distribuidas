@@ -31,6 +31,10 @@ import TarjetaView from '../screens/Tarjeta/TarjetaView';
 import IngresoView from '../screens/Ingreso/IngresoView';
 import Presupuesto from '../screens/Presupuesto/Presupuesto';
 import PresupuestoView from '../screens/Presupuesto/PresupuestoView';
+import PresupuestarIngresos from '../screens/PresupuestarIngresos/PresupuestarIngresos';
+import PresupuestarEgresos from '../screens/PresupuestarEgresos/PresupuestarEgresos';
+import PresupuestarInversiones from '../screens/PresupuestarInversiones/PresupuestarInversiones';
+import PresupuestarPrestamos from '../screens/PresupuestarPrestamos/PresupuestarPrestamos';
 import GastosAcumulados from '../screens/Tarjeta/GastosAcumulados';
 
 /* const Stack = createStackNavigator();
@@ -85,7 +89,11 @@ const MainNavigator = createStackNavigator(
     Tarjeta: Tarjeta,
     Presupuesto: Presupuesto,
     PresupuestoView: PresupuestoView,
-    GastosAcumulados:GastosAcumulados
+    GastosAcumulados:GastosAcumulados,
+    PresupuestarIngresos:PresupuestarIngresos,
+    PresupuestarEgresos:PresupuestarEgresos,
+    PresupuestarInversiones:PresupuestarInversiones,
+    PresupuestarPrestamos:PresupuestarPrestamos
   },
   {
     initialRouteName: 'Login',
