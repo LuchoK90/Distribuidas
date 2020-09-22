@@ -137,7 +137,7 @@ export default class Egreso extends React.Component {
           setChecked(!checked);
         }}
       />
-      <Text>Periódico</Text>
+      <Text>Débito Automático</Text>
       </View>
     );
   };
@@ -159,16 +159,38 @@ export default class Egreso extends React.Component {
     },{
       value: '74889/12321',
     },{
-      value: '46546/45645',
-    },{
       value: 'Efectivo',
     },]
     let detalle=[{
-      value: 'UADE',
+      value: 'Universidad',
     },{
       value: 'Luz',
     },{
       value: 'Gas',
+    },{
+      value: 'Cable',
+    },{
+      value: 'Telefono',
+    },{
+      value: 'Internet',
+    },{
+      value: 'Impuesto Nacional',
+    },{
+      value: 'Impuesto Provincial',
+    },{
+      value: 'Impuesto Municipal',
+    },{
+      value: 'Colegio',
+    },{
+      value: 'Obra Social',
+    },{
+      value: 'Gastos Varios',
+    },{
+      value: 'Comida',
+    },{
+      value: 'Viáticos',
+    },{
+      value: 'Entretenimiento',
     }]
     let meses=[{
       value: 'Todos los meses',
@@ -180,6 +202,18 @@ export default class Egreso extends React.Component {
       value: 'Cuatrimestral',
     },{
       value: 'Semestral',
+    }]
+
+    let Cuotas=[{
+      value: '3',
+    },{
+      value: '6',
+    },{
+      value: '9',
+    },{
+      value: '12',
+    },{
+      value: '18',
     }]
     let { image } = this.state;
     const { selectedItems } = this.state;
@@ -199,16 +233,16 @@ export default class Egreso extends React.Component {
       mul
     />
     <Dropdown 
-      label='Seleccionar Medio de Gasto'
+      label='Seleccionar Medio de Pago'
       data={medioGasto}
+    />
+    <Dropdown 
+    label='Seleccionar Cuotas'
+    data={Cuotas}
     />
     <this.MyComponent></this.MyComponent>
     <ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
-    <Dropdown 
-      label='Periodicidad'
-      data={meses}
-      mul
-    />
+   
     <Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={this._pickImage} />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       <View style={{marginTop:20}}>

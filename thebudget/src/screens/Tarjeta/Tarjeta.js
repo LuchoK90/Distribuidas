@@ -15,6 +15,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
   Dropdown }
   from 'react-native-material-dropdown';
+  import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
 
 
 
@@ -75,24 +76,13 @@ export default class Tarjeta extends React.Component {
           clearButtonMode='always'
           keyboardType='number-pad'
         />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Fecha Vencimiento'
-          clearButtonMode='always'
-          keyboardType='number-pad'
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Fecha cierre resumen'
-          clearButtonMode='always'
-          keyboardType='number-pad'
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Fecha vencimiento resumen'
-          clearButtonMode='always'
-          keyboardType='number-pad'
-        />
+        <Text>Fecha Vencimiento</Text>
+        <ElegirFecha style={{width:'100%'}}></ElegirFecha>
+        <Text>Fecha Cierre Resumen</Text>
+        <ElegirFecha style={{width:'100%'}}></ElegirFecha>
+        <Text>Fecha Vencimiento Resumen</Text>
+        <ElegirFecha style={{width:'100%'}}></ElegirFecha>
+        
         <Button 
         title="Guardar"
         onPress={() => navigation.navigate('TarjetaView')}

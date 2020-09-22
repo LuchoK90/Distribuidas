@@ -89,18 +89,18 @@ export default class HomeScreen extends React.Component {
             }
         ];
 
-        const HeadTable = ['Banco', 'N° Cuenta', 'Moneda', 'Saldo'];
+        const HeadTable = ['Banco', 'N° Cuenta', 'Saldo'];
         const DataTable = [
-            ['Santander', '10', '$', '50.000,00'],
-            ['Frances', '20', '$', '200,00'],
-            ['ICBC', '30', '$', '200,00']
+            ['Santander', '10', '$50.000,00'],
+            ['Frances', '20', '$200,00'],
+            ['ICBC', '30', '$200,00']
         ]
 
-        const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Moneda', 'Monto'];
+        const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Monto'];
         const DataTable_2 = [
-            ['Egresos', 'Gas', '20-09', '$', '5.000,00'],
-            ['Inversion', 'Plazo Fijo', '21-09', '$', '1.000,00'],
-            ['Prestamos', 'Cuota 2', '22-09', '$', '2.000,00'],
+            ['Egresos', 'Gas', '20-09', '$5.000,00'],
+            ['Inversion', 'Plazo Fijo', '21-09', '$1.000,00'],
+            ['Prestamos', 'Cuota 2', '22-09', '$2.000,00'],
         ]
 
         const data1_ = [100, 50, 30, 100]
@@ -126,13 +126,15 @@ export default class HomeScreen extends React.Component {
                 {x: 'Ingresos', y: 6000},
                 {x: 'Egresos', y: 4000},
                 {x: 'Inversiones', y: 1000},
-                {x: 'Prestamos', y: 2000},
+                {x: 'Prest. Sol.', y: 2000},
+                {x: 'Prest. Ot.', y: 2000},
             ],        
             actual: [
                 {x: 'Ingresos', y: 5000},
                 {x: 'Egresos', y: 8000},
                 {x: 'Inversiones', y: 1000},
-                {x: 'Prestamos', y: 1000},
+                {x: 'Prest. Sol.', y: 1000},
+                {x: 'Prest. Ot.', y: 1000},
             ],
         };
 

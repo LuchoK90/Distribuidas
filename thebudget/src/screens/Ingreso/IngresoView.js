@@ -77,19 +77,19 @@ export default class IngresoView extends React.Component {
             <DataTable.Row>
             <DataTable.Cell>05/09/2020</DataTable.Cell>
             <DataTable.Cell>Sueldo</DataTable.Cell>
-            <DataTable.Cell numeric>30000</DataTable.Cell>
+            <DataTable.Cell numeric>$30000</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row>
             <DataTable.Cell>13/09/2020</DataTable.Cell>
             <DataTable.Cell>Facturación Autónomo</DataTable.Cell>
-            <DataTable.Cell numeric>5000</DataTable.Cell>
+            <DataTable.Cell numeric>$5000</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row>
             <DataTable.Cell>17/09/2020</DataTable.Cell>
             <DataTable.Cell>Alquiler Propiedad</DataTable.Cell>
-            <DataTable.Cell numeric>22000</DataTable.Cell>
+            <DataTable.Cell numeric>$22000</DataTable.Cell>
             </DataTable.Row>
         </DataTable>
       </View>

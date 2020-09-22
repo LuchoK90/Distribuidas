@@ -17,7 +17,7 @@ import {
   from 'react-native-material-dropdown';
   import { Checkbox } from 'react-native-paper';
   import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
-  import Camara from '../../components/Camara/Camara';
+  import Check from '../../components/Check/Check';
 
 import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -27,6 +27,7 @@ import SelectMultiple from 'react-native-select-multiple';
 import MultiSelect from 'react-native-multiple-select';
 import PickList from 'react-native-picklist';
 import CustomMultiPicker from "react-native-multiple-select-list";
+
 
 
 const fruits = ['Septiembre', 'Octubre', 'Noviembre'];
@@ -69,7 +70,7 @@ const userList = {
 
 
 export default class Ingreso extends React.Component {
-
+  
   static navigationOptions = PickList.navigationOptions;
   state = { selectedFruits: [] };
   state = {
@@ -86,6 +87,10 @@ export default class Ingreso extends React.Component {
     // selectedFruits is array of { label, value }
     this.setState({ selectedFruits })
   };
+
+  App = () => {
+    const [isSelected, setSelection] = useState(false);
+  }
 
   state = {
     image: null,
@@ -126,21 +131,6 @@ export default class Ingreso extends React.Component {
     this.setState({ chosenDate: newDate });
   }
 
-  MyComponent = () => {
-    const [checked, setChecked] = React.useState(false);
-  
-    return (
-      <View style={styles.periodico}>
-      <Checkbox 
-        status={checked ? 'checked' : 'unchecked'}
-        onPress={() => {
-          setChecked(!checked);
-        }}
-      />
-      <Text>Periódico</Text>
-      </View>
-    );
-  };
 
   state = {
     selectedItems : []
@@ -150,8 +140,10 @@ export default class Ingreso extends React.Component {
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };
+  
 
   render(){
+    
     //const { selectedItems } = this.state;
     const { navigation } = this.props;
     let medioCobro=[{
@@ -168,19 +160,13 @@ export default class Ingreso extends React.Component {
     },{
       value: 'Facturación Autónomo',
     },{
-      value: 'Alquiler Propiedad',
+      value: 'Alquiler',
+    },{
+      value: 'Venta Bien Uso Personal',
+    },{
+      value: 'Otro',
     }]
-    let meses=[{
-      value: 'Todos los meses',
-    },{
-      value: 'Bimestral',
-    },{
-      value: 'Trimestral',
-    },{
-      value: 'Cuatrimestral',
-    },{
-      value: 'Semestral',
-    }]
+    
     let { image } = this.state;
     const { selectedItems } = this.state;
     return (
@@ -191,40 +177,33 @@ export default class Ingreso extends React.Component {
       placeholder='Monto'
       clearButtonMode='always'
       keyboardType='number-pad'
-    />
+      />
 
-    <Dropdown
+      <Dropdown
       label='Seleccionar Detalle'
       data={detalle}
       mul
-    />
-    <Dropdown 
+      />
+      <Dropdown 
       label='Seleccionar medio de cobro'
       data={medioCobro}
-    />
-    <this.MyComponent></this.MyComponent>
-    <ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
-    <Dropdown 
-      label='Periodicidad'
-      data={meses}
-      mul
-    />
-    <Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={this._pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-      <View style={{marginTop:20}}>
-    <Button 
-    title="Guardar"
-    onPress={() => navigation.navigate('IngresoView')}
-    />  
+      />
+    
+    
+    
+      <Button 
+      title="Guardar"
+      onPress={() => navigation.navigate('IngresoView')}
+      />  
      
     
 
-     </View>
+  </View>
     
 
 
 
-      </View>
+    
     );
   }
 
@@ -453,6 +432,9 @@ const styles = StyleSheet.create({
   },
   two: {
     flex: 2
+  },
+  checkbox: {
+    alignSelf: "center",
   }
 
 })

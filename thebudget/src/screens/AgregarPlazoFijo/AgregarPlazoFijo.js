@@ -18,6 +18,7 @@ import BotonNuevaCuenta from '../../components/BotonNuevaCuenta/BotonNuevaCuenta
 import InputCBUDestino from '../../components/inputCBUDestino/inputCBUDestino';
 import SelectTarjeta from '../../components/SelectTarjeta/SelectTarjeta';
 import SelectModoPlazoFijo from '../../components/SelectModoPlazoFijo/SelectModoPlazoFijo';
+import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -67,9 +68,10 @@ export default class RecipeScreen extends React.Component {
          </View>
           <InputCBUDestino/>
           <View style={{marginTop:20}}>
-          <Text style={styles.infoRecipe}>Ingrese Cantidad de Días</Text>
+          <Text style={styles.infoRecipe}>Ingrese Fecha Vencimiento </Text>
+          <ElegirFecha style={{width:'100%'}}></ElegirFecha>
          </View>
-         <InputCBUDestino/>
+         
          <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Rendimiento (%)</Text>
          </View>

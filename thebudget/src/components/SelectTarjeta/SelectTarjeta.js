@@ -12,6 +12,7 @@ const SelectTarjeta = () => {
       >
         <Picker.Item label="345345345345" value="345345345" />
         <Picker.Item label="345345345345" value="345345345" />
+        <Picker.Item label="Efectivo" value="Efectivo" />
       </Picker>
     </View>
   );

@@ -72,17 +72,13 @@ export default class Presupuesto extends React.Component {
       value: 'Otros',
     }]
     let rubro=[{
-      value: 'Luz',
+      value: 'Ingreso',
     },{
-      value: 'Alquiler',
+      value: 'Egreso',
     },{
-      value: 'Gas',
+      value: 'Inversiones',
     },{
-      value: 'Municipal',
-    },{
-      value: 'Provincial',
-    },{
-      value: 'Otro',
+      value: 'Prestamos',
     }]
     
     return(
@@ -94,13 +90,14 @@ export default class Presupuesto extends React.Component {
           keyboardType='number-pad'
         />
         <Dropdown 
-          label='Categoría'
-          data={categoria}
-        />
-        <Dropdown 
           label='Rubro'
           data={rubro}
         />
+        <Dropdown 
+          label='Categoría'
+          data={categoria}
+        />
+        
         
         
         <Button 
