@@ -1,29 +1,42 @@
 import React, { useState } from "react";
 import { CheckBox, Text, StyleSheet, View } from "react-native";
-import ElegirFecha from '../ElegirFecha/ElegirFecha';
-import {
-  Dropdown }
-  from 'react-native-material-dropdown';
+import ElegirFecha from "../ElegirFecha/ElegirFecha";
+import { Dropdown } from "react-native-material-dropdown";
 import { TextInput } from "react-native-paper";
-
 
 const Check = () => {
   const [isSelected, setSelection] = useState(false);
-  let meses=[{
-    value: 'Todos los meses',
-  },{
-    value: 'Bimestral',
-  },{
-    value: 'Trimestral',
-  },{
-    value: 'Cuatrimestral',
-  },{
-    value: 'Semestral',
-  }]
+  let meses = [
+    {
+      value: "Todos los meses",
+    },
+    {
+      value: "Bimestral",
+    },
+    {
+      value: "Trimestral",
+    },
+    {
+      value: "Cuatrimestral",
+    },
+    {
+      value: "Semestral",
+    },
+  ];
 
   return (
-    <View>
-      <View style={styles.checkboxContainer}>
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
+      <View
+        style={[
+          styles.checkboxContainer,
+          { flexDirection: "row", alignItems: "center" },
+        ]}
+      >
         <CheckBox
           value={isSelected}
           onValueChange={setSelection}
@@ -31,9 +44,11 @@ const Check = () => {
         />
         <Text>Periódico </Text>
       </View>
-      <ElegirFecha disabled={isSelected}/>
-    
-    
+      <View>
+        {isSelected && (
+          <ElegirFecha disabled={!isSelected} style={{ marginTop: 10 }} />
+        )}
+      </View>
     </View>
   );
 };
@@ -50,7 +65,7 @@ const styles = StyleSheet.create({
   },
   fechaContainer: {
     flex: 1,
-  flexDirection: 'row',
+    flexDirection: "row",
   },
   checkbox: {
     alignSelf: "center",
