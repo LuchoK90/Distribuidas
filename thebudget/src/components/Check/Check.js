@@ -4,6 +4,7 @@ import ElegirFecha from '../ElegirFecha/ElegirFecha';
 import {
   Dropdown }
   from 'react-native-material-dropdown';
+import { TextInput } from "react-native-paper";
 
 
 const Check = () => {
@@ -21,22 +22,18 @@ const Check = () => {
   }]
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.checkboxContainer}>
         <CheckBox
           value={isSelected}
           onValueChange={setSelection}
           style={styles.checkbox}
         />
-        <Text style={styles.label}>Do you like React Native?</Text>
+        <Text>Periódico </Text>
       </View>
-      
-      <Text>Is CheckBox selected: {isSelected ? <View><ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
-    <Dropdown 
-      label='Periodicidad'
-      data={meses}
-      mul
-    /> </View>: "👎"}</Text>
+      <ElegirFecha disabled={isSelected}/>
+    
+    
     </View>
   );
 };
@@ -51,6 +48,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20,
   },
+  fechaContainer: {
+    flex: 1,
+  flexDirection: 'row',
+  },
   checkbox: {
     alignSelf: "center",
   },
@@ -60,3 +61,13 @@ const styles = StyleSheet.create({
 });
 
 export default Check;
+
+/* 
+<Text>Is CheckBox selected: {isSelected ? <View><ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
+    <Dropdown 
+      label='Periodicidad'
+      data={meses}
+      mul
+    /> </View>: "👎"}</Text> 
+    
+    <Text>Is CheckBox selected: {isSelected ? <Text></Text> : "👎"}</Text>*/

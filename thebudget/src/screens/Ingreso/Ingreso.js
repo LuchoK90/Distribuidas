@@ -27,6 +27,7 @@ import SelectMultiple from 'react-native-select-multiple';
 import MultiSelect from 'react-native-multiple-select';
 import PickList from 'react-native-picklist';
 import CustomMultiPicker from "react-native-multiple-select-list";
+import DatePicker from 'react-native-datepicker'
 
 
 
@@ -69,6 +70,9 @@ const userList = {
 };
 
 
+
+
+
 export default class Ingreso extends React.Component {
   
   static navigationOptions = PickList.navigationOptions;
@@ -77,6 +81,7 @@ export default class Ingreso extends React.Component {
     //We will store selected item in this
     selectedItems: [],
   };
+
 
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
@@ -88,9 +93,7 @@ export default class Ingreso extends React.Component {
     this.setState({ selectedFruits })
   };
 
-  App = () => {
-    const [isSelected, setSelection] = useState(false);
-  }
+ 
 
   state = {
     image: null,
@@ -115,8 +118,12 @@ export default class Ingreso extends React.Component {
     super(props)
     this.state = { text: '' }
 
-    this.state = { chosenDate: new Date() };
+    this.state = { chosenDate: new Date(), prueba: false };
     this.setDate = this.setDate.bind(this);
+    this.state = { TextInputDisableStatus: true }
+    //Aca
+    this.state = {date:"20-09-2020"}
+    
   }
 
   submitAndClear = () => {
@@ -140,6 +147,12 @@ export default class Ingreso extends React.Component {
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };
+
+  onPressButton = () => {  
+    
+    
+  }
+
   
 
   render(){
@@ -171,32 +184,33 @@ export default class Ingreso extends React.Component {
     const { selectedItems } = this.state;
     return (
       <View style={styles.viewContainer}>
-      
+    
       <TextInput
       style={styles.textInput}
       placeholder='Monto'
       clearButtonMode='always'
       keyboardType='number-pad'
+      editable={this.state.TextInputDisableHolder}
       />
 
       <Dropdown
       label='Seleccionar Detalle'
       data={detalle}
-      mul
+      disabled={false}
       />
       <Dropdown 
       label='Seleccionar medio de cobro'
       data={medioCobro}
       />
-    
-    
-    
+
+      <Check></Check>
+      
       <Button 
       title="Guardar"
       onPress={() => navigation.navigate('IngresoView')}
       />  
      
-    
+     
 
   </View>
     
@@ -376,6 +390,8 @@ const Cafe = () => {
 export default Cafe;  */
 const styles = StyleSheet.create({
   viewContainer: {
+    flexDirection:"column",
+    flex:1,
     width: '90%',
     marginLeft: 20,
     marginTop: 20,
@@ -435,7 +451,22 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     alignSelf: "center",
-  }
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  label: {
+    margin: 8,
+  },
 
 })
 

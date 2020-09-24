@@ -1,17 +1,13 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import DatePicker from 'react-native-datepicker'
  
-export default class MyDatePicker extends Component {
-  constructor(props){
-    super(props)
-    this.state = {date:"20-09-2020"}
-  }
- 
-  render(){
+const MyDatePicker = () => {
+  const [date, setDate] = useState("20-09-2020")
+
     return (
       <DatePicker
         style={{width: 200}}
-        date={this.state.date}
+        date={date}
         mode="date"
         placeholder="select date"
         format="DD-MM-YYYY"
@@ -33,9 +29,10 @@ export default class MyDatePicker extends Component {
           
           // ... You can check the source to find the other keys.
         }}
-        onDateChange={(date) => {this.setState({date: date})}}
+        onDateChange={(val) => setDate(val)}
+        
       />
-      
-    )
-  }
-}
+    );
+  };
+
+export default MyDatePicker;
