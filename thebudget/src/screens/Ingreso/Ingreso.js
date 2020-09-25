@@ -103,6 +103,9 @@ export default class Ingreso extends React.Component {
   state = {
     image: null,
     monto:0,
+    detalle:null,
+    medio:null,
+    fecha:null,
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -129,11 +132,16 @@ export default class Ingreso extends React.Component {
     this.state = { TextInputDisableStatus: true }
     //Aca
     this.state = {date:"20-09-2020"}
+     //Tabla de movimientos
+     
     db.transaction(tx => {
       console.log("ingreso constructor");
+      /* tx.executeSql(
+        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
+      ); */
       tx.executeSql("select * from movimientos", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
-        );
+      );
     });
   }
 
@@ -164,7 +172,18 @@ export default class Ingreso extends React.Component {
     
   }
 
-  
+  getCurrentDate=()=>{
+
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //Alert.alert(date + '-' + month + '-' + year);
+    // You can turn it in to your desired format
+    
+    console.log(date + '/' + month + '/' + year + "getCurrentDate"+this.state.fecha);
+    return date + '/' + month + '/' + year;
+}
 
   render(){
     
@@ -208,20 +227,28 @@ export default class Ingreso extends React.Component {
       <Dropdown
       label='Seleccionar Detalle'
       data={detalle}
+      onChangeText={detalle => this.setState({ detalle })}
       disabled={false}
       />
       <Dropdown 
       label='Seleccionar medio de cobro'
       data={medioCobro}
+      onChangeText={medio => this.setState({ medio })}
+      
       />
-
+      
       <Check></Check>
       
       <Button 
       title="Guardar"
 
-      onPress={() => this.add(this.state.monto)}
+      onPress={() => this.add(this.state.monto,this.state.detalle,this.state.medio)}
       />  
+      <Button 
+      title="Select"
+
+      onPress={() => this.select()}
+      /> 
      
      
 
@@ -234,12 +261,10 @@ export default class Ingreso extends React.Component {
     );
   }
 
-  add(monto) {
-    console.log("add ingreso");
-
+  add(monto,detalle,medio) {
     db.transaction(
       tx => {
-        tx.executeSql("insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante) values (2909,prueba, ?, tarjeta, ingreso, nada)", [monto]),(_,{ rows }) => 
+        tx.executeSql("insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')", [this.getCurrentDate(), detalle,monto,medio]),(_,{ rows }) => 
                         console.log(JSON.stringify(rows)),(_,{ error}) => 
                         console.log(JSON.stringify(error));             
         
