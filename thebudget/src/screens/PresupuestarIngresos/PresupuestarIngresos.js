@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
   TouchableHighlight,
-  TextInput
+  TextInput, Alert,StyleSheet,
 } from 'react-native';
 import styles from './styles';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -19,6 +19,7 @@ import BotonNuevaCuenta from '../../components/BotonNuevaCuenta/BotonNuevaCuenta
 import InputCBUDestino from '../../components/inputCBUDestino/inputCBUDestino';
 import SelectPresupuestoCategoriaIngreso from '../../components/SelectPresupuestoCategoriaIngreso/SelectPresupuestoCategoriaIngreso';
 import * as SQLite from 'expo-sqlite';
+import Constants from "expo-constants";
 
 const { width: viewportWidth } = Dimensions.get('window');
 const db = SQLite.openDatabase("budgetgo.db");
@@ -41,6 +42,14 @@ export default class RecipeScreen extends React.Component {
       activeSlide: 0,
       montoPresupuesto:0
     };
+    db.transaction(tx => {
+      tx.executeSql(
+        "create table if not exists items (id integer primary key not null, done int, value text);"
+      );
+      tx.executeSql("select * from items", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+        );
+    });
   }
 
   montoPresupuesto(montoPresupuesto) {
@@ -48,10 +57,9 @@ export default class RecipeScreen extends React.Component {
     this.setState({ montoPresupuesto: montoPresupuesto })
    
     }
+   
 
-
-
-  render() {
+   render() {
     const { activeSlide } = this.state;
     const { navigation } = this.props;
     const item = navigation.getParam('item');
@@ -80,7 +88,7 @@ export default class RecipeScreen extends React.Component {
             
             />
             <Button title="HOLA"  onPress={() => {
-              this.add(100);
+              this.add("Hola");
             }}></Button>
               <Button title="CHAU"  onPress={() => {
               this.select();
@@ -96,26 +104,29 @@ export default class RecipeScreen extends React.Component {
     if (text === null || text === "") {
       return false;
     }
-  
+
     db.transaction(
-      tx => { console.log("HOLA")
-        tx.executeSql("insert into presupuesto (mes_anio, rubro, categoria, monto) values (?, ?, ?, ?)", text,text,text,text),(_,{ rows }) => 
+      tx => {
+        tx.executeSql("insert into items (done, value) values (0, ?)", [text]),(_,{ rows }) => 
                         console.log(JSON.stringify(rows)),(_,{ error}) => 
-                        console.log(JSON.stringify(error));    
-                        console.log("HOLA2")         
+                        console.log(JSON.stringify(error));             
         
-      }
+      },
+     
     );
    
   }
 
   select() {
-  db.transaction(tx => {
-    tx.executeSql("select * from presupuesto", [], (_, { rows }) =>
-        console.log(JSON.stringify(rows))
+    db.transaction(tx => {
+      tx.executeSql(
+        `select * from items where done = ?;`,
+        [this.props.done ? 1 : 0],
+        (_, { rows: { _array } }) => this.setState({ items: _array })
       );
-  });
-}  }
+    });
+  }
+}  
 
 /*cooking steps
 <View style={styles.infoContainer}>
@@ -124,3 +135,4 @@ export default class RecipeScreen extends React.Component {
 </View>
 <Text style={styles.infoDescriptionRecipe}>{item.description}</Text>
 */
+ 

@@ -14,6 +14,9 @@ export default class App extends React.Component
       tx.executeSql(
         "create table if not exists presupuesto (id_presupuesto integer primary key not null, mes_anio text, rubro text, monto int);"
       );
+      tx.executeSql(
+        "insert into presupuesto (id_presupuesto, mes_anio, rubro, categoria, monto) VALUES (null, ?, ?, ?)",["hola","como",100]
+      );
       tx.executeSql("select * from presupuesto", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
