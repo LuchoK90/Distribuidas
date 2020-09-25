@@ -4,6 +4,7 @@ import {
   ScrollView,
   Text,
   View,
+  Button,
   TouchableOpacity,
   Image,
   Dimensions,
@@ -17,8 +18,10 @@ import BackButton from '../../components/BackButton/BackButton';
 import BotonNuevaCuenta from '../../components/BotonNuevaCuenta/BotonNuevaCuenta';
 import InputCBUDestino from '../../components/inputCBUDestino/inputCBUDestino';
 import SelectPresupuestoCategoriaIngreso from '../../components/SelectPresupuestoCategoriaIngreso/SelectPresupuestoCategoriaIngreso';
+import * as SQLite from 'expo-sqlite';
 
 const { width: viewportWidth } = Dimensions.get('window');
+const db = SQLite.openDatabase("budgetgo.db");
 
 export default class RecipeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -35,11 +38,16 @@ export default class RecipeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSlide: 0
+      activeSlide: 0,
+      montoPresupuesto:0
     };
   }
 
+  montoPresupuesto(montoPresupuesto) {
 
+    this.setState({ montoPresupuesto: montoPresupuesto })
+   
+    }
 
 
 
@@ -60,7 +68,7 @@ export default class RecipeScreen extends React.Component {
            
            <Text style={styles.infoRecipe}>Ingrese Monto Presupuestado ($)</Text>
          </View>
-          <InputCBUDestino/>
+          <InputCBUDestino onChange={(ev) => { this.montoPresupuesto(ev.target.value) }} ref="montoPresupuesto" name="montoPresupuesto" id="montoPresupuesto"/>
           <View>
            
            <Text style={styles.infoRecipe}>Seleccione Categoría</Text>
@@ -71,12 +79,43 @@ export default class RecipeScreen extends React.Component {
             <BotonNuevaCuenta
             
             />
+            <Button title="HOLA"  onPress={() => {
+              this.add(100);
+            }}></Button>
+              <Button title="CHAU"  onPress={() => {
+              this.select();
+            }}></Button>
           </View>
         </View>
       </ScrollView>
     );
   }
-}
+  add(text) {
+    // is text empty?
+    console.log("text",text)
+    if (text === null || text === "") {
+      return false;
+    }
+  
+    db.transaction(
+      tx => { console.log("HOLA")
+        tx.executeSql("insert into presupuesto (mes_anio, rubro, categoria, monto) values (?, ?, ?, ?)", text,text,text,text),(_,{ rows }) => 
+                        console.log(JSON.stringify(rows)),(_,{ error}) => 
+                        console.log(JSON.stringify(error));    
+                        console.log("HOLA2")         
+        
+      }
+    );
+   
+  }
+
+  select() {
+  db.transaction(tx => {
+    tx.executeSql("select * from presupuesto", [], (_, { rows }) =>
+        console.log(JSON.stringify(rows))
+      );
+  });
+}  }
 
 /*cooking steps
 <View style={styles.infoContainer}>
