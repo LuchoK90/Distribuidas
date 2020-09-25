@@ -10,16 +10,21 @@ export default class App extends React.Component
 
   constructor() {
     super();
+    console.log("app3.js")
     db.transaction(tx => {
       tx.executeSql(
-        "create table if not exists presupuesto (id_presupuesto integer primary key not null, mes_anio text, rubro text, monto int);"
+        "create table if not exists items (id integer primary key not null, done int, value text);"
       );
-      tx.executeSql(
-        "insert into presupuesto (id_presupuesto, mes_anio, rubro, categoria, monto) VALUES (null, ?, ?, ?)",["hola","como",100]
-      );
-      tx.executeSql("select * from presupuesto", [], (_, { rows }) =>
+      tx.executeSql("select * from items", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
-        );
+      );
+      //Tabla de movimientos
+      tx.executeSql(
+        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
+      );
+      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
     });
   }
 

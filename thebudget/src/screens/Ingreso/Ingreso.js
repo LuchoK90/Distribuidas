@@ -27,7 +27,12 @@ import SelectMultiple from 'react-native-select-multiple';
 import MultiSelect from 'react-native-multiple-select';
 import PickList from 'react-native-picklist';
 import CustomMultiPicker from "react-native-multiple-select-list";
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import * as SQLite from 'expo-sqlite';
+
+
+
+const db = SQLite.openDatabase("budgetgo.db");
 
 
 
@@ -97,6 +102,7 @@ export default class Ingreso extends React.Component {
 
   state = {
     image: null,
+    monto:0,
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -123,7 +129,12 @@ export default class Ingreso extends React.Component {
     this.state = { TextInputDisableStatus: true }
     //Aca
     this.state = {date:"20-09-2020"}
-    
+    db.transaction(tx => {
+      console.log("ingreso constructor");
+      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+        );
+    });
   }
 
   submitAndClear = () => {
@@ -190,6 +201,7 @@ export default class Ingreso extends React.Component {
       placeholder='Monto'
       clearButtonMode='always'
       keyboardType='number-pad'
+      onChangeText={monto => this.setState({ monto })}
       editable={this.state.TextInputDisableHolder}
       />
 
@@ -207,7 +219,8 @@ export default class Ingreso extends React.Component {
       
       <Button 
       title="Guardar"
-      onPress={() => navigation.navigate('IngresoView')}
+
+      onPress={() => this.add(this.state.monto)}
       />  
      
      
@@ -216,9 +229,32 @@ export default class Ingreso extends React.Component {
     
 
 
-
+    //, navigation.navigate('IngresoView')
     
     );
+  }
+
+  add(monto) {
+    console.log("add ingreso");
+
+    db.transaction(
+      tx => {
+        tx.executeSql("insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante) values (2909,prueba, ?, tarjeta, ingreso, nada)", [monto]),(_,{ rows }) => 
+                        console.log(JSON.stringify(rows)),(_,{ error}) => 
+                        console.log(JSON.stringify(error));             
+        
+      },
+     
+    );
+   
+  }
+  select() {
+    console.log("select ingreso");
+    db.transaction(tx => {
+      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+        );
+    });
   }
 
   componentDidMount() {

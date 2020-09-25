@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
   TouchableHighlight,
-  TextInput, Alert,StyleSheet,
+  TextInput, Alert,StyleSheet, TouchableHighlightBase
 } from 'react-native';
 import styles from './styles';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -56,7 +56,9 @@ export default class RecipeScreen extends React.Component {
 
     this.setState({ montoPresupuesto: montoPresupuesto })
    
-    }
+  }
+
+
    
 
    render() {
@@ -88,9 +90,9 @@ export default class RecipeScreen extends React.Component {
             
             />
             <Button title="HOLA"  onPress={() => {
-              this.add("Hola");
+              this.add("chau");
             }}></Button>
-              <Button title="CHAU"  onPress={() => {
+            <Button title="CHAU"  onPress={() => {
               this.select();
             }}></Button>
           </View>
@@ -119,11 +121,9 @@ export default class RecipeScreen extends React.Component {
 
   select() {
     db.transaction(tx => {
-      tx.executeSql(
-        `select * from items where done = ?;`,
-        [this.props.done ? 1 : 0],
-        (_, { rows: { _array } }) => this.setState({ items: _array })
-      );
+      tx.executeSql("select * from items", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+        );
     });
   }
 }  
