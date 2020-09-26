@@ -27,7 +27,11 @@ import SelectMultiple from 'react-native-select-multiple';
 import MultiSelect from 'react-native-multiple-select';
 import PickList from 'react-native-picklist';
 import CustomMultiPicker from "react-native-multiple-select-list";
+import * as SQLite from 'expo-sqlite';
 
+
+
+const db = SQLite.openDatabase("budgetgo.db");
 
 const fruits = ['Septiembre', 'Octubre', 'Noviembre'];
 
@@ -110,8 +114,22 @@ export default class Egreso extends React.Component {
     super(props)
     this.state = { text: '' }
 
-    this.state = { chosenDate: new Date() };
+    this.state = { chosenDate: new Date(), prueba: false };
     this.setDate = this.setDate.bind(this);
+    this.state = { TextInputDisableStatus: true }
+    //Aca
+    this.state = {date:"20-09-2020"}
+     //Tabla de movimientos
+     
+    db.transaction(tx => {
+      console.log("ingreso constructor");
+      /* tx.executeSql(
+        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
+      ); */
+      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+    });
   }
 
   submitAndClear = () => {
@@ -150,6 +168,19 @@ export default class Egreso extends React.Component {
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };
+
+  getCurrentDate=()=>{
+
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //Alert.alert(date + '-' + month + '-' + year);
+    // You can turn it in to your desired format
+    
+    console.log(date + '/' + month + '/' + year + "getCurrentDate"+this.state.fecha);
+    return date + '/' + month + '/' + year;
+}
 
   render(){
     //const { selectedItems } = this.state;
@@ -225,20 +256,25 @@ export default class Egreso extends React.Component {
       placeholder='Monto'
       clearButtonMode='always'
       keyboardType='number-pad'
+      onChangeText={monto => this.setState({ monto })}
+      editable={this.state.TextInputDisableHolder}
     />
 
     <Dropdown
       label='Seleccionar Detalle'
       data={detalle}
-      mul
+      onChangeText={detalle => this.setState({ detalle })}
+      disabled={false}
     />
     <Dropdown 
       label='Seleccionar Medio de Pago'
       data={medioGasto}
+      onChangeText={medio => this.setState({ medio })}
     />
     <Dropdown 
     label='Seleccionar Cuotas'
     data={Cuotas}
+    onChangeText={cuotas => this.setState({ cuotas })}
     />
     <this.MyComponent></this.MyComponent>
     <ElegirFecha title="hasta" style={{width:'100%'}}></ElegirFecha>
@@ -248,7 +284,7 @@ export default class Egreso extends React.Component {
       <View style={{marginTop:20}}>
     <Button 
     title="Guardar"
-    onPress={() => navigation.navigate('EgresoView')}
+    onPress={() => this.add(this.state.monto,this.state.detalle,this.state.medio)}
     />  
      
     
@@ -259,6 +295,19 @@ export default class Egreso extends React.Component {
 
       </View>
     );
+  }
+
+  add(monto,detalle,medio) {
+    db.transaction(
+      tx => {
+        tx.executeSql("insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Egreso', '')", [this.getCurrentDate(), detalle,monto,medio]),(_,{ rows }) => 
+                        console.log(JSON.stringify(rows)),(_,{ error}) => 
+                        console.log(JSON.stringify(error));             
+        
+      },
+     
+    );
+   
   }
 
   componentDidMount() {
