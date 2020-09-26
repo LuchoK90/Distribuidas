@@ -17,6 +17,12 @@ import {
   from 'react-native-material-dropdown';
   import { DataTable } from 'react-native-paper';
 
+  import * as SQLite from 'expo-sqlite';
+  import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table"
+
+
+const db = SQLite.openDatabase("budgetgo.db");
+
 
 
 
@@ -39,7 +45,12 @@ export default class IngresoView extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { text: '' }
+    this.state = {
+      text: '',
+      variable: [],
+      variableDos:0
+            }
+    this.select()
   }
 
   submitAndClear = () => {
@@ -49,8 +60,18 @@ export default class IngresoView extends React.Component {
       text: ''
     })
   }
+  componentDidMount() {
+    this.select();
+  }
+
+  SampleFunction=(item)=>{
+ 
+    Alert.alert(item);
+ 
+  }
 
   render(){
+    var SampleNameArray = [101000,1000];
     const { navigation } = this.props;
     let medioCobro=[{
       value: 'Sueldo',
@@ -75,98 +96,47 @@ export default class IngresoView extends React.Component {
             </DataTable.Header>
 
             <DataTable.Row>
-            <DataTable.Cell>05/09/2020</DataTable.Cell>
-            <DataTable.Cell>Sueldo</DataTable.Cell>
+            <DataTable.Cell>25/9/2020</DataTable.Cell>
+            <DataTable.Cell>{this.state.variable.fecha}</DataTable.Cell>
             <DataTable.Cell numeric>$30000</DataTable.Cell>
             </DataTable.Row>
+          </DataTable>
 
-            <DataTable.Row>
-            <DataTable.Cell>13/09/2020</DataTable.Cell>
-            <DataTable.Cell>Facturación Autónomo</DataTable.Cell>
-            <DataTable.Cell numeric>$5000</DataTable.Cell>
-            </DataTable.Row>
+            { SampleNameArray.map((item, key)=>(
+         <Text key={key} style={styles.TextStyle} onPress={ this.SampleFunction.bind(this, item) }> { item } </Text>)
+         )}
 
-            <DataTable.Row>
-            <DataTable.Cell>17/09/2020</DataTable.Cell>
-            <DataTable.Cell>Alquiler Propiedad</DataTable.Cell>
-            <DataTable.Cell numeric>$22000</DataTable.Cell>
-            </DataTable.Row>
-        </DataTable>
+        
       </View>
     );
   }
-} 
+
+select() {
+  console.log("select ingresoview");
+  
+  db.transaction(tx => {
+    tx.executeSql("select * from movimientos", [], (_, { rows }) =>
+        //this.state({fecha: JSON.stringify(rows._array)}) ,
+         // this.setState({ datos_tabla: JSON.parse(window.localStorage.getItem("ranking")) })
+        //this.setState(variable)=JSON.stringify(rows._array[0].fecha),
+        this.setState({ variable: JSON.stringify(rows._array) }),
+        //this.setState({ variableDos: JSON.stringify(row }),
+        //this.setState({ variableDos: JSON.stringify(rows._array[1].detalle) }),
+        console.log(this.state.variable+" todo")
+        //console.log(this.state.fecha+" slect")
+        //this.setState({ items: _array })
+      );
+  });
+}
+
+
+}
+ 
 //onPress={navigation.navigate('IngredientsDetails', {  })}
 //onPress={() => Alert.alert('Simple Button pressed')}
-          //onPress={this.submitAndClear}
-
-     /*      <Dropdown 
-          label='fruta favorita'
-          data={info}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Categoria'
-          clearButtonMode='always'
-        />
-        <TextInput
-          style={styles.textInput}
-        placeholder='Medio de pago'
-        clearButtonMode='always'
-        /> */
-/*const getFullName = (uno , dos , tres) => {
-  return uno + " " + dos + " " + tres; 
-}
-
-const cat = () => {
-  return(
-    <View>
-      <Text>hello im...</Text>
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-        }}
-        defaultValue= 'Name me!'
-      />
-    </View>
-
-  )
-} 
-*/
 
 
-/*const Cat = (props) => {
-  return (
-    <View>
-      <Text>Hello, I am {props.name}!</Text>
-    </View>
-  );
-}
 
-const Cafe = () => {
-
-  return (
-    <View>
-      <Cat name="Buji" />
-      <Cat name="Jellylorum" />
-      <Cat name="Spot" />
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-          
-        }}
-        keyboardType='number-pad'
-        //defaultValue= 'Name me!'
-      />
-    </View>
-  );
-}
-
-export default Cafe;  */
 const styles = StyleSheet.create({
   viewContainer: {
     width: '90%',
@@ -199,7 +169,7 @@ const styles = StyleSheet.create({
     margin: 10
   }
 })
-AppRegistry.registerComponent('clear-text', () => ChangeText)
+//AppRegistry.registerComponent('clear-text', () => ChangeText)
 
 /*<PricingCard
             color="#4f9deb"

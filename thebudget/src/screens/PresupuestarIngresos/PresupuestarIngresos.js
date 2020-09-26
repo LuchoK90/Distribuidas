@@ -136,3 +136,5 @@ export default class RecipeScreen extends React.Component {
 <Text style={styles.infoDescriptionRecipe}>{item.description}</Text>
 */
  
+
+
