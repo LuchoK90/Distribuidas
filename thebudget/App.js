@@ -25,6 +25,41 @@ export default class App extends React.Component
       tx.executeSql("select * from movimientos", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
       );
+      //Tabla de usuarios
+      tx.executeSql(
+        "create table if not exists usuarios (id_usuario integer primary key not null, mail text, pass text);"
+      );
+      tx.executeSql("select * from usuarios", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+      //Tabla de Cuentas
+      tx.executeSql(
+        "create table if not exists cuentas (id_cuenta integer primary key not null, banco text, numero text, cbu int, debito text, saldo real);"
+      );
+      tx.executeSql("select * from cuentas", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+      //Tabla de Tarjetas
+      tx.executeSql(
+        "create table if not exists tarjetas (id_tarjeta integer primary key not null, banco text, entidad text, numero text, vencimiento text, cierre_resumen text, vencimiento_resumen text);"
+      );
+      tx.executeSql("select * from tarjetas", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+       //Tabla de Inversiones
+       tx.executeSql(
+        "create table if not exists inversiones (id_inversion integer primary key not null, tipo text, flag_deposito text, monto real, rendimiento real, vencimiento text, cuenta text);"
+      );
+      tx.executeSql("select * from inversiones", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+      //Tabla de Presupuestos
+      tx.executeSql(
+        "create table if not exists presupuestos (id_presupuestos integer primary key not null, mes_anio text, rubro text, categoria text, monto real);"
+      );
+      tx.executeSql("select * from presupuestos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
     });
   }
 
