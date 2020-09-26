@@ -532,32 +532,3 @@ const styles = StyleSheet.create({
 })
 
 
-AppRegistry.registerComponent('clear-text', () => ChangeText)
-
-/* <View style={styles.viewContainer}>
-<TextInput
-  style={styles.textInput}
-  placeholder='Monto'
-  clearButtonMode='always'
-  keyboardType='number-pad'
-/>
-
-<Dropdown 
-  label='Seleccionar Detalle'
-  data={detalle}
-/>
-<Dropdown 
-  label='Seleccionar medio de cobro'
-  data={medioCobro}
-/>
-<this.MyComponent></this.MyComponent>
-<Button 
-title="Guardar"
-onPress={() => navigation.navigate('IngresoView')}
-/>  
-
-<ElegirFecha></ElegirFecha>
-
-<Camara></Camara>
-
-</View> */

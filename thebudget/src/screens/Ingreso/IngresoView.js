@@ -1,139 +1,157 @@
-import React , { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   Text,
   View,
   Image,
-  TouchableHighlight, TextInput
+  TouchableHighlight,
+  TextInput,
+  SafeAreaView,
+  ScrollView,
+  AppRegistry,
+  StyleSheet,
+  Alert,
+  Button
 } from 'react-native';
 import hola from './styles';
+import { Container, H1 } from "native-base";
 import { categories } from '../../data/dataArrays';
 import { getNumberOfRecipes } from '../../data/MockDataAPI';
-import { AppRegistry, StyleSheet, Button, SafeAreaView, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
-  Dropdown }
+  Dropdown
+}
   from 'react-native-material-dropdown';
-  import { DataTable } from 'react-native-paper';
+import { DataTable } from 'react-native-paper';
 
-  import * as SQLite from 'expo-sqlite';
-  import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table"
+import * as SQLite from 'expo-sqlite';
+import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table"
 
 
 const db = SQLite.openDatabase("budgetgo.db");
 
 
+const IngresoView = ({ navigation }) => {
 
+  const [text, setText] = useState("");
+  const [variable, setVariable] = useState([]);
 
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 3;
+  const from = page * itemsPerPage;
+  const to = (page + 1) * itemsPerPage;
 
-export default class IngresoView extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTransparent: 'true',
-      headerLeft: () => <BackButton
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
-    };
-  };
+  // const navigationOptions = () => {
+  //   return {
+  //     headerTransparent: 'true',
+  //     title: 'Ingresos',
+  //     headerLeft: () => <BackButton
+  //       onPress={() => {
+  //         navigation.goBack();
+  //       }}
+  //     />
+  //   };
+  // };
 
-  static navigationOptions = {
-    title: 'Ingresos'
-  };
+  // const  navigationOptions = () => {
+  //   title: 'Ingresos'
+  // };
+  const handleSelect = async () => {
+    await select();
+  }
+  useEffect(() => {
+    handleSelect();
+  }, [])
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      text: '',
-      variable: [],
-      variableDos:0
-            }
-    this.select()
+  const select = async () => {
+
+    await db.transaction(tx => {
+      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
+
+        setVariable(rows._array);
+      });
+    });
   }
 
-  submitAndClear = () => {
-    this.props.writeText(this.state.text)
+  return (
+    <Container style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 5 }}>
+        <View style={{ marginTop: 20 }}>
+          <H1 style={{
+            textAlign: "center",
+            marginBottom: 20,
+            fontSize: 32,
+            fontWeight: "bold",
+            color: "#3700B3"
+          }}>Ingresos</H1>
+        </View>
 
-    this.setState({
-      text: ''
-    })
-  }
-  componentDidMount() {
-    this.select();
-  }
+        <ScrollView>
+          <View style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            marginHorizontal: "2.5%",
+            flex: 1
+          }}>
 
-  SampleFunction=(item)=>{
- 
-    Alert.alert(item);
- 
-  }
+            {variable && variable.length > 0 ? (
+              <DataTable>
+                <DataTable.Header>
+                  <DataTable.Title>Fecha</DataTable.Title>
+                  <DataTable.Title>Detalle</DataTable.Title>
+                  <DataTable.Title numeric>Monto</DataTable.Title>
+                </DataTable.Header>
+                <FlatList
+                  data={variable}
+                  renderItem={({ item }) => (
+                    <DataTable.Row>
+                      <DataTable.Cell>{item.fecha}</DataTable.Cell>
+                      <DataTable.Cell>{item.detalle}</DataTable.Cell>
+                      <DataTable.Cell numeric>$ {item.monto}</DataTable.Cell>
+                    </DataTable.Row>
+                  )}
+                  keyExtractor={(ing) => ing.id_mov}
+                />
 
-  render(){
-    var SampleNameArray = [101000,1000];
-    const { navigation } = this.props;
-    let medioCobro=[{
-      value: 'Sueldo',
-    },{
-      value: 'Aguinaldo',
-    },{
-      value: 'MercadoPago',
-    },{
-      value: 'Efectivo',
-    },]
-    return(
-      <View style={styles.viewContainer}>
-        <Button 
-        title="Agregar"
-        onPress={() => navigation.navigate('Ingreso')}/>
-        
-        <DataTable>
-            <DataTable.Header>
-            <DataTable.Title>Fecha</DataTable.Title>    
-            <DataTable.Title>Detalle</DataTable.Title>
-            <DataTable.Title numeric>Monto</DataTable.Title>
-            </DataTable.Header>
+                <DataTable.Pagination
+                  page={page}
+                  numberOfPages={Math.floor(
+                    (variable.length + 1) / itemsPerPage
+                  )}
+                  onPageChange={(page) => setPage(page)}
+                  label={`${from + 1}-${to} de ${variable.length}`}
+                />
+              </DataTable>
 
-            <DataTable.Row>
-            <DataTable.Cell>25/9/2020</DataTable.Cell>
-            <DataTable.Cell>{this.state.variable.fecha}</DataTable.Cell>
-            <DataTable.Cell numeric>$30000</DataTable.Cell>
-            </DataTable.Row>
-          </DataTable>
+            ) : null}
 
-            { SampleNameArray.map((item, key)=>(
-         <Text key={key} style={styles.TextStyle} onPress={ this.SampleFunction.bind(this, item) }> { item } </Text>)
-         )}
 
-        
-      </View>
-    );
-  }
+          </View>
+        </ScrollView>
+        <View style={{ marginTop: 20, marginBottom: 20 }}>
+          <Button
+            title="Agregar"
+            onPress={() => navigation.navigate('Ingreso')} />
+        </View>
+      </SafeAreaView>
+    </Container>
+  );
 
-select() {
-  console.log("select ingresoview");
-  
-  db.transaction(tx => {
-    tx.executeSql("select * from movimientos", [], (_, { rows }) =>
-        //this.state({fecha: JSON.stringify(rows._array)}) ,
-         // this.setState({ datos_tabla: JSON.parse(window.localStorage.getItem("ranking")) })
-        //this.setState(variable)=JSON.stringify(rows._array[0].fecha),
-        this.setState({ variable: JSON.stringify(rows._array) }),
-        //this.setState({ variableDos: JSON.stringify(row }),
-        //this.setState({ variableDos: JSON.stringify(rows._array[1].detalle) }),
-        console.log(this.state.variable+" todo")
-        //console.log(this.state.fecha+" slect")
-        //this.setState({ items: _array })
-      );
-  });
 }
 
-
-}
- 
-//onPress={navigation.navigate('IngredientsDetails', {  })}
-//onPress={() => Alert.alert('Simple Button pressed')}
+IngresoView['navigationOptions'] = screenProps => ({
+  title: 'Ingresos'
+})
+// IngresoView.navigationOptions = (screenProps) => ({
+// headerTransparent: 'true',
+// title: 'Ingresos',
+// headerLeft: () => <BackButton
+//   onPress={() => {
+//     navigation.goBack();
+//   }}
+// />
+// });
 
 
 
@@ -148,36 +166,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     paddingLeft: 10,
     marginLeft: 50
-    /* height: 40,y
-    borderWidth: 1,
-    borderColor: 'gray',
-    paddingLeft: 20,
-    margin: 10 */
-    //borderRadius: 20
   },
-  monto:{
-    //borderColor: 'gray',
+  monto: {
     paddingLeft: 20,
     margin: 10
-    //borderRadius: 20
   },
-  boton:{
+  boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
     paddingLeft: 20,
     margin: 10
   }
 })
-//AppRegistry.registerComponent('clear-text', () => ChangeText)
 
-/*<PricingCard
-            color="#4f9deb"
-            title="Sueldo"
-            price="$10000"
-            info={['09/09/2020']}
-            button={{ title: 'GET STARTED', icon: 'flight-takeoff' }}
-        />
-        
-        
-        /> */
+export default IngresoView;
