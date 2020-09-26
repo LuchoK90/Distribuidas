@@ -17,6 +17,9 @@ import BackButton from '../../components/BackButton/BackButton';
 import BotonNuevaCuenta from '../../components/BotonNuevaCuenta/BotonNuevaCuenta';
 import InputCBUDestino from '../../components/inputCBUDestino/inputCBUDestino';
 import SelectTarjeta from '../../components/SelectTarjeta/SelectTarjeta';
+import * as SQLite from 'expo-sqlite';
+
+const db = SQLite.openDatabase("budgetgo.db");
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -37,9 +40,40 @@ export default class RecipeScreen extends React.Component {
     this.state = {
       activeSlide: 0
     };
+    this.state = { chosenDate: new Date(), prueba: false };
+    this.setDate = this.setDate.bind(this);
+    this.state = { TextInputDisableStatus: true }
+    //Aca
+    this.state = {date:"20-09-2020"}
+     //Tabla de movimientos
+     
+    db.transaction(tx => {
+      console.log("ingreso constructor");
+      /* tx.executeSql(
+        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
+      ); */
+      tx.executeSql("select * from cuentas", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+    });
   }
 
+  setDate(newDate) {
+    this.setState({ chosenDate: newDate });
+  }
 
+  getCurrentDate=()=>{
+
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //Alert.alert(date + '-' + month + '-' + year);
+    // You can turn it in to your desired format
+    
+    console.log(date + '/' + month + '/' + year + "getCurrentDate"+this.state.fecha);
+    return date + '/' + month + '/' + year;
+}
 
 
 
@@ -60,23 +94,33 @@ export default class RecipeScreen extends React.Component {
            
            <Text style={styles.infoRecipe}>Ingrese Entidad Bancaria</Text>
          </View>
-          <InputCBUDestino/>
+          <InputCBUDestino
+            onChangeText={banco => this.setState({ banco })}
+          />
           <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Número de Cuenta</Text>
          </View>
-          <InputCBUDestino/>
+          <InputCBUDestino
+             onChangeText={numero => this.setState({ numero })}
+          />
           <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese CBU</Text>
          </View>
-         <InputCBUDestino/>
+         <InputCBUDestino
+            onChangeText={cbu => this.setState({ cbu })}
+         />
          <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Tarjeta Asociada</Text>
          </View>
-         <InputCBUDestino/>
+         <InputCBUDestino
+           onChangeText={debito => this.setState({ debito })}
+         />
          <View style={{marginTop:20}}>
           <Text style={styles.infoRecipe}>Ingrese Saldo</Text>
          </View>
-          <InputCBUDestino/>
+          <InputCBUDestino
+             onChangeText={saldo => this.setState({ saldo })}
+          />
 
           <View style={styles.infoContainer}>
             <BotonNuevaCuenta
@@ -86,6 +130,18 @@ export default class RecipeScreen extends React.Component {
         </View>
       </ScrollView>
     );
+  }
+  add(banco, numero, cbu, debito, saldo) {
+    db.transaction(
+      tx => {
+        tx.executeSql("insert into cuentas (banco, numero, cbu, debito, saldo) values (?, ?, ?, ?, ?)", [banco, numero, cbu, debito, saldo]),(_,{ rows }) => 
+                        console.log(JSON.stringify(rows)),(_,{ error}) => 
+                        console.log(JSON.stringify(error));             
+        
+      },
+     
+    );
+   
   }
 }
 
