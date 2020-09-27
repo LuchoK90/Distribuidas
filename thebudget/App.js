@@ -10,7 +10,7 @@ export default class App extends React.Component
 
   constructor() {
     super();
-    console.log("app3.js")
+    console.log("app4.js")
     db.transaction(tx => {
       tx.executeSql(
         "create table if not exists items (id integer primary key not null, done int, value text);"
@@ -57,7 +57,13 @@ export default class App extends React.Component
       tx.executeSql(
         "create table if not exists presupuestos (id_presupuestos integer primary key not null, mes_anio text, rubro text, categoria text, monto real);"
       );
+      tx.executeSql("insert into cuentas (banco, numero, cbu, debito, saldo) values ('','Efectivo','', '', 0) where not exists(select numero from cuentas where numero='Efectivo')"), (_, { rows }) =>
+          console.log(JSON.stringify(rows))
       tx.executeSql("select * from presupuestos", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+      );
+      console.log("cuentas")
+      tx.executeSql("select * from cuentas", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
       );
     });

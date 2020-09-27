@@ -1,10 +1,10 @@
-import React, { Component, useState }  from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   Text,
   View,
   Image,
-  TouchableHighlight, TextInput, Switch
+  TouchableHighlight, TextInput, Switch, Picker
 } from 'react-native';
 import hola from './styles';
 import { categories } from '../../data/dataArrays';
@@ -13,11 +13,12 @@ import { AppRegistry, StyleSheet, Button, SafeAreaView, Alert } from 'react-nati
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
-  Dropdown }
+  Dropdown
+}
   from 'react-native-material-dropdown';
-  import { Checkbox } from 'react-native-paper';
-  import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
-  import Check from '../../components/Check/Check';
+import { Checkbox } from 'react-native-paper';
+import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
+import Check from '../../components/Check/Check';
 
 import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -34,81 +35,47 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase("budgetgo.db");
 
+const Ingreso = ({ navigation }) => {
 
+  //export default class Ingreso extends React.Component {
+  const [variable, setVariable] = useState([]);
+  const [bankAccounts, setBankAccounts] = useState([]);
+  const [medioCobro, setMedioCobro] = useState("")
+  //const navigationOptions = () => { PickList.navigationOptions };
+  const [detalleSelected, setDetalleSelected] = useState();
+  let detalle = [{
+    value: 'Sueldo',
+  }, {
+    value: 'Facturación Autónomo',
+  }, {
+    value: 'Alquiler',
+  }, {
+    value: 'Venta Bien Uso Personal',
+  }, {
+    value: 'Otro',
+  }];
+  const [monto, setMonto] = useState(0);
 
-const fruits = ['Septiembre', 'Octubre', 'Noviembre'];
-
-const items = [{
-  id: '92iijs7yta',
-  name: 'Ondo'
+/*   value: 'Sueldo',
 }, {
-  id: 'a0s0a8ssbsd',
-  name: 'Ogun'
+  value: 'Facturación Autónomo',
 }, {
-  id: '16hbajsabsd',
-  name: 'Calabar'
+  value: 'Alquiler',
 }, {
-  id: 'nahs75a5sg',
-  name: 'Lagos'
+  value: 'Venta Bien Uso Personal',
 }, {
-  id: '667atsas',
-  name: 'Maiduguri'
-}, {
-  id: 'hsyasajs',
-  name: 'Anambra'
-}, {
-  id: 'djsjudksjd',
-  name: 'Benue'
-}, {
-  id: 'sdhyaysdj',
-  name: 'Kaduna'
-}, {
-  id: 'suudydjsjd',
-  name: 'Abuja'
-  }
-];
+  value: 'Otro',
+}] */
 
-const userList = {
-  "123":"Tom",
-  "124":"Michael",
-  "125":"Christin"
-};
-
-
-
-
-
-export default class Ingreso extends React.Component {
-  
-  static navigationOptions = PickList.navigationOptions;
-  state = { selectedFruits: [] };
-  state = {
-    //We will store selected item in this
-    selectedItems: [],
-  };
-
-
-  onSelectedItemsChange = selectedItems => {
-    this.setState({ selectedItems });
-    //Set Selected Items
-  };
- 
-  onSelectionsChange = (selectedFruits) => {
-    // selectedFruits is array of { label, value }
-    this.setState({ selectedFruits })
-  };
-
- 
-
-  state = {
+  /*state = {
     image: null,
-    monto:0,
-    detalle:null,
-    medio:null,
-    fecha:null,
-  };
+    monto: 0,
+    detalle: null,
+    medio: null,
+    fecha: null,
+  };*/
 
-  static navigationOptions = ({ navigation }) => {
+  const navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: 'true',
       headerLeft: () => <BackButton
@@ -117,33 +84,8 @@ export default class Ingreso extends React.Component {
         }}
       />
     };
-  };
-
-  static navigationOptions = {
-    title: 'Ingreso'
-  };
-
-  constructor(props) {
-    super(props)
-    this.state = { text: '' }
-
-    this.state = { chosenDate: new Date(), prueba: false };
-    this.setDate = this.setDate.bind(this);
-    this.state = { TextInputDisableStatus: true }
-    //Aca
-    this.state = {date:"20-09-2020"}
-     //Tabla de movimientos
-     
-    db.transaction(tx => {
-      console.log("ingreso constructor");
-      /* tx.executeSql(
-        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
-      ); */
-      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
-      );
-    });
   }
+
 
   submitAndClear = () => {
     this.props.writeText(this.state.text)
@@ -153,306 +95,155 @@ export default class Ingreso extends React.Component {
     })
   }
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
+  setDate = (newDate) => {
+    this.setState({ chosenDate: newDate })
   }
 
 
-  state = {
-    selectedItems : []
-  };
-
-  
-  onSelectedItemsChange = selectedItems => {
-    this.setState({ selectedItems });
-  };
-
-  onPressButton = () => {  
-    
-    
-  }
-
-  getCurrentDate=()=>{
+  const getCurrentDate = () => {
 
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //Alert.alert(date + '-' + month + '-' + year);
-    // You can turn it in to your desired format
-    
-    console.log(date + '/' + month + '/' + year + "getCurrentDate"+this.state.fecha);
+
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
     return date + '/' + month + '/' + year;
-}
-
-  render(){
-    
-    //const { selectedItems } = this.state;
-    const { navigation } = this.props;
-    let medioCobro=[{
-      value: '74144/78998',
-    },{
-      value: '74889/12321',
-    },{
-      value: '46546/45645',
-    },{
-      value: 'Efectivo',
-    },]
-    let detalle=[{
-      value: 'Sueldo',
-    },{
-      value: 'Facturación Autónomo',
-    },{
-      value: 'Alquiler',
-    },{
-      value: 'Venta Bien Uso Personal',
-    },{
-      value: 'Otro',
-    }]
-    
-    let { image } = this.state;
-    const { selectedItems } = this.state;
-    return (
-      <View style={styles.viewContainer}>
-    
-      <TextInput
-      style={styles.textInput}
-      placeholder='Monto'
-      clearButtonMode='always'
-      keyboardType='number-pad'
-      onChangeText={monto => this.setState({ monto })}
-      editable={this.state.TextInputDisableHolder}
-      />
-
-      <Dropdown
-      label='Seleccionar Detalle'
-      data={detalle}
-      onChangeText={detalle => this.setState({ detalle })}
-      disabled={false}
-      />
-      <Dropdown 
-      label='Seleccionar medio de cobro'
-      data={medioCobro}
-      onChangeText={medio => this.setState({ medio })}
-      
-      />
-      
-      <Check></Check>
-      
-      <Button 
-      title="Guardar"
-
-      onPress={() => this.add(this.state.monto,this.state.detalle,this.state.medio)}
-      />  
-      <Button 
-      title="Select"
-
-      onPress={() => this.select()}
-      /> 
-     
-     
-
-  </View>
-    
-
-
-    //, navigation.navigate('IngresoView')
-    
-    );
   }
 
-  add(monto,detalle,medio) {
+  const handleSelect = async () => {
+    await select();
+  }
+  useEffect(() => {
+    handleSelect();
+  }, [])
+
+  const add = (monto, detalle, medio) => {
+    console.log(monto+' '+detalle+' '+medio )
     db.transaction(
       tx => {
-        tx.executeSql("insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')", [this.getCurrentDate(), detalle,monto,medio]),(_,{ rows }) => 
-                        console.log(JSON.stringify(rows)),(_,{ error}) => 
-                        console.log(JSON.stringify(error));             
-        
+        tx.executeSql("insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')", [getCurrentDate(), detalle, monto, medio]), (_, { rows }) =>
+          console.log(JSON.stringify(rows)), (_, { error }) =>
+            console.log(JSON.stringify(error));
+
       },
-     
+
     );
-   
+
   }
-  select() {
-    console.log("select ingreso");
-    db.transaction(tx => {
-      tx.executeSql("select * from movimientos", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
-        );
+
+  const select = async () => {
+    console.log("entro al select")
+    await db.transaction(tx => {
+      tx.executeSql("select * from cuentas", [], (_, { rows }) => {
+
+        setVariable(rows._array);
+        console.log(variable);
+      });
     });
   }
+  //const { navigation } = this.props;
+  /* let medioCobro = [{
+    value: '74144/78998',
+  }, {
+    value: '74889/12321',
+  }, {
+    value: '46546/45645',
+  }, {
+    value: 'Efectivo',
+  },]*/
+  /*let detalle = [{
+    value: 'Sueldo',
+  }, {
+    value: 'Facturación Autónomo',
+  }, {
+    value: 'Alquiler',
+  }, {
+    value: 'Venta Bien Uso Personal',
+  }, {
+    value: 'Otro',
+  }]*/
 
-  componentDidMount() {
-    this.getPermissionAsync();
-  }
 
-  getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  };
+  return (
+    <View style={styles.viewContainer}>
 
-  _pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image: result.uri });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
-} 
-
-/* <View style={styles.viewContainer}>
-      
-      <MultiSelect
-            hideTags
-            items={items}
-            uniqueKey="id"
-            ref={component => {
-              this.multiSelect = component;
-            }}
-            onSelectedItemsChange={this.onSelectedItemsChange}
-            selectedItems={selectedItems}
-            selectText="Pick Items"
-            searchInputPlaceholderText="Search Items..."
-            onChangeInput={text => console.log(text)}
-            tagRemoveIconColor="#CCC"
-            tagBorderColor="#CCC"
-            tagTextColor="#CCC"
-            selectedItemTextColor="#CCC"
-            selectedItemIconColor="#CCC"
-            itemTextColor="#000"
-            displayKey="name"
-            searchInputStyle={{ color: '#CCC' }}
-            submitButtonColor="#48d22b"
-            submitButtonText="Submit"
-          />
-        <TextInput
+      <TextInput
         style={styles.textInput}
         placeholder='Monto'
         clearButtonMode='always'
         keyboardType='number-pad'
+        onChangeText={monto => setMonto({ monto })}
+        //editable={this.state.TextInputDisableHolder}
       />
 
-      <Dropdown 
+     <Dropdown
         label='Seleccionar Detalle'
         data={detalle}
+        onChangeText={det => setDetalleSelected({ det })}
+        disabled={false}
+      /> 
+
+        <View>
+          <Picker
+            style={{
+              height: 40,
+              marginTop: 22,
+              backgroundColor: "#FFF",
+            }}
+            selectedValue={medioCobro}
+            onValueChange={(val) => setMedioCobro(val)}
+          >
+            <Picker.Item
+              label={
+                variable && variable.length > 0
+                  ? "-- Seleccione un medio de cobro --"
+                  : "-- No posee medio de cobro registrado --"
+              }
+              value=""
+            />
+            {variable &&
+              variable.map((item, i) => (
+                <Picker.Item
+                  label={`${item.numero}`}
+                  value={`${item.numero}`}
+                  key={i}
+                />
+              ))}
+          </Picker>
+        </View>
+
+      <Check></Check>
+
+      <Button
+        title="Guardar"
+
+        onPress={() => add(monto, detalle, medioCobro)}
       />
-      <Dropdown 
-        label='Seleccionar medio de cobro'
-        data={medioCobro}
+      <Button
+        title="Select"
+
+        onPress={() => select()}
       />
-      <this.MyComponent></this.MyComponent>
-      <Button 
-      title="Guardar"
-      onPress={() => navigation.navigate('IngresoView')}
-      />  
-
-      <ElegirFecha></ElegirFecha>
-      <Button title="Pick an image from camera roll" onPress={this._pickImage} />
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        <View style={styles.row}>
-            <View style={[styles.box, styles.box2]}><SelectMultiple
-          items={fruits}
-          selectedItems={this.state.selectedFruits}
-          onSelectionsChange={this.onSelectionsChange} /></View>
-            <View style={[styles.box]}></View>
-            <View style={[styles.box, styles.box3]}></View>
-          </View>  
-
-            
-         }*/
 
 
 
-//onPress={navigation.navigate('IngredientsDetails', {  })}
-//onPress={() => Alert.alert('Simple Button pressed')}
-//onPress={() => navigation.navigate('IngresoView')}
-          //onPress={this.submitAndClear}
-
-     /*      <Dropdown 
-          label='fruta favorita'
-          data={info}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Categoria'
-          clearButtonMode='always'
-        />
-        <TextInput
-          style={styles.textInput}
-        placeholder='Medio de pago'
-        clearButtonMode='always'
-        /> */
-/*const getFullName = (uno , dos , tres) => {
-  return uno + " " + dos + " " + tres; 
-}
-
-const cat = () => {
-  return(
-    <View>
-      <Text>hello im...</Text>
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-        }}
-        defaultValue= 'Name me!'
-      />
     </View>
 
-  )
-} 
-*/
 
 
-/*const Cat = (props) => {
-  return (
-    <View>
-      <Text>Hello, I am {props.name}!</Text>
-    </View>
+    //, navigation.navigate('IngresoView')
+
   );
 }
 
-const Cafe = () => {
 
-  return (
-    <View>
-      <Cat name="Buji" />
-      <Cat name="Jellylorum" />
-      <Cat name="Spot" />
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-          
-        }}
-        keyboardType='number-pad'
-        //defaultValue= 'Name me!'
-      />
-    </View>
-  );
-}
 
-export default Cafe;  */
 const styles = StyleSheet.create({
   viewContainer: {
-    flexDirection:"column",
-    flex:1,
+    flexDirection: "column",
+    flex: 1,
     width: '90%',
     marginLeft: 20,
     marginTop: 20,
@@ -466,13 +257,13 @@ const styles = StyleSheet.create({
     margin: 10
     //borderRadius: 20
   },
-  drop:{
+  drop: {
     //borderColor: 'gray',
     paddingLeft: 20,
     margin: 10
     //borderRadius: 20
   },
-  boton:{
+  boton: {
     height: 40,
     borderWidth: 1,
     //borderColor: 'gray',
@@ -484,7 +275,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  periodico:{
+  periodico: {
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20
@@ -532,3 +323,5 @@ const styles = StyleSheet.create({
 })
 
 
+
+export default Ingreso;

@@ -28,26 +28,26 @@ export default class Inversiones extends React.Component {
 
   renderInversiones = ({ item }) => (
 
-      <View style={styles.container}>
-        <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
-        <Text style={styles.elemento}>{item.info}</Text>
-        <Text style={styles.elemento}>CAPITAL INVERTIDO: $ {item.capitalInvertido} </Text>
-        <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
-        <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
-        <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>       
-      </View>
-     
-   
+    <View style={styles.container}>
+      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
+      <Text style={styles.elemento}>{item.info}</Text>
+      <Text style={styles.elemento}>CAPITAL INVERTIDO: $ {item.capitalInvertido} </Text>
+      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
+      <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
+      <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
+    </View>
+
+
   );
 
   render() {
     return (
-      <View style={{flex:1}}>
-      <BotonAgregarInversion
-               onPress={() => {
-                this.onPressNuevaInversion();
-              }}
-            />
+      <View style={{ flex: 1 }}>
+        <BotonAgregarInversion
+          onPress={() => {
+            this.onPressNuevaInversion();
+          }}
+        />
         <FlatList
           vertical
           showsVerticalScrollIndicator={true}
@@ -56,7 +56,7 @@ export default class Inversiones extends React.Component {
           renderItem={this.renderInversiones}
           keyExtractor={item => `${item.recipeId}`}
         />
-        
+
       </View>
     );
   }
