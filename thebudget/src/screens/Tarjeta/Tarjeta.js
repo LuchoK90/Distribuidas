@@ -1,246 +1,289 @@
-import React , { Component } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   Text,
   View,
   Image,
-  TouchableHighlight, TextInput
-} from 'react-native';
-import estilos from './estilos';
-import { categories } from '../../data/dataArrays';
-import { getNumberOfRecipes } from '../../data/MockDataAPI';
-import { AppRegistry, StyleSheet, Button, SafeAreaView, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+  TouchableHighlight,
+  TextInput,
+  Switch,
+  Picker,
+} from "react-native";
+import hola from "./styles";
+import { categories } from "../../data/dataArrays";
+import { getNumberOfRecipes } from "../../data/MockDataAPI";
 import {
-  Dropdown }
-  from 'react-native-material-dropdown';
-  import ElegirFecha from '../../components/ElegirFecha/ElegirFecha';
-  import * as SQLite from 'expo-sqlite';
+  AppRegistry,
+  StyleSheet,
+  Button,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Dropdown } from "react-native-material-dropdown";
+import { Checkbox } from "react-native-paper";
+import ElegirFecha from "../../components/ElegirFecha/ElegirFecha";
+import Check from "../../components/Check/Check";
 
+import { Platform } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import SelectMultiple from "react-native-select-multiple";
+import MultiSelect from "react-native-multiple-select";
+import PickList from "react-native-picklist";
+import CustomMultiPicker from "react-native-multiple-select-list";
+import DatePicker from "react-native-datepicker";
+import * as SQLite from "expo-sqlite";
 
+const db = SQLite.openDatabase("budgetgo.db");
 
-  const db = SQLite.openDatabase("budgetgo.db");
+const Ingreso = ({ navigation }) => {
+  //export default class Ingreso extends React.Component {
+  const [variable, setVariable] = useState([]);
+  const [bankAccounts, setBankAccounts] = useState([]);
+  const [medioCobro, setMedioCobro] = useState("");
+  //const navigationOptions = () => { PickList.navigationOptions };
+  const [detalleSelected, setDetalleSelected] = useState();
+  let emisor=[{
+    value: 'Visa',
+  },{
+    value: 'MasterCard',
+  },{
+    value: 'Cabal',
+  },{
+    value: 'American Express',
+  }]
+  const [monto, setMonto] = useState(0);
 
+  /*   value: 'Sueldo',
+}, {
+  value: 'Facturación Autónomo',
+}, {
+  value: 'Alquiler',
+}, {
+  value: 'Venta Bien Uso Personal',
+}, {
+  value: 'Otro',
+}] */
 
-export default class Tarjeta extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  /*state = {
+    image: null,
+    monto: 0,
+    detalle: null,
+    medio: null,
+    fecha: null,
+  };*/
+
+  const navigationOptions = ({ navigation }) => {
     return {
-      headerTransparent: 'true',
-      headerLeft: () => <BackButton
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+      headerTransparent: "true",
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
     };
   };
 
-  static navigationOptions = {
-    title: 'Tarjeta'
-  };
-
-  constructor(props) {
-    super(props)
-    this.state = { text: '' }
-
-    this.state = { chosenDate: new Date(), prueba: false };
-    this.setDate = this.setDate.bind(this);
-    this.state = { TextInputDisableStatus: true }
-    //Aca
-    this.state = {date:"20-09-2020"}
-     //Tabla de movimientos
-     
-    db.transaction(tx => {
-      console.log("ingreso constructor");
-      /* tx.executeSql(
-        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
-      ); */
-      tx.executeSql("select * from tarjetas", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
-      );
-    });
-  }
-
   submitAndClear = () => {
-    this.props.writeText(this.state.text)
+    this.props.writeText(this.state.text);
 
     this.setState({
-      text: ''
-    })
-  }
+      text: "",
+    });
+  };
 
-  setDate(newDate) {
+  setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
-  }
+  };
 
-  getCurrentDate=()=>{
-
+  const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //Alert.alert(date + '-' + month + '-' + year);
-    // You can turn it in to your desired format
-    
-    console.log(date + '/' + month + '/' + year + "getCurrentDate"+this.state.fecha);
-    return date + '/' + month + '/' + year;
-}
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return date + "/" + month + "/" + year;
+  };
 
-  render(){
-    const { navigation } = this.props;
-    let emisor=[{
-      value: 'Visa',
-    },{
-      value: 'MasterCard',
-    },{
-      value: 'Cabal',
-    },{
-      value: 'American Express',
-    }]
-    return(
-      <View style={styles.viewContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder='Banco'
-          clearButtonMode='always'
-          onChangeText={banco => this.setState({ banco })}
-        />
-        <Dropdown 
-          label='Seleccionar entidad emisora'
-          data={emisor}
-          onChangeText={emisor => this.setState({ emisor })}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Últimos 4 números'
-          clearButtonMode='always'
-          keyboardType='number-pad'
-          onChangeText={numeros => this.setState({ numeros })}
-        />
+  const handleSelect = async () => {
+    await select();
+  };
+  useEffect(() => {
+    handleSelect();
+  }, []);
+
+  const add = (monto, detalle, medio) => {
+    console.log(monto + " " + detalle + " " + medio);
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')",
+        [getCurrentDate(), detalle, monto, medio]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+  };
+
+  const select = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
+        setVariable(rows._array);
+        console.log(variable);
+      });
+    });
+  };
+  //const { navigation } = this.props;
+  /* let medioCobro = [{
+    value: '74144/78998',
+  }, {
+    value: '74889/12321',
+  }, {
+    value: '46546/45645',
+  }, {
+    value: 'Efectivo',
+  },]*/
+  /*let detalle = [{
+    value: 'Sueldo',
+  }, {
+    value: 'Facturación Autónomo',
+  }, {
+    value: 'Alquiler',
+  }, {
+    value: 'Venta Bien Uso Personal',
+  }, {
+    value: 'Otro',
+  }]*/
+
+  return (
+    <View style={styles.viewContainer}>
+      <TextInput
+        style={styles.textInput}
+        placeholder="Banco"
+        clearButtonMode="always"
+        onChangeText={(monto) => setMonto({ monto })}
+        //editable={this.state.TextInputDisableHolder}
+      />
+
+      <Dropdown
+        label="Seleccionar entidad emisora"
+        data={emisor}
+        onChangeText={(det) => setDetalleSelected({ det })}
+        disabled={false}
+      />
+
+      
+
+      <TextInput
+        style={styles.textInput}
+        placeholder="Últimos 4 números"
+        clearButtonMode="always"
+        keyboardType="number-pad"
+        onChangeText={(monto) => setMonto({ monto })}
+        //editable={this.state.TextInputDisableHolder}
+      />
+      <View style={{flexDirection: "row",
+    marginTop: 20}}>
         <Text>Fecha Vencimiento</Text>
-        <ElegirFecha style={{width:'100%'}} onChangeText={vencimiento => this.setState({ vencimiento })}></ElegirFecha>
-        <Text>Fecha Cierre Resumen</Text>
-        <ElegirFecha style={{width:'100%'}} onChangeText={cierre_resumen => this.setState({ cierre_resumen })}></ElegirFecha>
-        <Text>Fecha Vencimiento Resumen</Text>
-        <ElegirFecha style={{width:'100%'}} onChangeText={vencimiento_resumen => this.setState({ vencimiento_resumen })}></ElegirFecha>
-        
-        <Button 
-        title="Guardar"
-        onPress={() => this.add(this.state.banco,this.state.emisor,this.state.numeros,this.state.vencimiento,this.state.cierre_resumen,this.state.vencimiento_resumen)}
-        />  
-      </View>
-    );
-  }
-  add(banco, emisor, numeros, vencimiento, cierre_resumen, vencimiento_resumen) {
-    db.transaction(
-      tx => {
-        tx.executeSql("insert into tarjetas (banco, entidad, numero, vencimiento, cierre_resumen,  vencimiento_resumen) values (?, ?, ?, ?, ?, ?)", [banco, emisor, numeros, vencimiento, cierre_resumen, vencimiento_resumen]),(_,{ rows }) => 
-                        console.log(JSON.stringify(rows)),(_,{ error}) => 
-                        console.log(JSON.stringify(error));             
-        
-      },
-     
-    );
-   
-  }
-} 
-//onPress={navigation.navigate('IngredientsDetails', {  })}
-//onPress={() => Alert.alert('Simple Button pressed')}
-          //onPress={this.submitAndClear}
+        <ElegirFecha style={{width:'100%',marginLeft:10}} ></ElegirFecha></View>
+        <View style={{flexDirection: "row",
+    marginTop: 20}}><Text>Fecha Cierre Resumen</Text>
+        <ElegirFecha style={{width:'100%'}} ></ElegirFecha></View>
+        <View style={{flexDirection: "row",
+    marginTop: 20}}><Text>Fecha Vencimiento Resumen</Text>
+        <ElegirFecha style={{width:'100%'}} ></ElegirFecha></View>
 
-     /*      <Dropdown 
-          label='fruta favorita'
-          data={info}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder='Categoria'
-          clearButtonMode='always'
-        />
-        <TextInput
-          style={styles.textInput}
-        placeholder='Medio de pago'
-        clearButtonMode='always'
-        /> */
-/*const getFullName = (uno , dos , tres) => {
-  return uno + " " + dos + " " + tres; 
-}
-
-const cat = () => {
-  return(
-    <View>
-      <Text>hello im...</Text>
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-        }}
-        defaultValue= 'Name me!'
-      />
+      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      
     </View>
 
-  )
-} 
-*/
-
-
-/*const Cat = (props) => {
-  return (
-    <View>
-      <Text>Hello, I am {props.name}!</Text>
-    </View>
+    //, navigation.navigate('IngresoView')
   );
-}
+};
 
-const Cafe = () => {
-
-  return (
-    <View>
-      <Cat name="Buji" />
-      <Cat name="Jellylorum" />
-      <Cat name="Spot" />
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-          
-        }}
-        keyboardType='number-pad'
-        //defaultValue= 'Name me!'
-      />
-    </View>
-  );
-}
-
-export default Cafe;  */
 const styles = StyleSheet.create({
   viewContainer: {
-    width: '90%',
+    flexDirection: "column",
+    flex: 1,
+    width: "90%",
     marginLeft: 20,
-    marginTop: 20
+    marginTop: 20,
+    padding: 10,
   },
   textInput: {
     height: 40,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     paddingLeft: 20,
-    margin: 10
+    margin: 10,
     //borderRadius: 20
   },
-  drop:{
+  drop: {
     //borderColor: 'gray',
     paddingLeft: 20,
-    margin: 10
+    margin: 10,
     //borderRadius: 20
   },
-  boton:{
+  boton: {
     height: 40,
     borderWidth: 1,
     //borderColor: 'gray',
     paddingLeft: 20,
-    margin: 10
-  }
-})
-AppRegistry.registerComponent('clear-text', () => ChangeText)
+    margin: 10,
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  periodico: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  box: {
+    flex: 1,
+    height: 160,
+    backgroundColor: "#333",
+  },
+  box2: {
+    backgroundColor: "green",
+  },
+  box3: {
+    backgroundColor: "orange",
+  },
+  two: {
+    flex: 2,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  label: {
+    margin: 8,
+  },
+});
+
+export default Ingreso;

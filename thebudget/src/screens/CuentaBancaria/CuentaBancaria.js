@@ -1,73 +1,83 @@
-import React from 'react';
-import { FlatList, ScrollView, Text, View, TouchableHighlight, Image } from 'react-native';
-import styles from './styles';
-import { recipes } from '../../data/dataArrays';
-import MenuImage from '../../components/MenuImage/MenuImage';
-import DrawerActions from 'react-navigation';
-import { getCategoryName } from '../../data/MockDataAPI';
-import BotonRealizarTransferencia from '../../components/botonRealizarTransferencia/botonRealizarTransferencia';
-import BotonAgregarCuenta from '../../components/botonAgregarCuenta/botonAgregarCuenta';
+import React, { useState, useEffect } from "react";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  View,
+  TouchableHighlight,
+  Image,
+  Button
+} from "react-native";
+import styles from "./styles";
+import { inversiones } from "../../data/dataArrays";
+import MenuImage from "../../components/MenuImage/MenuImage";
+// import DrawerActions from "react-navigation";
+import { getCategoryName } from "../../data/MockDataAPI";
+import BotonRealizarTransferencia from "../../components/botonRealizarTransferencia/botonRealizarTransferencia";
+import BotonAgregarInversion from "../../components/botonAgregarInversion/botonAgregarInversion";
+import { useNavigation } from "@react-navigation/native";
+import * as SQLite from "expo-sqlite";
 
-export default class CuentaBancaria extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Cuentas Bancarias',
-    headerLeft: () => <MenuImage
-      onPress={() => {
-        navigation.openDrawer();
-      }}
-    />
-  });
+const db = SQLite.openDatabase("budgetgo.db");
 
-  constructor(props) {
-    super(props);
-  }
+const CuentaBancaria = ({ navigation }) => {
+  const [inversiones, setInversiones] = useState([]);
 
-  onPressTransferencia = item => {
-    this.props.navigation.navigate('Transferencias', { item });
+  useEffect(() => {
+    handleSelect();
+  }, []);
+  const onPressNuevaInversion = (item) => {
+    navigation.navigate("Invertir");
   };
 
-  onPressNuevaCuenta = item => {
-    this.props.navigation.navigate('NuevaCuenta');
+  const handleSelect = async () => {
+    await select();
   };
 
-  renderRecipes = ({ item }) => (
+  const select = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from inversiones", [], (_, { rows }) => {
+        // console.log(rows);
+        setInversiones(rows._array);
+      });
+    });
+  };
 
-      <View style={styles.container}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.elemento}>N° DE CUENTA: {item.nCuenta}</Text>
-        <Text style={styles.elemento}>CBU: {item.cbu}</Text>
-        <Text style={styles.elemento}>TARJETA: {item.tarjeta}</Text>
-        <Text style={styles.elemento}>SALDO: $ {item.saldo}</Text>
-       
-            <BotonRealizarTransferencia
-              onPress={() => {
-                this.onPressTransferencia(item);
-              }}
-            />
-       
-      </View>
-     
-   
+  const renderInversiones = (item) => (
+    <View style={styles.container}>
+      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
+      <Text style={styles.elemento}>{item.info}</Text>
+      <Text style={styles.elemento}>
+        CAPITAL INVERTIDO: $ {item.capitalInvertido}
+      </Text>
+      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
+      <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
+      <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
+      <Button title={"Realizar Transferencia"} onPress={() =>  navigation.navigate('Transferencias', { item })}/> 
+    </View>
   );
 
-  render() {
-    return (
-      <View style={{flex:1}}>
-      <BotonAgregarCuenta
-               onPress={() => {
-                this.onPressNuevaCuenta();
-              }}
-            />
-        <FlatList
-          vertical
-          showsVerticalScrollIndicator={true}
-          numColumns={1}
-          data={recipes}
-          renderItem={this.renderRecipes}
-          keyExtractor={item => `${item.recipeId}`}
-        />
-        
-      </View>
-    );
-  }
-}
+  return (  
+    <View style={{ flex: 1 }}>
+      <Button title='Agregar Cuenta Bancaria'
+        onPress={() => {
+          navigation.navigate('NuevaCuenta')
+        }}
+      />
+      <FlatList
+        vertical
+        showsVerticalScrollIndicator={true}
+        numColumns={1}
+        data={inversiones}
+        renderItem={({ item }) => renderInversiones(item)}
+        keyExtractor={(item) => `${item.id_inversion}`}
+      />
+    </View>
+  );
+};
+
+CuentaBancaria["navigationOptions"] = (screenProps) => ({
+  title: "Inversiones",
+});
+
+export default CuentaBancaria;

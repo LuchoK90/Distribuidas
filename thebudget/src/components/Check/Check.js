@@ -42,7 +42,7 @@ const Check = () => {
           onValueChange={setSelection}
           style={styles.checkbox}
         />
-        <Text>Periódico </Text>
+        {/*<Text>Periódico </Text>*/}
       </View>
       <View>
         {isSelected && (

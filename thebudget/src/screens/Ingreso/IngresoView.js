@@ -60,7 +60,7 @@ const IngresoView = ({ navigation }) => {
 
   const select = () => {
     db.transaction((tx) => {
-      tx.executeSql("select * from cuentas", [], (_, { rows }) => {
+      tx.executeSql("select * from movimientos where tipo_mov='Ingreso'", [], (_, { rows }) => {
         setVariable(rows._array);
       });
     });

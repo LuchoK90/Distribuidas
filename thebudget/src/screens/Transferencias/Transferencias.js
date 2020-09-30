@@ -19,7 +19,7 @@ import InputCBUDestino from '../../components/inputCBUDestino/inputCBUDestino';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
-export default class RecipeScreen extends React.Component {
+export default class Transferencias extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: 'true',
@@ -56,8 +56,8 @@ export default class RecipeScreen extends React.Component {
     const { activeSlide } = this.state;
     const { navigation } = this.props;
     const item = navigation.getParam('item');
-    const category = getCategoryById(item.categoryId);
-    const title = getCategoryName(category.id);
+   // const category = getCategoryById(item.categoryId);
+    //const title = getCategoryName(category.id);
 
     return (
       <ScrollView style={styles.container}>

@@ -139,7 +139,7 @@ const Ingreso = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from cuentas", [], (_, { rows }) => {
+      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });
@@ -213,7 +213,7 @@ const Ingreso = ({ navigation }) => {
             ))}
         </Picker>
       </View>
-
+      <Text>Periódico</Text>          
       <Check></Check>
 
       <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />

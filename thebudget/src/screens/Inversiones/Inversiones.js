@@ -6,6 +6,7 @@ import {
   View,
   TouchableHighlight,
   Image,
+  Button
 } from "react-native";
 import styles from "./styles";
 import { inversiones } from "../../data/dataArrays";
@@ -19,27 +20,14 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("budgetgo.db");
 
-const Inversiones = () => {
-  // const navigation = useNavigation();
+const Inversiones = ({ navigation }) => {
   const [inversiones, setInversiones] = useState([]);
-  // static navigationOptions = ({ navigation }) => ({
-  //   title: 'Inversiones',
-  //   headerLeft: () => <MenuImage
-  //     onPress={() => {
-  //       navigation.openDrawer();
-  //     }}
-  //   />
-  // });
-
-  // constructor(props) {
-  //   super(props);
-  // }
 
   useEffect(() => {
     handleSelect();
   }, []);
   const onPressNuevaInversion = (item) => {
-    // navigation.navigate("Invertir");
+    navigation.navigate("Invertir");
   };
 
   const handleSelect = async () => {
@@ -49,7 +37,6 @@ const Inversiones = () => {
   const select = async () => {
     await db.transaction((tx) => {
       tx.executeSql("select * from inversiones", [], (_, { rows }) => {
-        console.log("asd 2");
         // console.log(rows);
         setInversiones(rows._array);
       });
@@ -61,15 +48,16 @@ const Inversiones = () => {
       <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
       <Text style={styles.elemento}>{item.info}</Text>
       <Text style={styles.elemento}>
-        CAPITAL INVERTIDO: $ {item.capitalInvertido}{" "}
+        CAPITAL INVERTIDO: $ {item.capitalInvertido}
       </Text>
       <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
       <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
       <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
+      {/* <Button title={"Ver Detalle"} onPress={() =>  navigation.navigate("InversionDetalle")}/> */}
     </View>
   );
 
-  return (
+  return (  
     <View style={{ flex: 1 }}>
       <BotonAgregarInversion
         onPress={() => {
@@ -81,11 +69,15 @@ const Inversiones = () => {
         showsVerticalScrollIndicator={true}
         numColumns={1}
         data={inversiones}
-        renderItem={renderInversiones}
-        keyExtractor={(item) => `${item.recipeId}`}
+        renderItem={({ item }) => renderInversiones(item)}
+        keyExtractor={(item) => `${item.id_inversion}`}
       />
     </View>
   );
 };
+
+Inversiones["navigationOptions"] = (screenProps) => ({
+  title: "Inversiones",
+});
 
 export default Inversiones;

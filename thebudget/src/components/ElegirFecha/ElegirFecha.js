@@ -15,7 +15,7 @@ const MyDatePicker = ({ disabled = false }) => {
       minDate="20-09-2020"
       maxDate="20-09-2021"
       confirmBtnText="Confirm"
-      showIcon="false"
+      showIcon={false}
       cancelBtnText="Cancel"
       customStyles={{
         dateIcon: {
