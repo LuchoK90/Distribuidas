@@ -25,7 +25,7 @@ import { DataTable } from "react-native-paper";
 import * as SQLite from "expo-sqlite";
 import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const PresupuestoView = ({ navigation }) => {
   const [text, setText] = useState("");

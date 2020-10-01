@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppContainer from "./src/navigations/AppNavigation";
 import * as SQLite from "expo-sqlite";
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 export default class App extends React.Component {
   constructor() {
@@ -21,7 +21,7 @@ export default class App extends React.Component {
         "drop table movimientos ;"
       ); */
       tx.executeSql(
-        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
+        "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text, dia int, mes int, anio int, sem int);"
       );
     });
 
@@ -67,6 +67,9 @@ export default class App extends React.Component {
       console.log("medio")
       tx.executeSql(
         "create table if not exists medios (id_medio integer primary key not null, banco text, numero text, cbu text, debito text, saldo real,entidad text, vencimiento text, cierre_resumen text, vencimiento_resumen text, esCuentaBancaria integer, esTarjetaCredito integer, esEfectivo integer);"
+      );
+      tx.executeSql(
+        "insert into medios(banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);"
       );
     });
 

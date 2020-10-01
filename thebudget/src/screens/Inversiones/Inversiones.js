@@ -18,7 +18,7 @@ import BotonAgregarInversion from "../../components/botonAgregarInversion/botonA
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const Inversiones = ({ navigation }) => {
   const [inversiones, setInversiones] = useState([]);

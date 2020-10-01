@@ -5,7 +5,7 @@ import MenuImage from '../../components/MenuImage/MenuImage';
 import { Button } from 'react-native-paper';
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2");
 
 
 //export default class CategoriesScreen extends React.Component {
@@ -82,12 +82,12 @@ const Login = ({navigation}) =>{
       const registrarse = () =>{
         add(email,password);
         select();
-        navigation.navigate("Dashboard");
+        navigation.navigate("Home");
       };
 
       const ingresar = () =>{
         loguearse(email,password);
-        navigation.navigate("Dashboard");
+        navigation.navigate("Home");
       };
 
     

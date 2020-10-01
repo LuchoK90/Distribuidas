@@ -37,7 +37,7 @@ import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const NuevaCuenta = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
@@ -132,7 +132,7 @@ const NuevaCuenta = ({ navigation }) => {
 
   const continuar = () =>{
     add(banco, numeroCuenta, cbu, tarjetaAsociada, saldo);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
 
   

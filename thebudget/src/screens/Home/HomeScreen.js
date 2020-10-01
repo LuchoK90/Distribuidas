@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import {ScrollView, Text, Image} from 'react-native';
 import styles from './styles';
 import MenuImage from '../../components/MenuImage/MenuImage';
 import {Table, Row, Rows} from 'react-native-table-component';
@@ -12,7 +12,7 @@ const screenWidth = Dimensions.get("window").width;
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Dashboard',
+        title: 'Home',
         headerLeft: () => <MenuImage
             onPress={() => {
                 navigation.openDrawer();
@@ -143,74 +143,11 @@ export default class HomeScreen extends React.Component {
 
             <ScrollView>
             
-                <Text style={styles.mesNombre}>{'Septiembre 2020'}</Text>
+            <Text style={styles.logo}>Budget GO</Text>
+            <Image style={styles.infoPhoto} source={require('../../../assets/images/login.jpeg')} />
+            
 
-                <Text style={styles.graficosNombre}>{'Gastos por Medio de Pago'}</Text>
-                <PieChart
-                    data={data}
-                    width={screenWidth}
-                    height={220}
-                    chartConfig={chartConfig}
-                    accessor="population"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
-
-                <Text style={styles.graficosNombre}>{'Saldos Cuentas Bancarias'}</Text>                
-                <Table borderStyle={{ borderWidth: 1, borderColor: '#270570' }}>
-                    <Row data={HeadTable} style={styles.HeadStyle} textStyle={styles.TableText} />
-                    <Rows data={DataTable} textStyle={styles.TableText} />
-                </Table>
-
-                <Text style={styles.graficosNombre}>{'Vencimientos'}</Text>
-                <Table borderStyle={{ borderWidth: 1, borderColor: '#270570' }}>
-                    <Row data={HeadTable_2} style={styles.HeadStyle} textStyle={styles.TableText} />
-                    <Rows data={DataTable_2} textStyle={styles.TableText} />
-                </Table>
-
-                <Text style={styles.graficosNombre}>{'Desvíos'}</Text>
-
-                <VictoryChart>
-                 
-                    <VictoryGroup offset={20}>
-                        <VictoryBar 
-                            data ={data_prueba.actual} 
-                                style={{
-                                    data: {
-                                        fill: 'lightblue',
-                                    },
-                                }}
-                        />
-                        <VictoryBar 
-                            data ={data_prueba.planned} 
-                            style={{
-                                data: {
-                                    fill: '#270570',
-                                },
-                            }}
-                        />
-                    </VictoryGroup>
-                    <VictoryLegend 
-                        x={Dimensions.get('screen').width / 2 - 100}
-                        orientation = "horizontal"
-                        gutter={20}
-                        data={[
-                            {
-                                name: 'Real',
-                                symbol:{
-                                    fill: 'lightblue',
-                                },
-                            },
-                            {
-                                name: 'Presupuestado',
-                                symbol:{
-                                    fill: '#270570',
-                                },
-                            },
-                        ]}   
-                    />
-                </VictoryChart>   
+                
             </ScrollView>
 
         );

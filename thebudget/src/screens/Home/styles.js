@@ -30,7 +30,18 @@ const styles = StyleSheet.create({
     
     HeadStyle: {
         backgroundColor: 'lightblue'
-    }
+    },
+    infoPhoto: {
+        height: '10%',
+        width: '10%',
+        marginTop:1,
+      },
+      logo:{
+        fontWeight:"bold",
+        fontSize:50,
+        color:"#0e84e6",
+        textAlign: 'center'
+      }
 });
 
 export default styles;

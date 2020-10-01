@@ -8,7 +8,7 @@ import { getCategoryName } from '../../data/MockDataAPI';
 import BotonAgregarCuenta from '../../components/botonAgregarCuenta/botonAgregarCuenta';
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const TarjetaView = ({navigation}) => {
   // static navigationOptions = ({ navigation }) => ({

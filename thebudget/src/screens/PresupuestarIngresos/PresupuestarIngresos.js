@@ -37,7 +37,7 @@ import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const PresupuestarIngreso = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
@@ -156,7 +156,7 @@ const PresupuestarIngreso = ({ navigation }) => {
 
   const continuar = () =>{
     add(detalleSelected,monto);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
   //const { navigation } = this.props;
   /* let medioCobro = [{

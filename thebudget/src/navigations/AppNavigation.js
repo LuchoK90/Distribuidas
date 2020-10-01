@@ -5,7 +5,8 @@ import {createStackNavigator} from 'react-navigation-stack'
 import {createStackNavigator} from '@react-navigation/stack'
 import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
-import Dashboard from '../screens/Home/HomeScreen';
+import Dashboard_Posta from '../screens/Home/Dashboard';
+import Home from '../screens/Home/HomeScreen';
 import CuentasBancarias from '../screens/CuentaBancaria/CuentaBancaria';
 import Login from '../screens/Login/Login';
 import Transferencias from '../screens/Transferencias/Transferencias';
@@ -38,7 +39,7 @@ import PresupuestarPrestamos from '../screens/PresupuestarPrestamos/Presupuestar
 import GastosAcumulados from '../screens/Tarjeta/GastosAcumulados';
 import {AsyncStorage} from 'react-native';
 import * as SQLite from "expo-sqlite";
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2");
 
 
 /* const Stack = createStackNavigator();
@@ -70,7 +71,8 @@ function MainNavigator() {
 
 const MainNavigator = createStackNavigator(
   {
-    Dashboard: Dashboard,
+    Dashboard_Posta: Dashboard_Posta,
+    Home: Home,
     Login: Login,
     CuentasBancarias: CuentasBancarias,
     Transferencias: Transferencias,

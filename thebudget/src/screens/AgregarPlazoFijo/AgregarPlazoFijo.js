@@ -37,7 +37,7 @@ import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("budgetgo.db");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const AgregarPlazoFijo = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
@@ -132,6 +132,41 @@ const AgregarPlazoFijo = ({ navigation }) => {
     return date + "/" + month + "/" + year;
   };
 
+  const getDate = () => {   
+    var day = new Date().getDate();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
+
+
+
+
+
+
+  const getWeek = () =>  {
+    var dd = new Date();
+    var d = new Date(Date.UTC(dd.getFullYear(), dd.getMonth(), dd.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+};
+
   const handleSelect = async () => {
     await select();
   };
@@ -147,7 +182,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
        });
     });
     db.transaction((tx) => {
-      tx.executeSql(
+      tx.executeSql(     
         "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Plazo Fijo',?,?,?,?,?)",
         [Modo,monto,rendimiento,fechaVenc,medioCobro]
       ),
@@ -156,8 +191,8 @@ const AgregarPlazoFijo = ({ navigation }) => {
     });
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Plazo Fijo', ?, ?, 'Egreso', '')",
-        [getCurrentDate(), monto, medioCobro]
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?,'Plazo Fijo', ?, ?, 'Egreso', '', ?, ?, ?, ?)",
+        [getCurrentDate(), monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -207,7 +242,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
 
   const continuar = () =>{
     add(medioCobro,monto,fechaVenc,rendimiento,mode);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
    
   //const { navigation } = this.props;
