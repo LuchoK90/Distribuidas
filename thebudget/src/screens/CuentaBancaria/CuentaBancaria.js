@@ -36,7 +36,7 @@ const CuentaBancaria = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from inversiones", [], (_, { rows }) => {
+      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });
@@ -45,15 +45,10 @@ const CuentaBancaria = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
-      <Text style={styles.elemento}>{item.info}</Text>
-      <Text style={styles.elemento}>
-        CAPITAL INVERTIDO: $ {item.capitalInvertido}
-      </Text>
-      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
-      <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
-      <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
-      <Button title={"Realizar Transferencia"} onPress={() =>  navigation.navigate('Transferencias', { item })}/> 
+      <Text style={styles.elemento}>{item.banco} </Text>
+      <Text style={styles.elemento}>{item.numero}</Text>
+      <Text style={styles.elemento}>{item.saldo}</Text>
+  
     </View>
   );
 
@@ -72,12 +67,13 @@ const CuentaBancaria = ({ navigation }) => {
         renderItem={({ item }) => renderInversiones(item)}
         keyExtractor={(item) => `${item.id_inversion}`}
       />
+      <Button title={"Realizar Transferencia"} onPress={() =>  navigation.navigate('Transferencias')}/>
     </View>
   );
 };
 
 CuentaBancaria["navigationOptions"] = (screenProps) => ({
-  title: "Inversiones",
+  title: "Cuentas Bancarias",
 });
 
 export default CuentaBancaria;

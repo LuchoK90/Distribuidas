@@ -6,6 +6,9 @@ import MenuImage from '../../components/MenuImage/MenuImage';
 import DrawerActions from 'react-navigation';
 import { getCategoryName } from '../../data/MockDataAPI';
 import BotonAgregarCuenta from '../../components/botonAgregarCuenta/botonAgregarCuenta';
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase("budgetgo.db");
 
 const TarjetaView = ({navigation}) => {
   // static navigationOptions = ({ navigation }) => ({
@@ -24,8 +27,8 @@ const TarjetaView = ({navigation}) => {
     // console.log("item",item)
 
     Alert.alert(
-     `Detalle tarjeta ${item.tarjeta}`,
-     `Monto gastado(Mes en Curso): ${item.saldo}\nEntidad Bancaria: ${item.title}`
+     `Detalle tarjeta ${item.numero}`,
+     `Monto gastado(Mes en Curso): ${item.saldo}\nEntidad Bancaria: ${item.entidad}`
        ,
        [
          {
@@ -58,6 +61,7 @@ const TarjetaView = ({navigation}) => {
     db.transaction((tx) => {
       tx.executeSql("select * from medios where esTarjetaCredito = 1", [], (_, { rows }) => {
         setVariable(rows._array);
+        console.log(rows._array)
       });
     });
   };
@@ -66,9 +70,9 @@ const TarjetaView = ({navigation}) => {
 
       <View style={styles.container}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.elemento}>VISA</Text>
-        <Text style={styles.elemento}>LIMITE: 3000</Text>
-        <Text style={styles.elemento}>TARJETA: {item.tarjeta}</Text>
+        <Text style={styles.elemento}>{item.banco}</Text>
+        <Text style={styles.elemento}>{item.entidad}</Text>
+        <Text style={styles.elemento}>{item.numero}</Text>
         <Text style={styles.elemento}>ACUMULADO: $ {item.saldo}</Text>
        
            

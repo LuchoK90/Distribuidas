@@ -36,7 +36,7 @@ const IngresoView = ({ navigation }) => {
   const itemsPerPage = 3;
   const from = page * itemsPerPage;
   const to = (page + 1) * itemsPerPage;
-  const isFocused = useIsFocused();
+ 
 
   // const navigationOptions = () => {
   //   return {
@@ -54,9 +54,9 @@ const IngresoView = ({ navigation }) => {
   //   title: 'Ingresos'
   // };
   useEffect(() => {
-    if (isFocused) {
-    handleSelect();}
-  }, [isFocused]);
+   
+    handleSelect();
+  }, []);
   const handleSelect = async () => {
     
     await select();

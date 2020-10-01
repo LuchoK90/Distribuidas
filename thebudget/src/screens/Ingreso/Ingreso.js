@@ -151,7 +151,7 @@ const Ingreso = ({navigation}) => {
 
   const continuar = () =>{
     add(monto, detalleSelected, medioCobro);
-    navigation.navigate("IngresoView");
+    navigation.navigate("Dashboard");
   };
   //const { navigation } = this.props;
   /* let medioCobro = [{

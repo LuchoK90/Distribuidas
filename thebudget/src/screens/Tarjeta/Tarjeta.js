@@ -39,7 +39,7 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("budgetgo.db");
 
-const Ingreso = ({ navigation }) => {
+const Tarjeta = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
@@ -118,12 +118,12 @@ const Ingreso = ({ navigation }) => {
 
   
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add = (banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen) => {
+    console.log("insert medios " +banco + entidadEmisora + ultimosNum + fechaVenc + fechaCierre + fechaVencResumen);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);",
-        [getCurrentDate(), detalle, monto, medio]
+        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0);",
+        [banco, ultimosNum, entidadEmisora, fechaVenc, fechaCierre , fechaVencResumen]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -131,8 +131,8 @@ const Ingreso = ({ navigation }) => {
   };
 
   const continuar = () =>{
-    add(monto, detalleSelected, medioCobro);
-    //navigation.navigate("IngresoView");
+    add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen);
+    navigation.navigate("Dashboard");
   };
 
   
@@ -164,14 +164,14 @@ const Ingreso = ({ navigation }) => {
         style={styles.textInput}
         placeholder="Banco"
         clearButtonMode="always"
-        onChangeText={banco => setMonto(setBanco)}
+        onChangeText={banco => setBanco(banco)}
         //editable={this.state.TextInputDisableHolder}
       />
 
       <Dropdown
         label="Seleccionar entidad emisora"
         data={emisor}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={entidadEmisora => setEntidadEmisora(entidadEmisora )}
         disabled={false}
       />
 
@@ -182,21 +182,36 @@ const Ingreso = ({ navigation }) => {
         placeholder="Últimos 4 números"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={ultimosNum => setUltimosNum(ultimosNum)}
         //editable={this.state.TextInputDisableHolder}
       />
-      <View style={{flexDirection: "row",
-    marginTop: 20}}>
-        <Text>Fecha Vencimiento</Text>
-        <ElegirFecha style={{width:'100%',marginLeft:10}} ></ElegirFecha></View>
-        <View style={{flexDirection: "row",
-    marginTop: 20}}><Text>Fecha Cierre Resumen</Text>
-        <ElegirFecha style={{width:'100%'}} ></ElegirFecha></View>
-        <View style={{flexDirection: "row",
-    marginTop: 20}}><Text>Fecha Vencimiento Resumen</Text>
-        <ElegirFecha style={{width:'100%'}} ></ElegirFecha></View>
+      
+        
+        <TextInput
+        style={styles.textInput}
+        placeholder="Fecha Vencimiento (d/m/aaaa)"
+        clearButtonMode="always"
+        onChangeText={fechaVenc => setFechaVenc(fechaVenc)}
+        //editable={this.state.TextInputDisableHolder}
+      />
 
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <TextInput
+        style={styles.textInput}
+        placeholder="Fecha Cierre Resumen (d/m/aaaa)"
+        clearButtonMode="always"
+        onChangeText={fechaCierre => setFechaCierre(fechaCierre)}
+        //editable={this.state.TextInputDisableHolder}
+      />
+
+      <TextInput
+        style={styles.textInput}
+        placeholder="Fecha Vencimiento Resumen(d/m/aaaa)"
+        clearButtonMode="always"
+        onChangeText={fechaVencResumen => setFechaVencResumen(fechaVencResumen)}
+        //editable={this.state.TextInputDisableHolder}
+      />
+
+      <Button title="Guardar" onPress={() => continuar() } />
       
     </View>
 
@@ -285,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Ingreso;
+export default Tarjeta;

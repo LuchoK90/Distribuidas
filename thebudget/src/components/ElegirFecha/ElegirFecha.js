@@ -30,7 +30,7 @@ const MyDatePicker = ({ disabled = false }) => {
 
         // ... You can check the source to find the other keys.
       }}
-      onDateChange={(val) => setDate(val)}
+      //onDateChange={(val) => setDate(val)}
     />
   );
 };
