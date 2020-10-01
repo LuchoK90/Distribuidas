@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, ScrollView, Text, View, TouchableHighlight, Image, Button, Alert } from 'react-native';
 import styles from './styles';
 import { tarjetas } from '../../data/dataArrays';
@@ -16,6 +16,8 @@ const TarjetaView = ({navigation}) => {
   //     }}
   //   />
   // });
+
+  const [variable, setVariable] = useState([]);
 
   const handleDetail = (item) => {
     // const resp = await getPaymentTotalAmountService("TRC", item.number); // llamar select para traer info del detalle
@@ -39,6 +41,25 @@ const TarjetaView = ({navigation}) => {
 
   const onPressNuevaTarjeta = item => {
     navigation.navigate('Tarjeta');
+  };
+
+  useEffect(() => {
+    
+    handleSelect();
+  }, []);
+  const handleSelect = async () => {
+    
+    await select();
+  };
+ 
+
+  const select = () => {
+    console.log("entro al select");
+    db.transaction((tx) => {
+      tx.executeSql("select * from medios where esTarjetaCredito = 1", [], (_, { rows }) => {
+        setVariable(rows._array);
+      });
+    });
   };
 
   const renderRecipes = (item) => (
@@ -75,7 +96,7 @@ const TarjetaView = ({navigation}) => {
           vertical
           showsVerticalScrollIndicator={true}
           numColumns={1}
-          data={tarjetas}
+          data={variable}
           renderItem={({ item }) => renderRecipes(item)}
           keyExtractor={item => `${item.recipeId}`}
         />

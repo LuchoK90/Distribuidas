@@ -21,6 +21,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Dropdown } from "react-native-material-dropdown";
 import { DataTable } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 
 import * as SQLite from "expo-sqlite";
 import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table";
@@ -35,6 +36,7 @@ const IngresoView = ({ navigation }) => {
   const itemsPerPage = 3;
   const from = page * itemsPerPage;
   const to = (page + 1) * itemsPerPage;
+  const isFocused = useIsFocused();
 
   // const navigationOptions = () => {
   //   return {
@@ -51,14 +53,18 @@ const IngresoView = ({ navigation }) => {
   // const  navigationOptions = () => {
   //   title: 'Ingresos'
   // };
+  useEffect(() => {
+    if (isFocused) {
+    handleSelect();}
+  }, [isFocused]);
   const handleSelect = async () => {
+    
     await select();
   };
-  useEffect(() => {
-    handleSelect();
-  }, []);
+ 
 
   const select = () => {
+    console.log("entro al select");
     db.transaction((tx) => {
       tx.executeSql("select * from movimientos where tipo_mov='Ingreso'", [], (_, { rows }) => {
         setVariable(rows._array);
@@ -111,26 +117,22 @@ const IngresoView = ({ navigation }) => {
                   keyExtractor={(ing) => ing.id_mov}
                 />
 
-                <DataTable.Pagination
-                  page={page}
-                  numberOfPages={Math.floor(
-                    (variable.length + 1) / itemsPerPage
-                  )}
-                  onPageChange={(page) => setPage(page)}
-                  label={`${from + 1}-${to} de ${variable.length}`}
-                />
+                
               </DataTable>
             ) : null}
           </View>
         </ScrollView>
-        <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Button
-            title="Agregar"
-            onPress={() => navigation.navigate("Ingreso")}
-          />
-        </View>
+        
       </SafeAreaView>
+      <View style={{ marginTop: 20, marginBottom: 20 }}>
+    <Button
+      title="Agregar"
+      onPress={() => navigation.navigate("Ingreso")}
+    /></View>
     </Container>
+
+    
+
   );
 };
 

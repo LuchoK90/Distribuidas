@@ -1,10 +1,19 @@
-import React from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from './styles';
 import MenuImage from '../../components/MenuImage/MenuImage';
 import { Button } from 'react-native-paper';
+import * as SQLite from "expo-sqlite";
 
-export default class CategoriesScreen extends React.Component {
+const db = SQLite.openDatabase("budgetgo.db");
+
+
+//export default class CategoriesScreen extends React.Component {
+const Login = ({navigation}) =>{
+    
+    const[password, setPass] = useState("");
+    const[email, setEmail] = useState("");
+    const[usuarios, setUsuarios] = useState("0");
    /*  static navigationOptions = ({ navigation }) => ({
         title: 'Login',
         headerLeft: () => <MenuImage
@@ -14,19 +23,44 @@ export default class CategoriesScreen extends React.Component {
         />
     }); */
 
-    constructor(props) {
+    /* constructor(props) {
         super(props);
-    }
+        db.transaction((tx) => { 
+            tx.executeSql("select * from usuarios", [], (_, { rows }) => {
+              console.log(rows._array);
+              //setInversiones(rows._array);
+            });
+        });
+    } */
 
-    state = {
+    /* state = {
         email: "",
         password: ""
-    }
+    } */
+    const handleSelect = async () => {
+        await select();
+       
+        
+    };
+    useEffect(() => {
+        handleSelect();
+    }, []);
+    
+    const select = () => {
+        db.transaction((tx) => { 
+            tx.executeSql("select * from usuarios where logueado=1", [], (_, { rows }) => {
+              //setUsuarios(rows._array);
+              console.log("usuario"+usuarios);
+              //setInversiones(rows._array);
+            });
+        });
+    };
 
-    render() {
-        const { navigation } = this.props;
+    
+    //if(usuarios.logueado)
+        //const { navigation } = this.props;
         return (
-
+            
             <View style={styles.container}>
                 <Text style={styles.logo}>Budget GO</Text>
 
@@ -37,7 +71,7 @@ export default class CategoriesScreen extends React.Component {
                         style={styles.inputText}
                         placeholder="Email..."
                         placeholderTextColor="#003f5c"
-                        onChangeText={text => this.setState({ email: text })} />
+                        onChangeText={(email) => setEmail({ email })} />
                 </View>
 
                 <View style={styles.inputView} >
@@ -46,19 +80,22 @@ export default class CategoriesScreen extends React.Component {
                         style={styles.inputText}
                         placeholder="Contraseña..."
                         placeholderTextColor="#003f5c"
-                        onChangeText={text => this.setState({ password: text })} />
+                        onChangeText={(password) => setPass({ password })}/>
                 </View>
 
                 <TouchableOpacity style={styles.loginBtn}>
                     <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>LOGIN</Text></Button>
+                    
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.loginBtn}>
                 
                     <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>REGISTRARSE</Text></Button>
                 </TouchableOpacity>
 
+                
             </View>
 
         );
-    }
+    
 }
+export default Login;

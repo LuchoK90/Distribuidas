@@ -1,70 +1,89 @@
-import React from 'react';
-import { FlatList, ScrollView, Text, View, TouchableHighlight, Image } from 'react-native';
-import styles from './styles';
-import { prestamos } from '../../data/dataArrays';
-import MenuImage from '../../components/MenuImage/MenuImage';
-import DrawerActions from 'react-navigation';
-import { getCategoryName } from '../../data/MockDataAPI';
-import BotonOtorgarPrestamo from '../../components/BotonOtorgarPrestamo/BotonOtorgarPrestamo';
-import BotonSolicitarPrestamo from '../../components/BotonSolicitarPrestamo/BotonSolicitarPrestamo';
+import React, { useState, useEffect } from "react";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  View,
+  TouchableHighlight,
+  Image,
+  Button
+} from "react-native";
+import styles from "./styles";
+import { inversiones } from "../../data/dataArrays";
+import MenuImage from "../../components/MenuImage/MenuImage";
+// import DrawerActions from "react-navigation";
+import { getCategoryName } from "../../data/MockDataAPI";
+import BotonRealizarTransferencia from "../../components/botonRealizarTransferencia/botonRealizarTransferencia";
+import BotonAgregarInversion from "../../components/botonAgregarInversion/botonAgregarInversion";
+import { useNavigation } from "@react-navigation/native";
+import * as SQLite from "expo-sqlite";
 
-export default class Prestamos extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Préstamos',
-    headerLeft: () => <MenuImage
-      onPress={() => {
-        navigation.openDrawer();
-      }}
-    />
-  });
+const db = SQLite.openDatabase("budgetgo.db");
 
-  constructor(props) {
-    super(props);
-  }
+const Prestamos = ({ navigation }) => {
+  const [inversiones, setInversiones] = useState([]);
 
-  onPressSolicitarPrestamo = item => {
-    this.props.navigation.navigate('SolicitarPrestamo');
+  useEffect(() => {
+    handleSelect();
+  }, []);
+  const onPressNuevaInversion = (item) => {
+    navigation.navigate("Invertir");
   };
 
-  onPressOtorgarPrestamo = item => {
-    this.props.navigation.navigate('OtorgarPrestamo');
+  const handleSelect = async () => {
+    await select();
   };
 
-  renderPrestamos = ({ item }) => (
+  const select = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from inversiones", [], (_, { rows }) => {
+        // console.log(rows);
+        setInversiones(rows._array);
+      });
+    });
+  };
 
-      <View style={styles.container}>
-        <Text style={styles.elemento}>TIPO: {item.tipoPrestamo}</Text>
-        <Text style={styles.elemento}>MONTO: $ {item.monto}</Text>
-        <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>       
-        <Text style={styles.elemento}>CUOTAS: {item.cuotas}</Text>  
-      </View>
-     
-   
+  const renderInversiones = (item) => (
+    <View style={styles.container}>
+      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
+      <Text style={styles.elemento}>{item.info}</Text>
+      <Text style={styles.elemento}>
+        CAPITAL INVERTIDO: $ {item.capitalInvertido}
+      </Text>
+      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
+      <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
+      <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
+      {/* <Button title={"Ver Detalle"} onPress={() =>  navigation.navigate("InversionDetalle")}/> */}
+    </View>
   );
 
-  render() {
-    return (
-      <View style={{flex:1}}>
-      <BotonOtorgarPrestamo
-               onPress={() => {
-                this.onPressOtorgarPrestamo();
-              }}
-            />
-             <BotonSolicitarPrestamo
-               onPress={() => {
-                this.onPressSolicitarPrestamo();
-              }}
-            />
-        <FlatList
-          vertical
-          showsVerticalScrollIndicator={true}
-          numColumns={1}
-          data={prestamos}
-          renderItem={this.renderPrestamos}
-          keyExtractor={item => `${item.recipeId}`}
-        />
-        
-      </View>
-    );
-  }
-}
+  return (  
+    <View style={{ flex: 1 }}>
+   
+      <View style={{margin:10}}><Button title='Otorgar Préstamo'
+        onPress={() => {
+          navigation.navigate('OtorgarPrestamo')
+        }}
+      /></View>
+      <View style={{margin:10, marginTop:0}}><Button title='Solicitar Préstamo'
+        onPress={() => {
+          navigation.navigate('SolicitarPrestamo')
+        }}
+      /></View>
+      <FlatList
+        vertical
+        showsVerticalScrollIndicator={true}
+        numColumns={1}
+        data={inversiones}
+        renderItem={({ item }) => renderInversiones(item)}
+        keyExtractor={(item) => `${item.id_inversion}`}
+      />
+    </View>
+  );
+};
+
+Prestamos["navigationOptions"] = (screenProps) => ({
+  title: "Préstamos",
+});
+
+export default Prestamos;

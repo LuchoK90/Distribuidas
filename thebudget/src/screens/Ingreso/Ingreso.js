@@ -19,7 +19,7 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Dropdown } from "react-native-material-dropdown";
 import { Checkbox } from "react-native-paper";
@@ -39,13 +39,15 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("budgetgo.db");
 
-const Ingreso = ({ navigation }) => {
+const Ingreso = ({navigation}) => {
   //export default class Ingreso extends React.Component {
   const [variable, setVariable] = useState([]);
-  const [bankAccounts, setBankAccounts] = useState([]);
-  const [medioCobro, setMedioCobro] = useState("");
-  //const navigationOptions = () => { PickList.navigationOptions };
-  const [detalleSelected, setDetalleSelected] = useState();
+ 
+  const [medioCobro, setMedioCobro] = useState('');
+ 
+  const [detalleSelected, setDetalleSelected] = useState(' ');
+
+
   let detalle = [
     {
       value: "Sueldo",
@@ -63,7 +65,7 @@ const Ingreso = ({ navigation }) => {
       value: "Otro",
     },
   ];
-  const [monto, setMonto] = useState(0);
+  const [monto, setMonto] = useState('');
 
   /*   value: 'Sueldo',
 }, {
@@ -84,7 +86,7 @@ const Ingreso = ({ navigation }) => {
     fecha: null,
   };*/
 
-  const navigationOptions = ({ navigation }) => {
+/*   const navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: "true",
       headerLeft: () => (
@@ -95,7 +97,7 @@ const Ingreso = ({ navigation }) => {
         />
       ),
     };
-  };
+  }; */
 
   submitAndClear = () => {
     this.props.writeText(this.state.text);
@@ -125,8 +127,8 @@ const Ingreso = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add =  (monto, detalle, medio) => {
+    console.log("monto: "+monto + " detalle: " + detalle + " medio: " + medio);
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')",
@@ -138,12 +140,18 @@ const Ingreso = ({ navigation }) => {
   };
 
   const select = async () => {
+    
     await db.transaction((tx) => {
-      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
+      tx.executeSql("select * from medios", [], (_, { rows }) => {
         setVariable(rows._array);
-        console.log(variable);
+        
       });
     });
+  };
+
+  const continuar = () =>{
+    add(monto, detalleSelected, medioCobro);
+    navigation.navigate("IngresoView");
   };
   //const { navigation } = this.props;
   /* let medioCobro = [{
@@ -174,14 +182,14 @@ const Ingreso = ({ navigation }) => {
         placeholder="Monto"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={monto => setMonto(monto)}
         //editable={this.state.TextInputDisableHolder}
       />
 
       <Dropdown
         label="Seleccionar Detalle"
         data={detalle}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={(detalleSelected) => setDetalleSelected(detalleSelected)}
         disabled={false}
       />
 
@@ -213,11 +221,17 @@ const Ingreso = ({ navigation }) => {
             ))}
         </Picker>
       </View>
-      <Text>Periódico</Text>          
-      <Check></Check>
 
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
-      <Button title="Select" onPress={() => select()} />
+      <View style={{flexDirection: "row",
+    marginTop: 20}}>
+      <Text>Periódico</Text>          
+      <Check ></Check>
+      </View>  
+
+     <View><Button title="Guardar" onPress={() =>  continuar()} /></View>
+     
+      
+      
     </View>
 
     //, navigation.navigate('IngresoView')

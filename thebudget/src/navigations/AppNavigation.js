@@ -36,6 +36,10 @@ import PresupuestarEgresos from '../screens/PresupuestarEgresos/PresupuestarEgre
 import PresupuestarInversiones from '../screens/PresupuestarInversiones/PresupuestarInversiones';
 import PresupuestarPrestamos from '../screens/PresupuestarPrestamos/PresupuestarPrestamos';
 import GastosAcumulados from '../screens/Tarjeta/GastosAcumulados';
+import {AsyncStorage} from 'react-native';
+import * as SQLite from "expo-sqlite";
+const db = SQLite.openDatabase("budgetgo.db");
+
 
 /* const Stack = createStackNavigator();
 
@@ -61,6 +65,8 @@ function MainNavigator() {
     </Stack.Navigator>
   )
 } */
+
+
 
 const MainNavigator = createStackNavigator(
   {
@@ -97,6 +103,7 @@ const MainNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'Login',
+    
     // headerMode: 'float',
     defaulfNavigationOptions: ({ navigation }) => ({
       headerTitleStyle: {
@@ -128,7 +135,8 @@ function DrawerStack() {
 
 const DrawerStack = createDrawerNavigator(
   {
-    Main: MainNavigator
+    Main: MainNavigator,
+    
   },
   {
     drawerPosition: 'left',

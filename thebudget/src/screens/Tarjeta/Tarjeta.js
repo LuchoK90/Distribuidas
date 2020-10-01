@@ -44,6 +44,12 @@ const Ingreso = ({ navigation }) => {
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
+  const [banco, setBanco] = useState(' ');
+  const [entidadEmisora, setEntidadEmisora] = useState(' ');
+  const [ultimosNum, setUltimosNum] = useState(' ');
+  const [fechaVenc, setFechaVenc] = useState(' ');
+  const [fechaCierre, setFechaCierre] = useState(' ');
+  const [fechaVencResumen, setFechaVencResumen] = useState(' ');
   //const navigationOptions = () => { PickList.navigationOptions };
   const [detalleSelected, setDetalleSelected] = useState();
   let emisor=[{
@@ -110,18 +116,13 @@ const Ingreso = ({ navigation }) => {
     return date + "/" + month + "/" + year;
   };
 
-  const handleSelect = async () => {
-    await select();
-  };
-  useEffect(() => {
-    handleSelect();
-  }, []);
+  
 
   const add = (monto, detalle, medio) => {
     console.log(monto + " " + detalle + " " + medio);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')",
+        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);",
         [getCurrentDate(), detalle, monto, medio]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -129,14 +130,12 @@ const Ingreso = ({ navigation }) => {
     });
   };
 
-  const select = async () => {
-    await db.transaction((tx) => {
-      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
-        setVariable(rows._array);
-        console.log(variable);
-      });
-    });
+  const continuar = () =>{
+    add(monto, detalleSelected, medioCobro);
+    //navigation.navigate("IngresoView");
   };
+
+  
   //const { navigation } = this.props;
   /* let medioCobro = [{
     value: '74144/78998',
@@ -165,7 +164,7 @@ const Ingreso = ({ navigation }) => {
         style={styles.textInput}
         placeholder="Banco"
         clearButtonMode="always"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={banco => setMonto(setBanco)}
         //editable={this.state.TextInputDisableHolder}
       />
 

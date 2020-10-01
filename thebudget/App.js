@@ -17,6 +17,9 @@ export default class App extends React.Component {
     });
     //Tabla de movimientos
     db.transaction((tx) => {
+     /*  tx.executeSql(
+        "drop table movimientos ;"
+      ); */
       tx.executeSql(
         "create table if not exists movimientos (id_movimiento integer primary key not null, fecha text, detalle text, monto int, medio text, tipo_mov text, comprobante text);"
       );
@@ -24,10 +27,17 @@ export default class App extends React.Component {
 
     //Tabla de usuarios
     db.transaction((tx) => {
+      console.log("creo tabla usuarios")
+     /*  tx.executeSql(
+        "drop table usuarios ;"
+      );  */
       tx.executeSql(
-        "create table if not exists usuarios (id_usuario integer primary key not null, mail text, pass text);"
+        "create table if not exists usuarios (id_usuario integer primary key not null, mail text, pass text, logueado integer);"
       );
     });
+
+
+
     /* //Tabla de cuentas
     db.transaction((tx) => {
       tx.executeSql(
@@ -56,15 +66,22 @@ export default class App extends React.Component {
         "create table if not exists medios (id_medio integer primary key not null, banco text, numero text, cbu text, debito text, saldo real,entidad text, vencimiento text, cierre_resumen text, vencimiento_resumen text, esCuentaBancaria integer, esTarjetaCredito integer, esEfectivo integer);"
       );
     });
-   /*  db.transaction((tx) => {
+     /*db.transaction((tx) => {
       console.log("medio")
       tx.executeSql(
         "insert into medios(banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);"
       );
     }); */
+   /*    db.transaction((tx) => {
+      console.log("usuarios")
+      tx.executeSql(
+        "insert into usuarios(mail, pass, logueado ) VALUES('gero','1234',1);"
+      );
+    });  */
     db.transaction((tx) => { 
-      tx.executeSql("select * from medios", [], (_, { rows }) => {
+      tx.executeSql("select * from usuarios", [], (_, { rows }) => {
         console.log(rows);
+        //setInversiones(rows._array);
       });
     });
 

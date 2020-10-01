@@ -43,24 +43,56 @@ const Egreso = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
-  const [medioCobro, setMedioCobro] = useState("");
+  const [medioCobro, setMedioCobro] = useState(' ');
   //const navigationOptions = () => { PickList.navigationOptions };
-  const [detalleSelected, setDetalleSelected] = useState();
+  const [detalleSelected, setDetalleSelected] = useState('hola ');
+  const [cuotasSelected, setCuotasSelected] = useState(' ');
+  
   let detalle = [
     {
-      value: "Sueldo",
+      value: "Universidad",
     },
     {
-      value: "Facturación Autónomo",
+      value: "Luz",
     },
     {
-      value: "Alquiler",
+      value: "Gas",
     },
     {
-      value: "Venta Bien Uso Personal",
+      value: "Cable",
     },
     {
-      value: "Otro",
+      value: "Teléfono",
+    },
+    {
+      value: "Internet",
+    },
+    {
+      value: "Impuesto Nacional",
+    },
+    {
+      value: "Impuesto Municipal",
+    },
+    {
+      value: "Impuesto Provincial",
+    },
+    {
+      value: "Colegio",
+    },
+    {
+      value: "Obra Social",
+    },
+    {
+      value: "Gastos Varios",
+    },
+    {
+      value: "Comida",
+    },
+    {
+      value: "Viáticos",
+    },
+    {
+      value: "Entretenimiento",
     },
   ];
 
@@ -81,7 +113,7 @@ const Egreso = ({ navigation }) => {
       value: "18",
     },
   ];
-  const [monto, setMonto] = useState(0);
+  const [monto, setMonto] = useState(' ');
 
   /*   value: 'Sueldo',
 }, {
@@ -101,7 +133,7 @@ const Egreso = ({ navigation }) => {
     medio: null,
     fecha: null,
   };*/
-
+/* 
   const navigationOptions = ({ navigation }) => {
     return {
       headerTransparent: "true",
@@ -113,19 +145,13 @@ const Egreso = ({ navigation }) => {
         />
       ),
     };
-  };
+  }; */
 
-  submitAndClear = () => {
-    this.props.writeText(this.state.text);
+ 
 
-    this.setState({
-      text: "",
-    });
-  };
-
-  setDate = (newDate) => {
+  /* setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
-  };
+  }; */
 
   const getCurrentDate = () => {
     var date = new Date().getDate();
@@ -156,12 +182,19 @@ const Egreso = ({ navigation }) => {
   };
 
   const select = async () => {
+    console.log("entre al select")
     await db.transaction((tx) => {
       tx.executeSql("select * from medios", [], (_, { rows }) => {
         setVariable(rows._array);
-        console.log(variable);
+        console.log(variable + "medios");
       });
     });
+  };
+
+  const continuar = () =>{
+    console.log("continuar "+monto+ detalleSelected+ medioCobro);
+    add(monto, detalleSelected, medioCobro);
+    navigation.navigate("EgresoView");
   };
 
   /* const componentDidMount=()=> {
@@ -225,14 +258,14 @@ const Egreso = ({ navigation }) => {
         placeholder="Monto"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={monto => setMonto( monto )}
         //editable={this.state.TextInputDisableHolder}
       />
 
       <Dropdown
         label="Seleccionar Detalle"
         data={detalle}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={(detalleSelected) => setDetalleSelected(detalleSelected)}
         disabled={false}
       />
 
@@ -268,7 +301,7 @@ const Egreso = ({ navigation }) => {
       <Dropdown
         label="Seleccionar Cuotas"
         data={cuotas}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={(cuo) => setCuotasSelected({ cuo })}
         disabled={false}
       />
       <View style={{flexDirection: "row",
@@ -278,9 +311,9 @@ const Egreso = ({ navigation }) => {
       </View>    
       {/*<Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={_pickImage()} />*/}
       <View style={{marginBottom:20}}><Button  title="Adjuntar Comprobante"  /></View>
-      
+     
       {/*{image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}  
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 
