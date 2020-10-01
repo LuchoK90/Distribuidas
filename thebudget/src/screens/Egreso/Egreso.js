@@ -199,7 +199,7 @@ const Egreso = ({ navigation }) => {
   const continuar = () =>{
     console.log("continuar "+monto+ detalleSelected+ medioCobro);
     add(monto, detalleSelected, medioCobro);
-    navigation.navigate("EgresoView");
+    navigation.navigate("Dashboard");
   };
 
   /* const componentDidMount=()=> {
