@@ -36,7 +36,7 @@ const Prestamos = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from inversiones", [], (_, { rows }) => {
+      tx.executeSql("select * from prestamos", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });
@@ -45,14 +45,10 @@ const Prestamos = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
-      <Text style={styles.elemento}>{item.info}</Text>
-      <Text style={styles.elemento}>
-        CAPITAL INVERTIDO: $ {item.capitalInvertido}
-      </Text>
-      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
-      <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
+      <Text style={styles.elemento}>TIPO: {item.tipo}</Text>
+      <Text style={styles.elemento}>MONTO: $ {item.monto}</Text>
       <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
+      <Text style={styles.elemento}>CUOTAS: {item.cuotas}</Text>
       {/* <Button title={"Ver Detalle"} onPress={() =>  navigation.navigate("InversionDetalle")}/> */}
     </View>
   );

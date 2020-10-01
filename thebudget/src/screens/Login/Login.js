@@ -37,24 +37,58 @@ const Login = ({navigation}) =>{
         email: "",
         password: ""
     } */
-    const handleSelect = async () => {
-        await select();
+    /* const handleSelect = async () => {
+        await if()
        
         
     };
     useEffect(() => {
         handleSelect();
-    }, []);
+    }, []); */
     
-    const select = () => {
-        db.transaction((tx) => { 
-            tx.executeSql("select * from usuarios where logueado=1", [], (_, { rows }) => {
-              //setUsuarios(rows._array);
-              console.log("usuario"+usuarios);
-              //setInversiones(rows._array);
-            });
+        const add=(email,password) => {
+            
+            /* db.transaction((tx) => {
+            tx.executeSql(
+                "insert into usuarios ( mail , pass , logueado) values (?,?,1)",
+                [email,password]
+            ),
+            (_, { rows }) => console.log(JSON.stringify(rows)),
+            (_, { error }) => console.log(JSON.stringify(error));
+            }); */
+        };
+
+        const loguearse=(email,password) => {
+            
+           /*  db.transaction((tx) => {
+            tx.executeSql(
+                "insert into usuarios ( mail , pass , logueado) values (?,?,1)",
+                [email,password]
+            ),
+            (_, { rows }) => console.log(JSON.stringify(rows)),
+            (_, { error }) => console.log(JSON.stringify(error));
+            }); */
+        };
+    
+      const select = async () => {
+        await db.transaction((tx) => {
+          tx.executeSql("select * from usuarios", [], (_, { rows }) => {
+            //setVariable(rows._array);
+            console.log(rows._array);
+          });
         });
-    };
+      };
+    
+      const registrarse = () =>{
+        add(email,password);
+        select();
+        navigation.navigate("Dashboard");
+      };
+
+      const ingresar = () =>{
+        loguearse(email,password);
+        navigation.navigate("Dashboard");
+      };
 
     
     //if(usuarios.logueado)
@@ -71,7 +105,7 @@ const Login = ({navigation}) =>{
                         style={styles.inputText}
                         placeholder="Email..."
                         placeholderTextColor="#003f5c"
-                        onChangeText={(email) => setEmail({ email })} />
+                        onChangeText={(email) => setEmail(email)} />
                 </View>
 
                 <View style={styles.inputView} >
@@ -80,16 +114,16 @@ const Login = ({navigation}) =>{
                         style={styles.inputText}
                         placeholder="Contraseña..."
                         placeholderTextColor="#003f5c"
-                        onChangeText={(password) => setPass({ password })}/>
+                        onChangeText={(password) => setPass(password)}/>
                 </View>
 
                 <TouchableOpacity style={styles.loginBtn}>
-                    <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>LOGIN</Text></Button>
+                    <Button onPress={() => ingresar()}><Text style={{color:'white'}}>LOGIN</Text></Button>
                     
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.loginBtn}>
                 
-                    <Button onPress={() => navigation.navigate('Dashboard')}><Text style={{color:'white'}}>REGISTRARSE</Text></Button>
+                    <Button onPress={() => registrarse()}><Text style={{color:'white'}}>REGISTRARSE</Text></Button>
                 </TouchableOpacity>
 
                 

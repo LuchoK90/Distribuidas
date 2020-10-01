@@ -28,7 +28,7 @@ const TarjetaView = ({navigation}) => {
 
     Alert.alert(
      `Detalle tarjeta ${item.numero}`,
-     `Monto gastado(Mes en Curso): ${item.saldo}\nEntidad Bancaria: ${item.entidad}`
+     `Monto gastado(Mes en Curso): ${-1*item.saldo}\nEntidad Bancaria: ${item.entidad}`
        ,
        [
          {
@@ -73,7 +73,7 @@ const TarjetaView = ({navigation}) => {
         <Text style={styles.elemento}>{item.banco}</Text>
         <Text style={styles.elemento}>{item.entidad}</Text>
         <Text style={styles.elemento}>{item.numero}</Text>
-        <Text style={styles.elemento}>ACUMULADO: $ {item.saldo}</Text>
+        <Text style={styles.elemento}>ACUMULADO: $ {-1*item.saldo}</Text>
        
            
 

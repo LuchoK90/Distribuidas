@@ -46,6 +46,9 @@ const AgregarTitulo = ({ navigation }) => {
   const [medioCobro, setMedioCobro] = useState("");
   //const navigationOptions = () => { PickList.navigationOptions };
   const [detalleSelected, setDetalleSelected] = useState();
+  const [monto, setMonto] = useState(0);
+  const [titulo, setTitulo] = useState(0);
+  const [rendimiento, setRendimiento] = useState(0);
   let modo = [
     {
       value: "Renovación Automática",
@@ -72,7 +75,7 @@ const AgregarTitulo = ({ navigation }) => {
       value: "18",
     },
   ];
-  const [monto, setMonto] = useState(0);
+  
 
   /*   value: 'Sueldo',
 }, {
@@ -134,12 +137,25 @@ const AgregarTitulo = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add=(medioCobro,monto,rendimiento,titulo) => {
+    console.log(medioCobro+monto+rendimiento+titulo);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Egreso', '')",
-        [getCurrentDate(), detalle, monto, medio]
+        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
+       });
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Titulo',' ',?,?,' ',?)",
+        [monto,rendimiento,medioCobro]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Titulo', ?, ?, 'Egreso', '')",
+        [getCurrentDate(), monto, medioCobro]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -148,7 +164,7 @@ const AgregarTitulo = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios", [], (_, { rows }) => {
+      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });
@@ -185,6 +201,11 @@ const AgregarTitulo = ({ navigation }) => {
     //} catch (E) {
       console.log(E);
    // }
+  };
+
+  const continuar = () =>{
+    add(medioCobro,monto,rendimiento,titulo);
+    navigation.navigate("Dashboard");
   };
    
   //const { navigation } = this.props;
@@ -248,7 +269,7 @@ const AgregarTitulo = ({ navigation }) => {
         placeholder="Monto a invertir"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(monto) => setMonto(monto)}
         //editable={this.state.TextInputDisableHolder}
       />
 
@@ -259,7 +280,7 @@ const AgregarTitulo = ({ navigation }) => {
         style={styles.textInput}
         placeholder="Nombre del Titulo"
         clearButtonMode="always"        
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(titulo) => setTitulo(titulo)}
         //editable={this.state.TextInputDisableHolder}
       />              
 
@@ -268,14 +289,14 @@ const AgregarTitulo = ({ navigation }) => {
         placeholder="Ingrese Rendimiento (%)"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(rendimiento) => setRendimiento(rendimiento)}
         //editable={this.state.TextInputDisableHolder}
       />    
 
       
       
       
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 

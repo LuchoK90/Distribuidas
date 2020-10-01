@@ -43,9 +43,14 @@ const AgregarPlazoFijo = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
-  const [medioCobro, setMedioCobro] = useState("");
+  const [medioCobro, setMedioCobro] = useState(' ');
   //const navigationOptions = () => { PickList.navigationOptions };
   const [detalleSelected, setDetalleSelected] = useState();
+  const [monto, setMonto] = useState(' ');
+  const [fechaVenc, setFechaVenc] = useState(' ');
+  const [rendimiento, setRendimiento] = useState(' ');
+  const [mode, setMode] = useState(' ');
+
   let modo = [
     {
       value: "Renovación Automática",
@@ -72,7 +77,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
       value: "18",
     },
   ];
-  const [monto, setMonto] = useState(0);
+  
 
   /*   value: 'Sueldo',
 }, {
@@ -134,12 +139,25 @@ const AgregarPlazoFijo = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add=(medioCobro,monto,fechaVenc,rendimiento,Modo) => {
+    console.log(medioCobro+monto+fechaVenc+rendimiento+Modo);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Egreso', '')",
-        [getCurrentDate(), detalle, monto, medio]
+        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
+       });
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Plazo Fijo',?,?,?,?,?)",
+        [Modo,monto,rendimiento,fechaVenc,medioCobro]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Plazo Fijo', ?, ?, 'Egreso', '')",
+        [getCurrentDate(), monto, medioCobro]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -148,7 +166,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios", [], (_, { rows }) => {
+      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });
@@ -185,6 +203,11 @@ const AgregarPlazoFijo = ({ navigation }) => {
     //} catch (E) {
       console.log(E);
    // }
+  };
+
+  const continuar = () =>{
+    add(medioCobro,monto,fechaVenc,rendimiento,mode);
+    navigation.navigate("Dashboard");
   };
    
   //const { navigation } = this.props;
@@ -248,28 +271,31 @@ const AgregarPlazoFijo = ({ navigation }) => {
         placeholder="Monto a invertir"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={monto => setMonto( monto )}
         //editable={this.state.TextInputDisableHolder}
       />
 
-      <View style={{flexDirection: "row",
-          marginTop: 20}}>
-              <Text>Fecha Vencimiento</Text>
-              <ElegirFecha style={{width:'100%',marginLeft:10}} ></ElegirFecha></View>
+      <TextInput
+        style={styles.textInput}
+        placeholder="Fecha Vencimiento (d/m/aaaa)"
+        clearButtonMode="always"
+        onChangeText={fechaVenc => setFechaVenc( fechaVenc )}
+        //editable={this.state.TextInputDisableHolder}
+      />
 
       <TextInput
         style={styles.textInput}
         placeholder="Ingrese Rendimiento (%)"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={rendimiento => setRendimiento(rendimiento)}
         //editable={this.state.TextInputDisableHolder}
       />    
       
       <Dropdown
         label="Seleccionar Modo"
         data={modo}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={(mode) => setMode( mode )}
         disabled={false}
       />
 
@@ -278,7 +304,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
       
       
       
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 

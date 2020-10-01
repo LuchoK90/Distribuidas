@@ -115,7 +115,15 @@ const PresupuestarIngreso = ({ navigation }) => {
     var year = new Date().getFullYear();
 
     //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
-    return date + "/" + month + "/" + year;
+    return  month;
+  };
+  const getCurrentYear = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return  year;
   };
 
   const handleSelect = async () => {
@@ -125,12 +133,12 @@ const PresupuestarIngreso = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add=(detalleSelected,monto) => {
+    console.log(detalleSelected+monto);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Ingreso', '')",
-        [getCurrentDate(), detalle, monto, medio]
+        "insert into presupuestos ( mes, anio , rubro ,categoria, monto ) values (?,?,'Ingreso',?,?)",
+        [getCurrentDate(), getCurrentYear(),detalleSelected,monto]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -139,11 +147,16 @@ const PresupuestarIngreso = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
+      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });
     });
+  };
+
+  const continuar = () =>{
+    add(detalleSelected,monto);
+    navigation.navigate("Dashboard");
   };
   //const { navigation } = this.props;
   /* let medioCobro = [{
@@ -173,7 +186,7 @@ const PresupuestarIngreso = ({ navigation }) => {
       <Dropdown
         label="Seleccionar Categoría"
         data={detalle}
-        onChangeText={(det) => setDetalleSelected({ det })}
+        onChangeText={(det) => setDetalleSelected( det )}
         disabled={false}
       />
 
@@ -182,11 +195,11 @@ const PresupuestarIngreso = ({ navigation }) => {
         placeholder="Monto"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(monto) => setMonto(monto)}
         //editable={this.state.TextInputDisableHolder}
       />
 
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 

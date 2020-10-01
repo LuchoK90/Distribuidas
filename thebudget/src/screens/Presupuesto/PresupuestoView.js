@@ -60,7 +60,7 @@ const PresupuestoView = ({ navigation }) => {
 
   const select = () => {
     db.transaction((tx) => {
-      tx.executeSql("select * from movimientos where tipo_mov = 'Egreso'", [], (_, { rows }) => {
+      tx.executeSql("select * from presupuestos", [], (_, { rows }) => {
         setVariable(rows._array);
       });
     });
@@ -79,7 +79,7 @@ const PresupuestoView = ({ navigation }) => {
               color: "#3700B3",
             }}
           >
-            Egresos
+            PRESUPUESTOS
           </H1>
         </View>
 
@@ -97,6 +97,7 @@ const PresupuestoView = ({ navigation }) => {
                 <DataTable.Header>
                   <DataTable.Title>Fecha</DataTable.Title>
                   <DataTable.Title>Detalle</DataTable.Title>
+                  <DataTable.Title>Categoria</DataTable.Title>
                   <DataTable.Title numeric>Monto</DataTable.Title>
                 </DataTable.Header>
                 {variable && variable.length > 0 ? (
@@ -104,8 +105,9 @@ const PresupuestoView = ({ navigation }) => {
                   data={variable}
                   renderItem={({ item }) => (
                     <DataTable.Row>
-                      <DataTable.Cell>{item.fecha}</DataTable.Cell>
-                      <DataTable.Cell>{item.detalle}</DataTable.Cell>
+                      <DataTable.Cell>{item.mes+"/"+item.anio}</DataTable.Cell>
+                      <DataTable.Cell>{item.rubro}</DataTable.Cell>
+                      <DataTable.Cell>{item.categoria}</DataTable.Cell>
                       <DataTable.Cell numeric>$ {item.monto}</DataTable.Cell>
                     </DataTable.Row>
                   )}

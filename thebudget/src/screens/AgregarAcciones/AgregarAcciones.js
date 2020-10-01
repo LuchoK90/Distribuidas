@@ -72,7 +72,9 @@ const AgregarAcciones = ({ navigation }) => {
       value: "18",
     },
   ];
-  const [monto, setMonto] = useState(0);
+  const [monto, setMonto] = useState(' ');
+  const [empresa, setEmpresa] = useState(' ');
+  const [rendimiento, setRendimiento] = useState(' ');
 
   /*   value: 'Sueldo',
 }, {
@@ -134,12 +136,25 @@ const AgregarAcciones = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
-    console.log(monto + " " + detalle + " " + medio);
+  const add=(medioCobro,monto,rendimiento,empresa) => {
+    console.log(medioCobro+monto+rendimiento+empresa);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Egreso', '')",
-        [getCurrentDate(), detalle, monto, medio]
+        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
+       });
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Acción',' ',?,?,' ',?)",
+        [monto,rendimiento,medioCobro]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Acción', ?, ?, 'Egreso', '')",
+        [getCurrentDate(), monto, medioCobro]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -148,11 +163,16 @@ const AgregarAcciones = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios", [], (_, { rows }) => {
+      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });
     });
+  };
+
+  const continuar = () =>{
+    add(medioCobro,monto,rendimiento,empresa);
+    navigation.navigate("Dashboard");
   };
 
   /* const componentDidMount=()=> {
@@ -248,7 +268,7 @@ const AgregarAcciones = ({ navigation }) => {
         placeholder="Monto a invertir"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(monto) => setMonto( monto )}
         //editable={this.state.TextInputDisableHolder}
       />
 
@@ -259,7 +279,7 @@ const AgregarAcciones = ({ navigation }) => {
         style={styles.textInput}
         placeholder="Nombre de la Empresa"
         clearButtonMode="always"        
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(empresa) => setEmpresa( empresa )}
         //editable={this.state.TextInputDisableHolder}
       />              
 
@@ -268,14 +288,14 @@ const AgregarAcciones = ({ navigation }) => {
         placeholder="Ingrese Rendimiento (%)"
         clearButtonMode="always"
         keyboardType="number-pad"
-        onChangeText={(monto) => setMonto({ monto })}
+        onChangeText={(rendimiento) => setRendimiento( rendimiento )}
         //editable={this.state.TextInputDisableHolder}
       />    
 
       
       
       
-      <Button title="Guardar" onPress={() => add(monto, detalle, medioCobro)} />
+      <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 

@@ -45,12 +45,10 @@ const Inversiones = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>TIPO: {item.tipoInversion}</Text>
-      <Text style={styles.elemento}>{item.info}</Text>
-      <Text style={styles.elemento}>
-        CAPITAL INVERTIDO: $ {item.capitalInvertido}
+      <Text style={styles.elemento}>TIPO: {item.tipo}</Text>
+      <Text style={styles.elemento}>CAPITAL INVERTIDO: $ {item.monto}
       </Text>
-      <Text style={styles.elemento}>RENDIMIENTO: {item.ganancia} %</Text>
+      <Text style={styles.elemento}>RENDIMIENTO: {item.rendimiento} %</Text>
       <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
       <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
       {/* <Button title={"Ver Detalle"} onPress={() =>  navigation.navigate("InversionDetalle")}/> */}

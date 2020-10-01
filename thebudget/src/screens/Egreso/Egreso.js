@@ -179,6 +179,11 @@ const Egreso = ({ navigation }) => {
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
     });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "update medios set saldo = (select saldo from medios where numero = '" + medio+"') - '"+monto +"'where numero ='"+medio+"'", [], (_, { rows }) => {
+        });
+      });
   };
 
   const select = async () => {
