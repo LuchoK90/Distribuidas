@@ -30,13 +30,43 @@ const CuentaBancaria = ({ navigation }) => {
     navigation.navigate("Invertir");
   };
 
+  const getCurrentDate = () => {
+    var date = new Date().getDate(); 
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return date + "/" + month + "/" + year;
+  };
+
+  const getDate = () => {   
+    var day = new Date().getDate();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
+
   const handleSelect = async () => {
     await select();
   };
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });

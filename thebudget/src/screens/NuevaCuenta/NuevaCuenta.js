@@ -95,17 +95,6 @@ const NuevaCuenta = ({ navigation }) => {
     };
   };
 
-  submitAndClear = () => {
-    this.props.writeText(this.state.text);
-
-    this.setState({
-      text: "",
-    });
-  };
-
-  setDate = (newDate) => {
-    this.setState({ chosenDate: newDate });
-  };
 
   const getCurrentDate = () => {
     var date = new Date().getDate();

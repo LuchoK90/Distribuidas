@@ -62,11 +62,24 @@ const IngresoView = ({ navigation }) => {
     await select();
   };
  
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
 
   const select = () => {
     console.log("entro al select");
     db.transaction((tx) => {
-      tx.executeSql("select * from movimientos where tipo_mov='Ingreso'", [], (_, { rows }) => {
+      tx.executeSql("select * from movimientos where tipo_mov='Ingreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         setVariable(rows._array);
       });
     });

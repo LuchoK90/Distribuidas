@@ -71,9 +71,10 @@ const Ingreso = ({navigation}) => {
   const [isSelected, setSelection] = useState(false);
   const [cantMesesPeriodico, setCantMesesPeriodico] = useState(' ');
   const [fechaFutura, setFechaFutura] = useState(' ');
-  /* const [fechaFutura, setFechaFutura] = useState(' ');
-  const [fechaFutura, setFechaFutura] = useState(' ');
-  const [fechaFutura, setFechaFutura] = useState(' '); */
+  const [diaFutura, setDiaFutura] = useState(' ');
+  const [mesFutura, setMesFutura] = useState(' ');
+  const [anioFutura, setAnioFutura] = useState(' ');
+  const [semFutura, setSemFutura] = useState(' ');
   const [efect, setEfect] = useState(0);
   /*   value: 'Sueldo',
 }, {
@@ -148,6 +149,19 @@ const Ingreso = ({navigation}) => {
     //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
     return year;
   };
+  function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
 
   const getWeek = () =>  {
     var dd = new Date();
@@ -165,21 +179,21 @@ const Ingreso = ({navigation}) => {
     handleSelect();
   }, []);
 
-  const add =  (monto, detalle, medio, fecha) => {
+  const add =  (monto, detalle, medio, fecha, dia, mes, anio, sem) => {
     console.log("monto: "+monto + " detalle: " + detalle + " medio: " + medio);
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Ingreso', '', ?, ?, ?, ?)",
-        [fecha, detalle, monto, medio, getDate(), getMonth(), getFullYear(), getWeek()]
+        [fecha, detalle, monto, medio, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
     });
-    db.transaction((tx) => {
+    /*db.transaction((tx) => {
       tx.executeSql(
         "update medios set saldo = (select saldo from medios where numero = '" + medio+"') + '"+monto +"'where numero ='"+medio+"'", [], (_, { rows }) => {
         });
-      });
+      });*/
   };
 
   const select = async () => {
@@ -194,7 +208,7 @@ const Ingreso = ({navigation}) => {
 
   const continuar = () =>{
     console.log(medioCobro);
-    if(medioCobro==='Efectivo'){
+    if(medioCobro!=='Efectivo'){
       if(isSelected){
         console.log("Periodico no efectivo");
 
@@ -213,34 +227,54 @@ const Ingreso = ({navigation}) => {
           
           
           
-          setFechaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
-          console.log("fecha fut = "+fechaFutura);
-         add(monto, detalleSelected, medioCobro,fechaFutura);
+          setDiaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate());
+          setMesFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+          setAnioFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+          setSemFutura(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+        setFechaFutura(diaFutura + "/" + mesFutura + "/" + anioFutura);
+
+          //console.log("fecha fut = "+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+         //console.log(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+          add(monto, detalleSelected, medioCobro,addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate(), (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
          navigation.navigate("Home");
        }  
       }else{
           //comun
           console.log("no Periodico no efectivo");
-          add(monto, detalleSelected, medioCobro, getCurrentDate());
+          add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
           navigation.navigate("Home");
       }
     }else{
       if(isSelected){
         console.log("Periodico  efectivo");
         //for
-        Alert.alert(
-          `No se pueden hacer ingresos períodicos con Efectivo`
-            ,
+         Alert.alert(
+           
+            "No se pueden hacer ingresos períodicos con Efectivo",
+           
             [
-              {
-                text: "Confirmar",
-              },
-            ]
-         );
+           
+            {
+           
+            text: "Cancel",
+           
+            onPress: () => console.log("Cancel Pressed"),
+           
+            style: "cancel"
+           
+            },
+           
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+           
+            ],
+           
+            { cancelable: false }
+           
+            );
       }else{
         console.log("no Periodico efectivo");
         //comun
-        add(monto, detalleSelected, medioCobro, getCurrentDate());
+        add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
         navigation.navigate("Home");
       }
     }
@@ -346,7 +380,7 @@ const Ingreso = ({navigation}) => {
 
       {<View style={{flexDirection: "row",
     marginTop: 20}}>
-       <Text>prueba</Text>           
+       <Text>Periódico</Text>           
      
           <CheckBox value={isSelected} onValueChange={setSelection}/>
           
