@@ -138,9 +138,8 @@ const HomeScreen = () => {
     ],
   };
 
-  const obtenerIngresosEnMemoria = () => {
-    console.log("entro al select");
-    db.transaction((tx) => {
+  const obtenerIngresosEnMemoria = async () => {
+    await db.transaction((tx) => {
       tx.executeSql("select * from movimientos", [], (_, { rows }) => {
         setIngresos(rows._array);
       });
@@ -179,6 +178,8 @@ const HomeScreen = () => {
     });
   };
   const handleDownload = async () => {
+    /*Primer se obtiene la data */
+    await obtenerIngresosEnMemoria();
     createExcel();
   };
 
