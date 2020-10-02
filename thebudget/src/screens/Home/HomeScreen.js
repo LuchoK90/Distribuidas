@@ -24,10 +24,13 @@ import { Container } from "native-base";
 import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const screenWidth = Dimensions.get("window").width;
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [ingresos, setIngresos] = useState([]);
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
