@@ -245,7 +245,7 @@ HomeScreen["navigationOptions"] = (screenProps) => ({
   headerLeft: () => (
     <MenuImage
       onPress={() => {
-        navigation.openDrawer();
+        screenProps.navigation.openDrawer();
       }}
     />
   ),
