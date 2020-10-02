@@ -7,22 +7,23 @@ import {
   TouchableHighlight,
   TextInput,
   Switch,
-  Picker,
+  Picker, CheckBox, ColorPropType
 } from "react-native";
 import hola from "./styles";
 import { categories } from "../../data/dataArrays";
 import { getNumberOfRecipes } from "../../data/MockDataAPI";
 import {
+  Checkbox,
   AppRegistry,
   StyleSheet,
   Button,
   SafeAreaView,
-  Alert,
+  Alert
 } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Dropdown } from "react-native-material-dropdown";
-import { Checkbox } from "react-native-paper";
+//import { Checkbox } from "react-native-paper";
 import ElegirFecha from "../../components/ElegirFecha/ElegirFecha";
 import Check from "../../components/Check/Check";
 
@@ -35,6 +36,7 @@ import MultiSelect from "react-native-multiple-select";
 import PickList from "react-native-picklist";
 import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
+import Moment from 'moment';
 import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
@@ -66,7 +68,13 @@ const Ingreso = ({navigation}) => {
     },
   ];
   const [monto, setMonto] = useState('');
-
+  const [isSelected, setSelection] = useState(false);
+  const [cantMesesPeriodico, setCantMesesPeriodico] = useState(' ');
+  const [fechaFutura, setFechaFutura] = useState(' ');
+  /* const [fechaFutura, setFechaFutura] = useState(' ');
+  const [fechaFutura, setFechaFutura] = useState(' ');
+  const [fechaFutura, setFechaFutura] = useState(' '); */
+  const [efect, setEfect] = useState(0);
   /*   value: 'Sueldo',
 }, {
   value: 'Facturación Autónomo',
@@ -99,15 +107,15 @@ const Ingreso = ({navigation}) => {
     };
   }; */
 
-  submitAndClear = () => {
+  /* submitAndClear = () => {
     this.props.writeText(this.state.text);
 
     this.setState({
       text: "",
     });
-  };
+  }; */
 
-  setDate = (newDate) => {
+  const setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
   };
 
@@ -157,12 +165,12 @@ const Ingreso = ({navigation}) => {
     handleSelect();
   }, []);
 
-  const add =  (monto, detalle, medio) => {
+  const add =  (monto, detalle, medio, fecha) => {
     console.log("monto: "+monto + " detalle: " + detalle + " medio: " + medio);
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Ingreso', '', ?, ?, ?, ?)",
-        [getCurrentDate(), detalle, monto, medio, getDate(), getMonth(), getFullYear(), getWeek()]
+        [fecha, detalle, monto, medio, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -185,8 +193,87 @@ const Ingreso = ({navigation}) => {
   };
 
   const continuar = () =>{
-    add(monto, detalleSelected, medioCobro);
-    navigation.navigate("Home");
+    console.log(medioCobro);
+    if(medioCobro==='Efectivo'){
+      if(isSelected){
+        console.log("Periodico no efectivo");
+
+          //for
+          console.log("entro al for ");
+      
+       const addMonths = require('addmonths')
+       Moment.locale('en');
+      
+       var mes = ' ';
+      //console.log(addMonths(new Date(2020, 10, 1), 3));
+      for(let i=-1;i<cantMesesPeriodico;i++){
+         
+        console.log(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+
+          
+          
+          
+          setFechaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+          console.log("fecha fut = "+fechaFutura);
+         add(monto, detalleSelected, medioCobro,fechaFutura);
+         navigation.navigate("Home");
+       }  
+      }else{
+          //comun
+          console.log("no Periodico no efectivo");
+          add(monto, detalleSelected, medioCobro, getCurrentDate());
+          navigation.navigate("Home");
+      }
+    }else{
+      if(isSelected){
+        console.log("Periodico  efectivo");
+        //for
+        Alert.alert(
+          `No se pueden hacer ingresos períodicos con Efectivo`
+            ,
+            [
+              {
+                text: "Confirmar",
+              },
+            ]
+         );
+      }else{
+        console.log("no Periodico efectivo");
+        //comun
+        add(monto, detalleSelected, medioCobro, getCurrentDate());
+        navigation.navigate("Home");
+      }
+    }
+
+   /*  if(isSelected && efect==0){
+     // var mes = new Date().getMonth() + + 5;
+       //var d = Date().getDate();
+       console.log("entro al for ");
+      
+       const addMonths = require('addmonths')
+       Moment.locale('en');
+      
+       var mes = ' ';
+      //console.log(addMonths(new Date(2020, 10, 1), 3));
+      for(let i=-1;i<cantMesesPeriodico;i++){
+         
+        console.log(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+
+          
+          
+          
+          setFechaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+          console.log("fecha fut = "+fechaFutura);
+         add(monto, detalleSelected, medioCobro,fechaFutura);
+      }
+    }else{
+      if(!isSelected)
+      console.log("no entro al for ");
+      add(monto, detalleSelected, medioCobro, getCurrentDate());
+      
+    }; */
+    
+    
   };
   //const { navigation } = this.props;
   /* let medioCobro = [{
@@ -257,11 +344,24 @@ const Ingreso = ({navigation}) => {
         </Picker>
       </View>
 
-      <View style={{flexDirection: "row",
+      {<View style={{flexDirection: "row",
     marginTop: 20}}>
-      <Text>Periódico</Text>          
-      <Check ></Check>
-      </View>  
+       <Text>prueba</Text>           
+     
+          <CheckBox value={isSelected} onValueChange={setSelection}/>
+          
+      {isSelected && (
+          <TextInput
+          style={styles.textInput}
+          placeholder="Cantidad de meses"
+          clearButtonMode="always"
+          keyboardType="number-pad"
+          onChangeText={cantMesesPeriodico => setCantMesesPeriodico(cantMesesPeriodico)}
+          //editable={this.state.TextInputDisableHolder}
+        />
+        )}
+      </View>}
+        
 
      <View><Button title="Guardar" onPress={() =>  continuar()} /></View>
      
@@ -272,6 +372,12 @@ const Ingreso = ({navigation}) => {
     //, navigation.navigate('IngresoView')
   );
 };
+
+/* <View style={{flexDirection: "row",
+    marginTop: 20}}>
+      <Text>Periódico</Text>          
+      <Check ></Check>
+      </View> */
 
 const styles = StyleSheet.create({
   viewContainer: {

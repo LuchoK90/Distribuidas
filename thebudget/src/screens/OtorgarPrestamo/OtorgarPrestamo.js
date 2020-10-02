@@ -172,7 +172,7 @@ const OtorgarPrestamo = ({ navigation }) => {
 
   const continuar = () =>{
     add(medioCobro,monto,cantCuotas);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
 
   /* const componentDidMount=()=> {

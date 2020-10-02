@@ -6,6 +6,7 @@ import { TextInput } from "react-native-paper";
 
 const Check = () => {
   const [isSelected, setSelection] = useState(false);
+  const [cantMesesPeriodico, setCantMesesPeriodico] = useState(' ');
   let meses = [
     {
       value: "Todos los meses",
@@ -46,7 +47,14 @@ const Check = () => {
       </View>
       <View>
         {isSelected && (
-          <ElegirFecha disabled={!isSelected} style={{ marginTop: 10 }} />
+          <TextInput
+          style={styles.textInput}
+          placeholder="Cantidad de meses"
+          clearButtonMode="always"
+          keyboardType="number-pad"
+          onChangeText={cantMesesPeriodico => setCantMesesPeriodico(cantMesesPeriodico)}
+          //editable={this.state.TextInputDisableHolder}
+        />
         )}
       </View>
     </View>
