@@ -78,10 +78,9 @@ const TarjetaView = ({navigation}) => {
   const renderRecipes = (item) => (
 
       <View style={styles.container}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.elemento}>{item.banco}</Text>
-        <Text style={styles.elemento}>{item.entidad}</Text>
-        <Text style={styles.elemento}>{item.numero}</Text>
+        <Text style={styles.title}>{item.entidad}</Text>
+        <Text style={styles.elemento}>BANCO: {item.banco}</Text>
+        <Text style={styles.elemento}>NÚMERO DE TARJETA: {item.numero}</Text>
         <Text style={styles.elemento}>ACUMULADO: $ {item.saldo}</Text>
        
            
