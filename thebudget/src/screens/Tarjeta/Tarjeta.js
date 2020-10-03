@@ -107,6 +107,53 @@ const Tarjeta = ({ navigation }) => {
     this.setState({ chosenDate: newDate });
   };
 
+  const getDate = () => {   
+    var day = new Date().getDate();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
+
+
+ const getWeek = () =>  {
+    var dd = new Date();
+    var d = new Date(Date.UTC(dd.getFullYear(), dd.getMonth(), dd.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+};
+
+function getWeekNumber(d) {
+    console.log(d);
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
+
+
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -118,12 +165,12 @@ const Tarjeta = ({ navigation }) => {
 
   
 
-  const add = (banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen) => {
-    console.log("insert medios " +banco + entidadEmisora + ultimosNum + fechaVenc + fechaCierre + fechaVencResumen);
+  const add = (banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen, dia, mes, anio, sem) => {
+    console.log("insert medios " +banco + entidadEmisora + ultimosNum + fechaVenc + fechaCierre + fechaVencResumen + dia + mes + anio + sem);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0);",
-        [banco, ultimosNum, entidadEmisora, fechaVenc, fechaCierre , fechaVencResumen]
+        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo, vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0,?,?,?,?);",
+        [banco, ultimosNum, entidadEmisora, fechaVenc, fechaCierre , fechaVencResumen, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -131,7 +178,13 @@ const Tarjeta = ({ navigation }) => {
   };
 
   const continuar = () =>{
-    add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen);
+    console.log(fechaVencResumen.substring(0,2));
+    console.log(fechaVencResumen.substring(3,5));
+    console.log(fechaVencResumen.substring(6,10));
+    var dateString = fechaVencResumen;
+    var dateParts = dateString.split("/");
+    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+    add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen, Number(fechaVencResumen.substring(0,2)), Number(fechaVencResumen.substring(3,5)), Number(fechaVencResumen.substring(6,10)), getWeekNumber(dateObject));
     navigation.navigate("Home");
   };
 
@@ -189,7 +242,7 @@ const Tarjeta = ({ navigation }) => {
         
         <TextInput
         style={styles.textInput}
-        placeholder="Fecha Vencimiento (d/m/aaaa)"
+        placeholder="Fecha Vencimiento (mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVenc => setFechaVenc(fechaVenc)}
         //editable={this.state.TextInputDisableHolder}
@@ -197,7 +250,7 @@ const Tarjeta = ({ navigation }) => {
 
       <TextInput
         style={styles.textInput}
-        placeholder="Fecha Cierre Resumen (d/m/aaaa)"
+        placeholder="Fecha Cierre Resumen (dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaCierre => setFechaCierre(fechaCierre)}
         //editable={this.state.TextInputDisableHolder}
@@ -205,7 +258,7 @@ const Tarjeta = ({ navigation }) => {
 
       <TextInput
         style={styles.textInput}
-        placeholder="Fecha Vencimiento Resumen(d/m/aaaa)"
+        placeholder="Fecha Vencimiento Resumen(dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVencResumen => setFechaVencResumen(fechaVencResumen)}
         //editable={this.state.TextInputDisableHolder}

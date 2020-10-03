@@ -61,7 +61,7 @@ const Dashboard_Posta = ({ navigation }) => {
 const HeadTable = ['Banco', 'N° Cuenta', 'Saldo'];
 
 
-const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Monto'];
+const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
   // const navigationOptions = () => {
   //   return {
   //     headerTransparent: 'true',
@@ -133,12 +133,12 @@ const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Monto'];
             console.log(variable1);
             //console.log(getMonth());
           });
-      tx.executeSql("select distinct banco, numero, saldo from medios where esCuentaBancaria=1", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
         let array = rows._array.map(obj => Object.values(obj));
         setVariable2(array);
         //console.log(getDate());
       });
-      tx.executeSql("select distinct tipo_mov x, sum(monto) y from movimientos where mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' group by tipo_mov", [], (_, { rows }) => {
+      tx.executeSql("select distinct tipo_mov x, sum(monto) y from movimientos where mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' group by tipo_mov union select 'Inversion' x, sum(monto*rendimiento) y from inversiones where mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' union select 'Prestamo' x, sum(monto/cuotas) y from prestamos where mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' and tipo = 'Solicitado'", [], (_, { rows }) => {
         setVariable5(rows._array);
         console.log(variable5);
       });   
@@ -146,6 +146,11 @@ const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Monto'];
         setVariable4(rows._array);
         console.log(variable4);
       });  
+      tx.executeSql("select 'Tarjeta', medios.vencimiento_resumen vencimiento, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') and medios.vencimientoResumenAnio = '"+ getFullYear()+"' and medios.vencimientoResumenSem = '"+ getWeek()+"' group by medios.vencimiento_resumen union select 'Plazo Fijo', vencimiento, sum(monto*rendimiento) from inversiones where tipo = 'Plazo Fijo' and anio = '"+ getFullYear()+"' and sem= '"+ getWeek()+"' group by vencimiento  union select 'Prestamo', vencimiento, sum(monto/cuotas) from prestamos where tipo = 'Solicitado' and anio = '"+ getFullYear()+"' and sem= '"+ getWeek()+"' group by vencimiento", [], (_, { rows }) => {
+        let array = rows._array.map(obj => Object.values(obj));
+        setVariable3(array);
+        //console.log(getDate());
+      });
     });
   };
 
@@ -178,7 +183,10 @@ const HeadTable_2 = ['Tipo', 'Detalle', 'Fecha', 'Monto'];
                 </Table>
 
                <Text style={styles.graficosNombre}>{'Vencimientos'}</Text>
- 
+               <Table borderStyle={{ borderWidth: 1, borderColor: '#270570' }}>
+                    <Row data={HeadTable_2} style={styles.HeadStyle} textStyle={styles.TableText} />
+                    <Rows data={variable3} textStyle={styles.TableText} />
+                </Table>
 
                 <Text style={styles.graficosNombre}>{'Desvíos'}</Text>
                 <VictoryChart>

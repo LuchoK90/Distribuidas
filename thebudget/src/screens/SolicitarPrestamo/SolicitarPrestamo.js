@@ -48,6 +48,7 @@ const SolicitarPrestamo = ({ navigation }) => {
   const [detalleSelected, setDetalleSelected] = useState();
   const [monto, setMonto] = useState(' ');
   const [cantCuotas, setCantCuotas] = useState(' ');
+  const [fechaVenc, setFechaVenc] = useState(' ');
   let modo = [
     {
       value: "Renovación Automática",
@@ -107,6 +108,32 @@ const SolicitarPrestamo = ({ navigation }) => {
       ),
     };
   };
+ 
+  const getDate = () => {   
+    var day = new Date().getDate();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
+
+
+
+
+
 
   submitAndClear = () => {
     this.props.writeText(this.state.text);
@@ -119,7 +146,29 @@ const SolicitarPrestamo = ({ navigation }) => {
   setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
   };
+  const getWeek = () =>  {
+    var dd = new Date();
+    var d = new Date(Date.UTC(dd.getFullYear(), dd.getMonth(), dd.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+};
 
+function getWeekNumber(d) {
+    console.log(d);
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -136,25 +185,25 @@ const SolicitarPrestamo = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add=(medioCobro,monto,cantCuotas) => {
+  const add=(medioCobro,monto,cantCuotas, fechaVenc, dia, mes, anio, sem) => {
     console.log(medioCobro+monto+cantCuotas);
-    db.transaction((tx) => {
+    /*db.transaction((tx) => {
       tx.executeSql(
         "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') + '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
        });
-    });
+    });*/
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into prestamos ( tipo , monto ,cuenta, cuotas ) values ('Solicitado',?,?,?)",
-        [monto,medioCobro,cantCuotas]
+        "insert into prestamos ( tipo , monto ,cuenta, cuotas, vencimiento, dia , mes , anio , sem ) values ('Solicitado',?,?,?, ?, ?, ?, ?, ?)",
+        [monto,medioCobro,cantCuotas, fechaVenc, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
     });
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Prest. Solicitado', ?, ?, 'Ingreso', '')",
-        [getCurrentDate(), monto, medioCobro]
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia , mes , anio , sem ) values (?,'Prest. Solicitado', ?, ?, 'Ingreso', '', ?, ?, ?, ?)",
+        [getCurrentDate(), monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -171,7 +220,14 @@ const SolicitarPrestamo = ({ navigation }) => {
   };
 
   const continuar = () =>{
-    add(medioCobro,monto,cantCuotas);
+    var dateString = fechaVenc;
+    var dateParts = dateString.split("/");
+    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+    //add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVenc, Number(fechaVencResumen.substring(0,2)), Number(fechaVencResumen.substring(3,5)), Number(fechaVencResumen.substring(6,10)), getWeekNumber(dateObject));
+    
+
+    
+    add(medioCobro,monto,cantCuotas, fechaVenc, Number(fechaVenc.substring(0,2)), Number(fechaVenc.substring(3,5)), Number(fechaVenc.substring(6,10)), getWeekNumber(dateObject));
     navigation.navigate("Home");
   };
 
@@ -275,7 +331,15 @@ const SolicitarPrestamo = ({ navigation }) => {
         keyboardType="number-pad"
         onChangeText={(monto) => setMonto(monto)}
         //editable={this.state.TextInputDisableHolder}
-      />               
+      />     
+
+      <TextInput
+        style={styles.textInput}
+        placeholder="Fecha Vencimiento (dd/mm/aaaa)"
+        clearButtonMode="always"
+        onChangeText={fechaVenc => setFechaVenc(fechaVenc)}
+        //editable={this.state.TextInputDisableHolder}
+      />          
 
       <TextInput
         style={styles.textInput}

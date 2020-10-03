@@ -10,8 +10,9 @@ export default class App extends React.Component {
     console.log("app6.js");
     //tabla de inversiones
     db.transaction((tx) => {
+        tx.executeSql("drop table inversiones;" );
       tx.executeSql(
-        "create table if not exists inversiones (id_inversion integer primary key not null, tipo text, flag_deposito text, monto real, rendimiento real, vencimiento text, cuenta text);"
+        "create table if not exists inversiones (id_inversion integer primary key not null, tipo text, flag_deposito text, monto real, rendimiento real, vencimiento text, cuenta text, dia int, mes int, anio int, sem int);"
       );
       
     });
@@ -56,6 +57,8 @@ export default class App extends React.Component {
      /*  tx.executeSql(
         "drop table presupuestos ;"
       ); */
+      tx.executeSql("drop table presupuestos;" );
+      tx.executeSql("drop table presupuestos;" );
       tx.executeSql(
         "create table if not exists presupuestos (id_presupuestos integer primary key not null, mes integer, anio integer, rubro text, categoria text, monto real);"
       );
@@ -66,17 +69,18 @@ export default class App extends React.Component {
       console.log("medio")
          tx.executeSql("drop table medios;" );
       tx.executeSql(
-        "create table if not exists medios (id_medio integer primary key not null, banco text, numero text, cbu text, debito text, saldo real,entidad text, vencimiento text, cierre_resumen text, vencimiento_resumen text, esCuentaBancaria integer, esTarjetaCredito integer, esEfectivo integer);"
+        "create table if not exists medios (id_medio integer primary key not null, banco text, numero text, cbu text, debito text, saldo real,entidad text, vencimiento text, cierre_resumen text, vencimiento_resumen text, esCuentaBancaria integer, esTarjetaCredito integer, esEfectivo integer, vencimientoResumenDia int, vencimientoResumenMes int, vencimientoResumenAnio int, vencimientoResumenSem int);"
       );
       tx.executeSql(
-        "insert into medios(banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);"
+        "insert into medios(banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo, vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1, ' ', ' ', ' ', ' ');"
       );
-    });
+    }); 
 
     //Tabla de Prestamos
     db.transaction((tx) => {
+        tx.executeSql("drop table prestamos;" );
       tx.executeSql(
-        "create table if not exists prestamos (id_prestamo integer primary key not null, tipo text, monto real, cuenta text, cuotas integer);"
+        "create table if not exists prestamos (id_prestamo integer primary key not null, tipo text, monto real, cuenta text, cuotas integer, vencimiento text, dia int, mes int, anio int, sem int);"
       );
     });
 

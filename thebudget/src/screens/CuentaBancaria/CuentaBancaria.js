@@ -66,7 +66,7 @@ const CuentaBancaria = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select medios.banco banco, medios.numero numero, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, medios.cbu cbu, medios.debito debito, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });
@@ -75,9 +75,11 @@ const CuentaBancaria = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>{item.banco} </Text>
-      <Text style={styles.elemento}>{item.numero}</Text>
-      <Text style={styles.elemento}>{item.saldo}</Text>
+      <Text style={styles.title}>{item.banco} </Text>
+      <Text style={styles.elemento}>NÚMERO DE CUENTA: {item.numero}</Text>
+      <Text style={styles.elemento}>CBU: {item.cbu}</Text>
+      <Text style={styles.elemento}>TARJETA ASOCIADA: {item.debito}</Text>
+      <Text style={styles.elemento}>SALDO: $ {item.saldo}</Text>
   
     </View>
   );
