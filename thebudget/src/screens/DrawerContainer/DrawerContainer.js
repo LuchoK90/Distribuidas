@@ -90,7 +90,7 @@ export default class DrawerContainer extends React.Component {
           />
           <MenuButton
             title="CERRAR SESION"
-            source={require('../../../assets/icons/presupuesto.png')}
+            source={require('../../../assets/icons/exit.png')}
             onPress={() => {  
              
               navigation.navigate('Login');

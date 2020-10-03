@@ -140,7 +140,6 @@ const PresupuestoView = ({ navigation }) => {
             onPress={() => navigation.navigate("Presupuesto")}
           />
         </View>
-        <Button title= 'hola'onPress={handlePressButton}></Button>
       </SafeAreaView>
     </Container>
   );
