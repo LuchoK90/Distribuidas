@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Alert,
   Button,
+  AsyncStorage,
 } from "react-native";
 import hola from "./styles";
 import { Container, H1 } from "native-base";
@@ -24,6 +25,8 @@ import { DataTable } from "react-native-paper";
 
 import * as SQLite from "expo-sqlite";
 import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table";
+
+const idUsuarioLogueado = '@my-app:value';
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
@@ -64,6 +67,12 @@ const PresupuestoView = ({ navigation }) => {
         setVariable(rows._array);
       });
     });
+  };
+
+  const handlePressButton = async () =>{
+       
+    const storageSample = await AsyncStorage.getItem(idUsuarioLogueado);
+    alert(storageSample);
   };
 
   return (
@@ -131,6 +140,7 @@ const PresupuestoView = ({ navigation }) => {
             onPress={() => navigation.navigate("Presupuesto")}
           />
         </View>
+        <Button title= 'hola'onPress={handlePressButton}></Button>
       </SafeAreaView>
     </Container>
   );

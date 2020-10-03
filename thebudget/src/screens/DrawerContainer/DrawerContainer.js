@@ -1,10 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, AsyncStorage, DevSettings } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import MenuButton from '../../components/MenuButton/MenuButton';
+import RNExitApp from 'react-native-exit-app';
+
+const idUsuarioLogueado = '@my-app:value';
 
 export default class DrawerContainer extends React.Component {
+
+ 
+
   render() {
     const { navigation } = this.props;
     return (
@@ -79,6 +85,15 @@ export default class DrawerContainer extends React.Component {
             source={require('../../../assets/icons/presupuesto.png')}
             onPress={() => {
               navigation.navigate('PresupuestoView');
+              navigation.closeDrawer();
+            }}
+          />
+          <MenuButton
+            title="CERRAR SESION"
+            source={require('../../../assets/icons/presupuesto.png')}
+            onPress={() => {  
+             
+              navigation.navigate('Login');
               navigation.closeDrawer();
             }}
           />

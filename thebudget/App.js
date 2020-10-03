@@ -7,7 +7,7 @@ const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 export default class App extends React.Component {
   constructor() {
     super();
-    console.log("app5.js");
+    console.log("app6.js");
     //tabla de inversiones
     db.transaction((tx) => {
       tx.executeSql(
@@ -27,9 +27,9 @@ export default class App extends React.Component {
     //Tabla de usuarios
     db.transaction((tx) => {
       console.log("creo tabla usuarios")
-     /*  tx.executeSql(
+      /*  tx.executeSql(
         "drop table usuarios ;"
-      );  */
+      ); */  
       tx.executeSql(
         "create table if not exists usuarios (id_usuario integer primary key not null, mail text, pass text, logueado integer);"
       );
@@ -86,12 +86,12 @@ export default class App extends React.Component {
         "insert into medios(banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(' ','Efectivo',' ',' ',0.0,' ',' ',' ',' ',0,0,1);"
       );
     }); */
-   /*    db.transaction((tx) => {
+      /* db.transaction((tx) => {
       console.log("usuarios")
       tx.executeSql(
         "insert into usuarios(mail, pass, logueado ) VALUES('gero','1234',1);"
       );
-    });  */
+    }); */ 
     db.transaction((tx) => { 
       tx.executeSql("select * from usuarios", [], (_, { rows }) => {
         console.log(rows);

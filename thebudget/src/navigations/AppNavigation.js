@@ -37,6 +37,7 @@ import PresupuestarEgresos from '../screens/PresupuestarEgresos/PresupuestarEgre
 import PresupuestarInversiones from '../screens/PresupuestarInversiones/PresupuestarInversiones';
 import PresupuestarPrestamos from '../screens/PresupuestarPrestamos/PresupuestarPrestamos';
 import GastosAcumulados from '../screens/Tarjeta/GastosAcumulados';
+
 import {AsyncStorage} from 'react-native';
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2");
@@ -101,7 +102,8 @@ const MainNavigator = createStackNavigator(
     PresupuestarIngresos:PresupuestarIngresos,
     PresupuestarEgresos:PresupuestarEgresos,
     PresupuestarInversiones:PresupuestarInversiones,
-    PresupuestarPrestamos:PresupuestarPrestamos
+    PresupuestarPrestamos:PresupuestarPrestamos,
+   
   },
   {
     initialRouteName: 'Login',
