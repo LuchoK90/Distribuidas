@@ -45,7 +45,7 @@ const Prestamos = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>TIPO: {item.tipo}</Text>
+      <Text style={styles.title}>{item.tipo}</Text>
       <Text style={styles.elemento}>MONTO: $ {item.monto}</Text>
       <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
       <Text style={styles.elemento}>CUOTAS: {item.cuotas}</Text>

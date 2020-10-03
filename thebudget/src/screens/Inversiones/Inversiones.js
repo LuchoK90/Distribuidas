@@ -45,7 +45,7 @@ const Inversiones = ({ navigation }) => {
 
   const renderInversiones = (item) => (
     <View style={styles.container}>
-      <Text style={styles.elemento}>TIPO: {item.tipo}</Text>
+      <Text style={styles.title}>{item.tipo}</Text>
       <Text style={styles.elemento}>CAPITAL INVERTIDO: $ {item.monto}
       </Text>
       <Text style={styles.elemento}>RENDIMIENTO: {item.rendimiento} %</Text>

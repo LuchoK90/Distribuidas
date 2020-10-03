@@ -12,7 +12,7 @@ export default class DrawerContainer extends React.Component {
         <View style={styles.container}>
           <MenuButton
             title="HOME"
-            source={require('../../../assets/icons/dashboard.png')}
+            source={require('../../../assets/icons/home2.png')}
             onPress={() => {
               navigation.navigate('Home');
               navigation.closeDrawer();
