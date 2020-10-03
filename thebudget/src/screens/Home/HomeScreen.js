@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -25,6 +25,7 @@ import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as SQLite from "expo-sqlite";
+//import { useFocusEffect } from "@react-navigation/native";
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
@@ -32,6 +33,7 @@ const screenWidth = Dimensions.get("window").width;
 
 const HomeScreen = ({ navigation }) => {
   const [ingresos, setIngresos] = useState([]);
+  //const isFocused = useIsFocused();
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -141,18 +143,39 @@ const HomeScreen = ({ navigation }) => {
     ],
   };
 
+  /* useEffect(() => {
+    obtenerIngresosEnMemoria();
+    
+  }, []); */
+  useEffect(() => {
+    console.log("ingresos",ingresos);
+    
+  }, [ingresos]);
+
+  useEffect(() => {
+    if (navigation.isFocused) {
+      console.log("entre al use focus");
+      obtenerIngresosEnMemoria();
+    }
+    return () => {};
+  }, [navigation]);
+
   const obtenerIngresosEnMemoria = async () => {
     await db.transaction((tx) => {
       tx.executeSql("select * from movimientos", [], (_, { rows }) => {
         setIngresos(rows._array);
+        console.log("carga data"+ingresos);
       });
     });
   };
 
-  const createExcel = async (data) => {
+
+
+  const createExcel = async (ing) => {
+    console.log("createExcel",ing);
     var wb = XLSX.utils.book_new();
     /*Ingresos */
-    var wsIngresos = XLSX.utils.json_to_sheet(ingresos);
+    var wsIngresos = XLSX.utils.json_to_sheet(ing);
     XLSX.utils.book_append_sheet(wb, wsIngresos, "Ingresos");
 
     /*Egresos*/
@@ -180,10 +203,10 @@ const HomeScreen = ({ navigation }) => {
       UTI: "com.microsoft.excel.xlsx",
     });
   };
-  const handleDownload = async () => {
+  const handleDownload =   () => {
     /*Primer se obtiene la data */
-    await obtenerIngresosEnMemoria();
-    createExcel();
+     //await obtenerIngresosEnMemoria();
+    createExcel(ingresos);
   };
 
   return (

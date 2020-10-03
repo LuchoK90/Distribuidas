@@ -38,6 +38,7 @@ import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
+const idUsuarioLogueado = '@my-app:value';
 
 const PresupuestarIngreso = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
@@ -46,6 +47,7 @@ const PresupuestarIngreso = ({ navigation }) => {
   const [medioCobro, setMedioCobro] = useState("");
   //const navigationOptions = () => { PickList.navigationOptions };
   const [detalleSelected, setDetalleSelected] = useState();
+  const[usuario,setUsuario] = useState("");
   let detalle = [
     {
       value: "Sueldo",
@@ -126,15 +128,24 @@ const PresupuestarIngreso = ({ navigation }) => {
     return  year;
   };
 
-  const handleSelect = async () => {
-    await select();
+  const handleSelect = async (id) => {
+    await select(id);
   };
   useEffect(() => {
-    handleSelect();
+    handlePressButton();
+    /* handleSelect();
+    handlePressButton(); */
   }, []);
+  const handlePressButton = async () =>{
+       
+    const storageSample = await AsyncStorage.getItem(idUsuarioLogueado);
+    return storageSample;
+    
+  };
 
   const add=(detalleSelected,monto) => {
-    console.log(detalleSelected+monto);
+    const id = handlePressButton();
+    console.log("en el add = "+{id});
     db.transaction((tx) => {
       tx.executeSql(
         "insert into presupuestos ( mes, anio , rubro ,categoria, monto ) values (?,?,'Ingreso',?,?)",
@@ -145,7 +156,7 @@ const PresupuestarIngreso = ({ navigation }) => {
     });
   };
 
-  const select = async () => {
+  const select = async (id) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);

@@ -54,13 +54,9 @@ export default class App extends React.Component {
 
     //Tabla de presupuestos
     db.transaction((tx) => {
-     /*  tx.executeSql(
-        "drop table presupuestos ;"
-      ); */
-      tx.executeSql("drop table presupuestos;" );
       tx.executeSql("drop table presupuestos;" );
       tx.executeSql(
-        "create table if not exists presupuestos (id_presupuestos integer primary key not null, mes integer, anio integer, rubro text, categoria text, monto real);"
+        "create table if not exists presupuestos (id_presupuestos integer primary key not null, mes integer, anio integer, rubro text, categoria text, monto real, user text);"
       );
     });
 

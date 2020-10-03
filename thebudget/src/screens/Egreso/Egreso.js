@@ -58,6 +58,7 @@ const Egreso = ({ navigation }) => {
   const [anioFutura, setAnioFutura] = useState(' ');
   const [semFutura, setSemFutura] = useState(' ');
   const [fechaFutura, setFechaFutura] = useState(' ');
+  const [image, setImage] = useState(null);
   let detalle = [
     {
       value: "Universidad",
@@ -224,14 +225,22 @@ const Egreso = ({ navigation }) => {
   };
   useEffect(() => {
     handleSelect();
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
   }, []);
 
   const add = (monto, detalle, medio, fecha, dia, mes, anio, sem) => {
     console.log(monto + " " + detalle + " " + medio);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Egreso', '', ?, ?, ?, ?)",
-        [fecha, detalle, monto, medio, dia, mes, anio, sem]
+        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Egreso', ? , ?, ?, ?, ?)",
+        [fecha, detalle, monto, medio, image ,dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -361,36 +370,22 @@ const Egreso = ({ navigation }) => {
     navigation.navigate("Home");
   };
 
-  /* const componentDidMount=()=> {
-    getPermissionAsync();
-  } */
+ 
 
-  /* const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      
     }
-  }; */
-
-  const _pickImage =   () => {
-    //try {
-      //let result = await ImagePicker.launchImageLibraryAsync({
-      let result =  ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image: result.uri });
-      }
-
-      console.log(result);
-    //} catch (E) {
-      console.log(E);
-   // }
   };
    
   //const { navigation } = this.props;
@@ -497,11 +492,10 @@ const Egreso = ({ navigation }) => {
         />
         )}
       </View>}
-
-      {/*<Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={_pickImage()} />*/}
-      <View style={{marginBottom:20}}><Button  title="Adjuntar Comprobante"  /></View>
-     
-      {/*{image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}  
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="Adjuntar comprobante" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    </View>
       <Button title="Guardar" onPress={() => continuar()} />
       
     </View>

@@ -75,6 +75,7 @@ const EgresoView = ({ navigation }) => {
       //tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {  
       setVariable(rows._array);
+      
       });
     });
   };

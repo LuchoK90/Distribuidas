@@ -4,6 +4,8 @@ import styles from './styles';
 import MenuImage from '../../components/MenuImage/MenuImage';
 import { Button } from 'react-native-paper';
 import * as SQLite from "expo-sqlite";
+import { useFocusEffect } from '@react-navigation/native';
+
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const idUsuarioLogueado = '@my-app:value';
@@ -39,10 +41,13 @@ const Login = ({navigation}) =>{
         email: "",
         password: ""
     } */
+    
+
     useEffect(() => {
+            
            
             handleSelect();
-            loadFont()
+            
         
         
         
@@ -55,15 +60,12 @@ const Login = ({navigation}) =>{
         
         
     };
-    const loadFont = async () =>{
-       // await AsyncStorage.setItem(idUsuarioLogueado,'prueba7');
-    };
     
     
        
     
       const select =   () => {
-          //console.log("db")
+          console.log("db")
           db.transaction((tx) => { 
         //tx.executeSql("select * from usuarios where mail = '" + email + "'", [], (_, { rows }) => {
                 tx.executeSql("select * from usuarios", [], (_, { rows }) => {
@@ -87,11 +89,10 @@ const Login = ({navigation}) =>{
     
 
       const ingresar = () =>{
-      
+        desloguear();
         for(let i=0;i<usuarios.length;i++){
               if(usuarios[i].mail===email&&usuarios[i].pass===password){
-                handlePressButton(usuarios[i].id_usuario.toString());
-                setEncontroUsuario(true);
+                logear(usuarios[i].id_usuario);
                 navigation.navigate("Home");
                 return;
               }else{
@@ -139,22 +140,29 @@ const Login = ({navigation}) =>{
         //navigation.navigate("Home");
       };
 
-      const estalogueado = async () =>{
-        //console.log(id);
-        const storageSample = await AsyncStorage.getItem(idUsuarioLogueado);
-        alert(storageSample);
+      const logear = async (id) =>{
+        await db.transaction((tx) => { 
+          //tx.executeSql("select * from usuarios where mail = '" + email + "'", [], (_, { rows }) => {
+                  tx.executeSql("update usuarios set logueado = 1 where id_usuario = '"+id+"'", [], (_, { rows }) => {
+                
+               
+                console.log("logueado");
+              });
+            })
+      };
+      const desloguear = async () =>{
+        await db.transaction((tx) => { 
+          //tx.executeSql("select * from usuarios where mail = '" + email + "'", [], (_, { rows }) => {
+                  tx.executeSql("update usuarios set logueado = 0;", [], (_, { rows }) => {
+                
+               
+                console.log("deslogueado");
+              });
+            })
       };
 
-      const handlePressButton = async (id) =>{
-        //console.log(id);
-        const storageSample = await AsyncStorage.setItem(idUsuarioLogueado,id);
-        //alert(storageSample);
-      };
-      const averga = async (id) =>{
-        //console.log(id);
-        const storageSample = await AsyncStorage.getItem(idUsuarioLogueado);
-        alert(storageSample);
-      };
+      
+   
     
     //if(usuarios.logueado)
         //const { navigation } = this.props;
@@ -191,7 +199,7 @@ const Login = ({navigation}) =>{
                     <Button onPress={() => registro()}><Text style={{color:'white'}}>REGISTRARSE</Text></Button>
                 </TouchableOpacity>
 
-                <Button onPress={averga}></Button>
+                
 
                 
             </View>
