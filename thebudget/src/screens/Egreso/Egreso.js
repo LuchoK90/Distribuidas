@@ -8,6 +8,7 @@ import {
   TextInput,
   Switch,
   Picker,
+  CheckBox
 } from "react-native";
 import hola from "./styles";
 import { categories } from "../../data/dataArrays";
@@ -25,6 +26,7 @@ import { Dropdown } from "react-native-material-dropdown";
 import { Checkbox } from "react-native-paper";
 import ElegirFecha from "../../components/ElegirFecha/ElegirFecha";
 import Check from "../../components/Check/Check";
+import CheckTC from "../../components/Check/CheckTC";
 
 import { Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -36,7 +38,7 @@ import PickList from "react-native-picklist";
 import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
-
+import Moment from 'moment';
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const Egreso = ({ navigation }) => {
@@ -47,7 +49,15 @@ const Egreso = ({ navigation }) => {
   //const navigationOptions = () => { PickList.navigationOptions };
   const [detalleSelected, setDetalleSelected] = useState('hola ');
   const [cuotasSelected, setCuotasSelected] = useState(' ');
-  
+  const [isSelected, setSelection] = useState(false);
+  const [isSelectedTC, setSelectionTC] = useState(false);
+  const [cantMesesPeriodico, setCantMesesPeriodico] = useState(' ');
+  const [cantCuotas, setCantCuotas] = useState(' ');
+  const [diaFutura, setDiaFutura] = useState(' ');
+  const [mesFutura, setMesFutura] = useState(' ');
+  const [anioFutura, setAnioFutura] = useState(' ');
+  const [semFutura, setSemFutura] = useState(' ');
+  const [fechaFutura, setFechaFutura] = useState(' ');
   let detalle = [
     {
       value: "Universidad",
@@ -152,7 +162,19 @@ const Egreso = ({ navigation }) => {
   /* setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
   }; */
-
+  function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -204,12 +226,12 @@ const Egreso = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add = (monto, detalle, medio) => {
+  const add = (monto, detalle, medio, fecha, dia, mes, anio, sem) => {
     console.log(monto + " " + detalle + " " + medio);
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Egreso', '', ?, ?, ?, ?)",
-        [getCurrentDate(), detalle, monto, medio, getDate(), getMonth(), getFullYear(), getWeek()]
+        [fecha, detalle, monto, medio, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -232,8 +254,110 @@ const Egreso = ({ navigation }) => {
   };
 
   const continuar = () =>{
-    console.log("continuar "+monto+ detalleSelected+ medioCobro);
-    add(monto, detalleSelected, medioCobro);
+    console.log(medioCobro);
+    if(medioCobro!=='Efectivo'){
+      if(isSelected){
+        console.log("Periodico no efectivo");
+
+          //for
+          console.log("entro al for ");
+      
+       const addMonths = require('addmonths')
+       Moment.locale('en');
+      
+       var mes = ' ';
+      //console.log(addMonths(new Date(2020, 10, 1), 3));
+      for(let i=-1;i<cantMesesPeriodico;i++){
+         
+        console.log(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+
+          
+          
+          
+          setDiaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate());
+          setMesFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+          setAnioFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+          setSemFutura(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+        setFechaFutura(diaFutura + "/" + mesFutura + "/" + anioFutura);
+
+          //console.log("fecha fut = "+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+         //console.log(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+          add(monto, detalleSelected, medioCobro,addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate(), (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+         navigation.navigate("Home");
+       }  
+      }else{
+          if(isSelectedTC){
+            console.log("Periodico no efectivo");
+
+            //for
+            console.log("entro al for ");
+        
+         const addMonths = require('addmonths')
+         Moment.locale('en');
+        
+         var mes = ' ';
+        //console.log(addMonths(new Date(2020, 10, 1), 3));
+        for(let i=-1;i<cantCuotas-1;i++){
+           
+          console.log(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+  
+            
+            
+            
+            setDiaFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate());
+            setMesFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+            setAnioFutura(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+            setSemFutura(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+          setFechaFutura(diaFutura + "/" + mesFutura + "/" + anioFutura);
+  
+            //console.log("fecha fut = "+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear());
+           //console.log(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+            add(monto/cantCuotas, detalleSelected, medioCobro,addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate(), (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
+           navigation.navigate("Home");
+         }              
+
+          }else{
+          //comun
+          console.log("no Periodico no efectivo");
+          add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
+          navigation.navigate("Home");
+      }
+    }
+    }else{
+      if(isSelected || isSelectedTC){
+        console.log("Periodico  efectivo");
+        //for
+         Alert.alert(
+           
+            "No se pueden hacer egresos períodicos con Efectivo",
+           
+            [
+           
+            {
+           
+            text: "Cancel",
+           
+            onPress: () => console.log("Cancel Pressed"),
+           
+            style: "cancel"
+           
+            },
+           
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+           
+            ],
+           
+            { cancelable: false }
+           
+            );
+      }else{
+        console.log("no Periodico efectivo");
+        //comun
+        add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
+        navigation.navigate("Home");
+      }
+    }
+
     navigation.navigate("Home");
   };
 
@@ -338,17 +462,42 @@ const Egreso = ({ navigation }) => {
         </Picker>
       </View>
 
-      <Dropdown
-        label="Seleccionar Cuotas"
-        data={cuotas}
-        onChangeText={(cuo) => setCuotasSelected({ cuo })}
-        disabled={false}
-      />
-      <View style={{flexDirection: "row",
+      {<View style={{flexDirection: "row",
     marginTop: 20}}>
-      <Text>Débito automático</Text>          
-      <Check ></Check>
-      </View>    
+       <Text>Dábito Automático</Text>           
+     
+          <CheckBox value={isSelected} onValueChange={setSelection}/>
+          
+      {isSelected && (
+          <TextInput
+          style={styles.textInput}
+          placeholder="Cantidad de meses"
+          clearButtonMode="always"
+          keyboardType="number-pad"
+          onChangeText={cantMesesPeriodico => setCantMesesPeriodico(cantMesesPeriodico)}
+          //editable={this.state.TextInputDisableHolder}
+        />
+        )}
+      </View>}  
+
+      {<View style={{flexDirection: "row",
+    marginTop: 20}}>
+       <Text>Tarjeta de Crédito</Text>           
+     
+          <CheckBox value={isSelectedTC} onValueChange={setSelectionTC}/>
+          
+      {isSelectedTC && (
+          <TextInput
+          style={styles.textInput}
+          placeholder="Cantidad de meses"
+          clearButtonMode="always"
+          keyboardType="number-pad"
+          onChangeText={cantCuotas => setCantCuotas(cantCuotas)}
+          //editable={this.state.TextInputDisableHolder}
+        />
+        )}
+      </View>}
+
       {/*<Button style={{marginBottom:10}} title="Adjuntar Comprobante" onPress={_pickImage()} />*/}
       <View style={{marginBottom:20}}><Button  title="Adjuntar Comprobante"  /></View>
      

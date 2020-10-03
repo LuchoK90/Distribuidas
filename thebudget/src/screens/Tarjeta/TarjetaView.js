@@ -38,6 +38,15 @@ const TarjetaView = ({navigation}) => {
     );
   };
 
+  const getCurrentDate = () => {
+    var date = new Date().getDate(); 
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return date + "/" + month + "/" + year;
+  };
+
   const onPressTransferencia = item => {
     navigation.navigate('GastosAcumulados', { item });
   };
@@ -59,7 +68,7 @@ const TarjetaView = ({navigation}) => {
   const select = () => {
     console.log("entro al select");
     db.transaction((tx) => {
-      tx.executeSql("select * from medios where esTarjetaCredito = 1", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, medios.entidad entidad, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero, medios.entidad", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(rows._array)
       });
@@ -73,7 +82,7 @@ const TarjetaView = ({navigation}) => {
         <Text style={styles.elemento}>{item.banco}</Text>
         <Text style={styles.elemento}>{item.entidad}</Text>
         <Text style={styles.elemento}>{item.numero}</Text>
-        <Text style={styles.elemento}>ACUMULADO: $ {-1*item.saldo}</Text>
+        <Text style={styles.elemento}>ACUMULADO: $ {item.saldo}</Text>
        
            
 

@@ -119,7 +119,38 @@ const AgregarAcciones = ({ navigation }) => {
   setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
   };
+  const getDate = () => {   
+    var day = new Date().getDate();  
 
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
+
+
+
+
+  const getWeek = () =>  {
+    var dd = new Date();
+    var d = new Date(Date.UTC(dd.getFullYear(), dd.getMonth(), dd.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+};
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -138,14 +169,14 @@ const AgregarAcciones = ({ navigation }) => {
 
   const add=(medioCobro,monto,rendimiento,empresa) => {
     console.log(medioCobro+monto+rendimiento+empresa);
-    db.transaction((tx) => {
+   /* db.transaction((tx) => {
       tx.executeSql(
         "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
        });
-    });
+    });*/
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Acción',' ',?,?,' ',?)",
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem  ) values ('Accion',' ',?,?,' ',?,'','','','')",
         [monto,rendimiento,medioCobro]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -153,8 +184,8 @@ const AgregarAcciones = ({ navigation }) => {
     });
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,'Acción', ?, ?, 'Egreso', '')",
-        [getCurrentDate(), monto, medioCobro]
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?,'Accion', ?, ?, 'Egreso', '', ?, ?, ?, ?)",
+        [getCurrentDate(), monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -172,7 +203,7 @@ const AgregarAcciones = ({ navigation }) => {
 
   const continuar = () =>{
     add(medioCobro,monto,rendimiento,empresa);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
 
   /* const componentDidMount=()=> {

@@ -57,11 +57,24 @@ const EgresoView = ({ navigation }) => {
   useEffect(() => {
     handleSelect();
   }, []);
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
 
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+
+    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    return year;
+  };
   const select = () => {
     db.transaction((tx) => {
-      tx.executeSql("select * from movimientos where tipo_mov = 'Egreso'", [], (_, { rows }) => {
-        setVariable(rows._array);
+      //tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {
+        tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {  
+      setVariable(rows._array);
       });
     });
   };

@@ -111,7 +111,7 @@ const NuevaCuenta = ({ navigation }) => {
     console.log("insert cuentas " +banco + numeroCuenta + cbu + tarjetaAsociada + saldo);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo ) VALUES(?,?,?,?,?,'','','','',1,0,0);",
+        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo,  vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem ) VALUES(?,?,?,?,?,'','','','',1,0,0, '', '', '', '');",
         [banco, numeroCuenta, cbu, tarjetaAsociada, saldo]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),

@@ -8,6 +8,7 @@ import {
   TextInput,
   Switch,
   Picker,
+  CheckBox
 } from "react-native";
 import hola from "./styles";
 import { categories } from "../../data/dataArrays";
@@ -50,6 +51,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
   const [fechaVenc, setFechaVenc] = useState(' ');
   const [rendimiento, setRendimiento] = useState(' ');
   const [mode, setMode] = useState(' ');
+  const [isSelected, setSelection] = useState(false);
 
   let modo = [
     {
@@ -154,7 +156,19 @@ const AgregarPlazoFijo = ({ navigation }) => {
   };
 
 
-
+  function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
 
 
 
@@ -174,17 +188,17 @@ const AgregarPlazoFijo = ({ navigation }) => {
     handleSelect();
   }, []);
 
-  const add=(medioCobro,monto,fechaVenc,rendimiento,Modo) => {
+  const add=(medioCobro,monto,fechaVenc,rendimiento,Modo, dia, mes, anio, sem) => {
     console.log(medioCobro+monto+fechaVenc+rendimiento+Modo);
-    db.transaction((tx) => {
+    /*db.transaction((tx) => {
       tx.executeSql(
         "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
        });
-    });
+    });*/
     db.transaction((tx) => {
       tx.executeSql(     
-        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta ) values ('Plazo Fijo',?,?,?,?,?)",
-        [Modo,monto,rendimiento,fechaVenc,medioCobro]
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem ) values ('Plazo Fijo',?,?,?,?,?, ?, ?, ?, ?)",
+        [Modo,monto,rendimiento,fechaVenc,medioCobro, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -198,6 +212,42 @@ const AgregarPlazoFijo = ({ navigation }) => {
         (_, { error }) => console.log(JSON.stringify(error));
     });
   };
+
+
+  const addEnCuenta=(medioCobro,monto,fechaVenc,rendimiento,Modo, dia, mes, anio, sem) => {
+    console.log(medioCobro+monto+fechaVenc+rendimiento+Modo);
+    /*db.transaction((tx) => {
+      tx.executeSql(
+        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
+       });
+    });*/
+    db.transaction((tx) => {
+      tx.executeSql(     
+        "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem ) values ('Plazo Fijo',?,?,?,?,?,?,?,?,?)",
+        [Modo,monto,rendimiento,fechaVenc,medioCobro, dia, mes, anio, sem]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?,'Plazo Fijo', ?, ?, 'Egreso', '', ?, ?, ?, ?)",
+        [getCurrentDate(), monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
+      ),
+        (_, { rows }) => console.log(JSON.stringify(rows)),
+        (_, { error }) => console.log(JSON.stringify(error));
+    });
+    db.transaction((tx) => {
+        tx.executeSql(
+          "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?,'Plazo Fijo', ?, ?, 'Ingreso', '', ?, ?, ?, ?)",
+          [fechaVenc, monto*rendimiento, medioCobro, dia, mes, anio, sem]
+        ),
+          (_, { rows }) => console.log(JSON.stringify(rows)),
+          (_, { error }) => console.log(JSON.stringify(error));
+      });
+  };
+
+
 
   const select = async () => {
     await db.transaction((tx) => {
@@ -241,7 +291,20 @@ const AgregarPlazoFijo = ({ navigation }) => {
   };
 
   const continuar = () =>{
-    add(medioCobro,monto,fechaVenc,rendimiento,mode);
+      if(isSelected){
+        var dateString = fechaVenc;
+        var dateParts = dateString.split("/");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+        //add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen, Number(fechaVencResumen.substring(0,2)), Number(fechaVencResumen.substring(3,5)), Number(fechaVencResumen.substring(6,10)), getWeekNumber(dateObject));
+       
+          addEnCuenta(medioCobro,monto,fechaVenc,rendimiento,mode,Number(fechaVenc.substring(0,2)), Number(fechaVenc.substring(3,5)), Number(fechaVenc.substring(6,10)), getWeekNumber(dateObject));
+
+      }else{
+        var dateString = fechaVenc;
+        var dateParts = dateString.split("/");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+         add(medioCobro,monto,fechaVenc,rendimiento,mode,Number(fechaVenc.substring(0,2)), Number(fechaVenc.substring(3,5)), Number(fechaVenc.substring(6,10)), getWeekNumber(dateObject));
+      }
     navigation.navigate("Home");
   };
    
@@ -312,7 +375,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
 
       <TextInput
         style={styles.textInput}
-        placeholder="Fecha Vencimiento (d/m/aaaa)"
+        placeholder="Fecha Vencimiento (dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVenc => setFechaVenc( fechaVenc )}
         //editable={this.state.TextInputDisableHolder}
@@ -327,12 +390,9 @@ const AgregarPlazoFijo = ({ navigation }) => {
         //editable={this.state.TextInputDisableHolder}
       />    
       
-      <Dropdown
-        label="Seleccionar Modo"
-        data={modo}
-        onChangeText={(mode) => setMode( mode )}
-        disabled={false}
-      />
+      <Text>Deposito en Cuenta</Text>           
+     
+     <CheckBox value={isSelected} onValueChange={setSelection}/>
 
       
 
