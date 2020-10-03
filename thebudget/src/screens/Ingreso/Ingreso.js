@@ -183,7 +183,7 @@ const Ingreso = ({navigation}) => {
     console.log("monto: "+monto + " detalle: " + detalle + " medio: " + medio);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Ingreso', '', ?, ?, ?, ?)",
+        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Ingreso', '', ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
         [fecha, detalle, monto, medio, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -199,7 +199,7 @@ const Ingreso = ({navigation}) => {
   const select = async () => {
     
     await db.transaction((tx) => {
-      tx.executeSql("select distinct numero from medios where esCuentaBancaria=1 or esEfectivo=1", [], (_, { rows }) => {
+      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and medios.esCuentaBancaria=1 union  select distinct numero from medios where esEfectivo=1", [], (_, { rows }) => {
         setVariable(rows._array);
         
       });
@@ -237,12 +237,14 @@ const Ingreso = ({navigation}) => {
          //console.log(getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
           add(monto, detalleSelected, medioCobro,addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate(), (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
          navigation.navigate("Home");
+         navigation.closeDrawer();
        }  
       }else{
           //comun
           console.log("no Periodico no efectivo");
           add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
           navigation.navigate("Home");
+          navigation.closeDrawer();
       }
     }else{
       if(isSelected){
@@ -276,6 +278,7 @@ const Ingreso = ({navigation}) => {
         //comun
         add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
         navigation.navigate("Home");
+        navigation.closeDrawer();
       }
     }
 

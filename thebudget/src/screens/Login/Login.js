@@ -85,6 +85,18 @@ const Login = ({navigation}) =>{
             );
           });
           select();
+          if(true){
+            Alert.alert(
+                `Se ha registrado correctamente, GO! `,
+                `Muchas gracias`
+                  ,
+                  [
+                    {
+                      text: "Confirmar",
+                    },
+                  ]
+               ); 
+        }
       };
     
 

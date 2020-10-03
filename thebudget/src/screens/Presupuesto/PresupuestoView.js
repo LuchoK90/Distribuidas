@@ -33,7 +33,7 @@ const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 const PresupuestoView = ({ navigation }) => {
   const [text, setText] = useState("");
   const [variable, setVariable] = useState([]);
-  const[usuario,setUsuario] = useState([]);
+
   const [page, setPage] = useState(0);
   const itemsPerPage = 3;
   const from = page * itemsPerPage;
@@ -58,31 +58,21 @@ const PresupuestoView = ({ navigation }) => {
     await select();
   };
   useEffect(() => {
-    handlePressButton();
     handleSelect();
-    
   }, []);
 
   const select = () => {
-    console.log("s"+usuario[0].id_usuario);
     db.transaction((tx) => {
-      tx.executeSql("select * from presupuestos where user = '"+usuario[0].id_usuario+"'", [], (_, { rows }) => {
-      
+      tx.executeSql("select * from presupuestos inner join usuarios on presupuestos.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         setVariable(rows._array);
-        
       });
     });
   };
 
   const handlePressButton = async () =>{
        
-    db.transaction((tx) => {
-      tx.executeSql("select * from usuarios where logueado=1;  ", [], (_, { rows }) => {
-        setUsuario(rows._array);
-        console.log(rows._array);
-        
-      });
-    });
+    const storageSample = await AsyncStorage.getItem(idUsuarioLogueado);
+    alert(storageSample);
   };
 
   return (

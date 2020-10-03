@@ -239,7 +239,7 @@ const Egreso = ({ navigation }) => {
     console.log(monto + " " + detalle + " " + medio);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem) values (?, ?, ?, ?, 'Egreso', ? , ?, ?, ?, ?)",
+        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Egreso', ? , ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
         [fecha, detalle, monto, medio, image ,dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -255,7 +255,7 @@ const Egreso = ({ navigation }) => {
   const select = async () => {
     console.log("entre al select")
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios", [], (_, { rows }) => {
+      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 union  select distinct numero from medios where esEfectivo=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable + "medios");
       });

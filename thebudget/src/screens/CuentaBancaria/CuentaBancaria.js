@@ -66,7 +66,7 @@ const CuentaBancaria = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select medios.banco banco, medios.numero numero, medios.cbu cbu, medios.debito debito, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, medios.cbu cbu, medios.debito debito, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user = movimientos.user where usuarios.logueado = 1 and medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });

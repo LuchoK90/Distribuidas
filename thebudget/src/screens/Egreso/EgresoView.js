@@ -73,7 +73,7 @@ const EgresoView = ({ navigation }) => {
   const select = () => {
     db.transaction((tx) => {
       //tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {
-        tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {  
+        tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.tipo_mov='Egreso' and movimientos.mes = '" + getMonth() + "' and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {  
       setVariable(rows._array);
       
       });

@@ -6,6 +6,8 @@ import {createStackNavigator} from '@react-navigation/stack'
 import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer' */
 import Dashboard_Posta from '../screens/Home/Dashboard';
+import Backup from '../screens/Home/Backup';
+import ExportExcel from '../screens/Home/ExportExcel';
 import Home from '../screens/Home/HomeScreen';
 import CuentasBancarias from '../screens/CuentaBancaria/CuentaBancaria';
 import Login from '../screens/Login/Login';
@@ -73,6 +75,8 @@ function MainNavigator() {
 const MainNavigator = createStackNavigator(
   {
     Dashboard_Posta: Dashboard_Posta,
+    Backup:Backup,
+    ExportExcel:ExportExcel,
     Home: Home,
     Login: Login,
     CuentasBancarias: CuentasBancarias,

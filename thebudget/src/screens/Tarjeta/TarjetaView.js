@@ -68,7 +68,7 @@ const TarjetaView = ({navigation}) => {
   const select = () => {
     console.log("entro al select");
     db.transaction((tx) => {
-      tx.executeSql("select medios.banco banco, medios.numero numero, medios.entidad entidad, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios left join movimientos on medios.numero = movimientos.medio where medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero, medios.entidad", [], (_, { rows }) => {
+      tx.executeSql("select medios.banco banco, medios.numero numero, medios.entidad entidad, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user = movimientos.user where usuarios.logueado = 1 and medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero, medios.entidad", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(rows._array)
       });

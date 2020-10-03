@@ -187,7 +187,7 @@ const OtorgarPrestamo = ({ navigation }) => {
     });*/
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into prestamos ( tipo , monto ,cuenta, cuotas, vencimiento, dia , mes , anio , sem  ) values ('Otorgado',?,?,?,'','','','','')",
+        "insert into prestamos ( tipo , monto ,cuenta, cuotas, vencimiento, dia , mes , anio , sem , user ) values ('Otorgado',?,?,?,'','','','','',(select id_usuario from usuarios where logueado = 1))",
         [monto,medioCobro,cantCuotas]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -195,7 +195,7 @@ const OtorgarPrestamo = ({ navigation }) => {
     });
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia , mes , anio , sem  ) values (?,'Prest. Otorgado', ?, ?, 'Egreso', '',?,?,?,?)",
+        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia , mes , anio , sem , user ) values (?,'Prest. Otorgado', ?, ?, 'Egreso', '',?,?,?,?,(select id_usuario from usuarios where logueado = 1))",
         [getCurrentDate(), monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
@@ -205,7 +205,7 @@ const OtorgarPrestamo = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
+      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and medios.esCuentaBancaria=1", [], (_, { rows }) => {
         setVariable(rows._array);
         console.log(variable);
       });

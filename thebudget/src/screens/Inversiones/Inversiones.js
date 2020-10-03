@@ -36,7 +36,7 @@ const Inversiones = ({ navigation }) => {
 
   const select = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from inversiones", [], (_, { rows }) => {
+      tx.executeSql("select * from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         // console.log(rows);
         setInversiones(rows._array);
       });

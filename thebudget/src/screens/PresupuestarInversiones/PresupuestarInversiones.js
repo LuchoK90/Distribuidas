@@ -131,7 +131,7 @@ const PresupuestarInversiones = ({ navigation }) => {
     console.log(detalleSelected+monto);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into presupuestos ( mes, anio , rubro ,categoria, monto ) values (?,?,'Inversion',?,?)",
+        "insert into presupuestos ( mes, anio , rubro ,categoria, monto, user) values (?,?,'Inversion',?,?, (select id_usuario from usuarios where logueado = 1))",
         [getCurrentDate(), getCurrentYear(),detalleSelected,monto]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),

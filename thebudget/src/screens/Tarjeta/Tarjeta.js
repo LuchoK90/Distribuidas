@@ -169,7 +169,7 @@ function getWeekNumber(d) {
     console.log("insert medios " +banco + entidadEmisora + ultimosNum + fechaVenc + fechaCierre + fechaVencResumen + dia + mes + anio + sem);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo, vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0,?,?,?,?);",
+        "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo, vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem, user) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0,?,?,?,?, (select id_usuario from usuarios where logueado = 1));",
         [banco, ultimosNum, entidadEmisora, fechaVenc, fechaCierre , fechaVencResumen, dia, mes, anio, sem]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),

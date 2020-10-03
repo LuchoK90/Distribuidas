@@ -88,6 +88,22 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
             }}
           />
+        <MenuButton
+            title="EXPORTAR EXCEL"
+            source={require('../../../assets/icons/presupuesto.png')}
+            onPress={() => {
+              navigation.navigate('ExportExcel');
+              navigation.closeDrawer();
+            }}
+          />
+          <MenuButton
+            title="BACKUP"
+            source={require('../../../assets/icons/presupuesto.png')}
+            onPress={() => {
+              navigation.navigate('Backup');
+              navigation.closeDrawer();
+            }}
+          />
           <MenuButton
             title="CERRAR SESION"
             source={require('../../../assets/icons/exit.png')}

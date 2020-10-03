@@ -167,7 +167,7 @@ const PresupuestarEgreso = ({ navigation }) => {
     console.log(detalleSelected+monto);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into presupuestos ( mes, anio , rubro ,categoria, monto ) values (?,?,'Egreso',?,?)",
+        "insert into presupuestos ( mes, anio , rubro ,categoria, monto, user) values (?,?,'Egreso',?,?, (select id_usuario from usuarios where logueado = 1))",
         [getCurrentDate(), getCurrentYear(),detalleSelected,monto]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),

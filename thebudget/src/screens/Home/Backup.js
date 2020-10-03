@@ -1,37 +1,42 @@
 import React, { useState, useEffect } from "react";
 import {
-  ScrollView,
+  FlatList,
   Text,
-  Image,
   View,
+  Image,
+  TouchableHighlight,
+  TextInput,
+  SafeAreaView,
+  ScrollView,
+  AppRegistry,
+  StyleSheet,
+  Alert,
+  Button,
   TouchableWithoutFeedback,
 } from "react-native";
-import styles from "./styles";
-import MenuImage from "../../components/MenuImage/MenuImage";
-import { Table, Row, Rows } from "react-native-table-component";
-import { BarChart, Grid } from "react-native-svg-charts";
-import { PieChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
-import {
-  VictoryChart,
-  VictoryGroup,
-  VictoryBar,
-  VictoryLegend,
-  VictoryPie,
-} from "victory-native";
-import { Button } from "react-native-paper";
-import { Container } from "native-base";
+import hola from "./styles";
+import { Container, H1 } from "native-base";
+import { categories } from "../../data/dataArrays";
+import { getNumberOfRecipes } from "../../data/MockDataAPI";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Dropdown } from "react-native-material-dropdown";
+import { DataTable } from "react-native-paper";
+import {PieChart} from "react-native-chart-kit";
+import {Dimensions} from "react-native";
+import {VictoryChart, VictoryGroup, VictoryBar, VictoryLegend, VictoryPie} from "victory-native";
+import {Table, Row, Rows} from 'react-native-table-component';
+import {RecipeCard} from '../../AppStyles';
+import * as SQLite from "expo-sqlite";
+import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table";
 import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import * as SQLite from "expo-sqlite";
-//import { useFocusEffect } from "@react-navigation/native";
-
+const screenWidth = Dimensions.get("window").width;
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
-const screenWidth = Dimensions.get("window").width;
 
-const HomeScreen = ({ navigation }) => {
+const Backup = ({ navigation }) => {
   const [ingresos, setIngresos] = useState([]);
   //const isFocused = useIsFocused();
   const chartConfig = {
@@ -220,40 +225,143 @@ const HomeScreen = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text style={styles.logo}>Budget GO</Text>
+        
 
         <Image
           style={{ width: "40%", height: "40%" }}
           source={require("../../../assets/images/login.jpeg")}
         />
-        <Text style={styles.logo}>Bienvenido</Text>
-        
-       
+
+        <TouchableWithoutFeedback
+          delayPressIn={1}
+          onPress={() => handleDownload()}
+        >
+          <View
+            style={{
+              marginTop: 10,
+              marginBottom: 20,
+              backgroundColor: "#0e84e6",
+              color: "#FFF",
+              borderRadius: 10,
+              borderColor: "#eee",
+              borderWidth: 2,
+              padding: 10,
+              justifyContent: "center",
+              width: "80%",
+            }}
+          >
+            <Text
+              style={{
+                color: "#FFF",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                textAlign: "center",
+                fontSize: 18,
+              }}
+            >
+              {"Importar Backup"}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          delayPressIn={1}
+          onPress={() => handleDownload()}
+        >
+          <View
+            style={{
+              marginTop: 10,
+              marginBottom: 20,
+              backgroundColor: "#0e84e6",
+              color: "#FFF",
+              borderRadius: 10,
+              borderColor: "#eee",
+              borderWidth: 2,
+              padding: 10,
+              justifyContent: "center",
+              width: "80%",
+            }}
+          >
+            <Text
+              style={{
+                color: "#FFF",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                textAlign: "center",
+                fontSize: 18,
+              }}
+            >
+              {"Exportar Backup"}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </Container>
   );
 };
 
-HomeScreen["navigationOptions"] = (screenProps) => ({
-  title: "Home",
-  headerLeft: () => (
-    <MenuImage
-      onPress={() => {
-        screenProps.navigation.openDrawer();
-      }}
-    />
-  ),
+Backup["navigationOptions"] = (screenProps) => ({
+  title: "Backup",
+});
+// HomeScreen2.navigationOptions = (screenProps) => ({
+// headerTransparent: 'true',
+// title: 'Ingresos',
+// headerLeft: () => <BackButton
+//   onPress={() => {
+//     navigation.goBack();
+//   }}
+// />
+// });
+
+const styles = StyleSheet.create({
+  viewContainer: {
+    width: "90%",
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  titulo: {
+    fontSize: 30,
+    backgroundColor: "gray",
+    paddingLeft: 10,
+    marginLeft: 50,
+  },
+  monto: {
+    paddingLeft: 20,
+    margin: 10,
+  },
+  boton: {
+    height: 40,
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 10,
+  },
+  container: RecipeCard.container,
+
+  photo: RecipeCard.photo,
+
+  title: RecipeCard.title,
+
+  category: RecipeCard.category,
+
+  graficosNombre: {
+      fontSize: 20,
+      margin: 10,
+      fontWeight: 'bold',
+      color: 'white',
+      textAlign: 'center',
+      backgroundColor: '#270570'
+  },
+
+  mesNombre: {
+      fontSize: 28,
+      margin: 10,
+      fontWeight: 'bold',
+      color: '#270570',
+      textAlign: 'center'
+  },
+  
+  HeadStyle: {
+      backgroundColor: 'lightblue'
+  }
 });
 
-// static navigationOptions = ({ navigation }) => ({
-//     title: "Home",
-//     headerLeft: () => (
-//       <MenuImage
-//         onPress={() => {
-//           navigation.openDrawer();
-//         }}
-//       />
-//     ),
-//   });
-
-export default HomeScreen;
+export default Backup;
