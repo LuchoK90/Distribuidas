@@ -76,24 +76,7 @@ const AgregarAcciones = ({ navigation }) => {
   const [empresa, setEmpresa] = useState(' ');
   const [rendimiento, setRendimiento] = useState(' ');
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
 
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -122,21 +105,21 @@ const AgregarAcciones = ({ navigation }) => {
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+   
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+   
     return year;
   };
 
@@ -156,7 +139,7 @@ const AgregarAcciones = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
@@ -169,11 +152,7 @@ const AgregarAcciones = ({ navigation }) => {
 
   const add=(medioCobro,monto,rendimiento,empresa) => {
     console.log(medioCobro+monto+rendimiento+empresa);
-   /* db.transaction((tx) => {
-      tx.executeSql(
-        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
-       });
-    });*/
+  
     db.transaction((tx) => {
       tx.executeSql(
         "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem , user) values ('Accion',' ',?,?,' ',?,'','','','', (select id_usuario from usuarios where logueado = 1))",
@@ -206,22 +185,10 @@ const AgregarAcciones = ({ navigation }) => {
     navigation.navigate("Home");
   };
 
-  /* const componentDidMount=()=> {
-    getPermissionAsync();
-  } */
-
-  /* const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  }; */
+ 
 
   const _pickImage =   () => {
-    //try {
-      //let result = await ImagePicker.launchImageLibraryAsync({
+
       let result =  ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -233,32 +200,12 @@ const AgregarAcciones = ({ navigation }) => {
       }
 
       console.log(result);
-    //} catch (E) {
+   
       console.log(E);
-   // }
+  
   };
    
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -300,7 +247,7 @@ const AgregarAcciones = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={(monto) => setMonto( monto )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />
 
       
@@ -311,7 +258,7 @@ const AgregarAcciones = ({ navigation }) => {
         placeholder="Nombre de la Empresa"
         clearButtonMode="always"        
         onChangeText={(empresa) => setEmpresa( empresa )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />              
 
       <TextInput
@@ -330,7 +277,6 @@ const AgregarAcciones = ({ navigation }) => {
       
     </View>
 
-    //, navigation.navigate('IngresoView')
   );
 };
 
@@ -349,18 +295,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+    
   },
   drop: {
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+   
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },

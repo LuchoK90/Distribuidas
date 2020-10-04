@@ -1,18 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, Alert,AsyncStorage } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from './styles';
-import MenuImage from '../../components/MenuImage/MenuImage';
 import { Button } from 'react-native-paper';
 import * as SQLite from "expo-sqlite";
 import clienteAxios from "../../axios";
-import { useFocusEffect } from '@react-navigation/native';
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
-const idUsuarioLogueado = '@my-app:value';
-
-
-//export default class CategoriesScreen extends React.Component {
 const Login = ({navigation}) =>{
     
     const[password, setPass] = useState(' ');
@@ -37,69 +31,59 @@ const Login = ({navigation}) =>{
       });
     };
       
-      const registro=()=>{
-        db.transaction((tx) => {
-            console.log("usuarios")
-            tx.executeSql(
-              "insert into usuarios(mail, pass, logueado ) VALUES(?,?,0)",
-            [email,password]
-            );
-          });
-          select();
-          if(true){
-            Alert.alert(
-                `Se ha registrado correctamente, GO! `,
-                `Muchas gracias`
-                  ,
-                  [
-                    {
-                      text: "Confirmar",
-                    },
-                  ]
-               ); 
-        }
-      };
+    const registro=()=>{
+      db.transaction((tx) => {
+        tx.executeSql(
+          "insert into usuarios(mail, pass, logueado ) VALUES(?,?,0)",
+          [email,password]
+        );
+      });
+      select();
+      if(true){
+        Alert.alert(
+          `Se ha registrado correctamente, GO! `,
+          `Muchas gracias`
+           ,
+          [
+            {
+              text: "Confirmar",
+            },
+          ]
+        ); 
+      }
+    };
     
 
-      const ingresar = async() =>{
-        desloguear();
-        for(let i=0;i<usuarios.length;i++){
-              if(usuarios[i].mail===email&&usuarios[i].pass===password){
-                logear(usuarios[i].id_usuario);
-                await recuperar(usuarios[i].id_usuario);
-                console.log("usuarios en el for ",usuarios[i].id_usuario);
-                
-                
+    const ingresar = async() =>{
+      desloguear();
+      for(let i=0;i<usuarios.length;i++){
+        if(usuarios[i].mail===email&&usuarios[i].pass===password){
+          logear(usuarios[i].id_usuario);
+          await recuperar(usuarios[i].id_usuario);              
                 return;
-              }else{
-                setEncontroUsuario(false);
-              }
-              
-        };
-   
-        if(!encontroUsuario){
-            Alert.alert(
-                `Usuario no encontrado `,
-                `Por favor, regístrese`
-                  ,
-                  [
-                    {
-                      text: "Confirmar",
-                    },
-                  ]
-               ); 
+        }else{
+          setEncontroUsuario(false);
         }
+              
+      };
+      if(!encontroUsuario){
+        Alert.alert(
+         `Usuario no encontrado `,
+         `Por favor, regístrese`
+          ,
+          [
+            {
+              text: "Confirmar",
+            },
+          ]
+        );}
       };
 
       const logear = async (id) =>{
         await db.transaction((tx) => { 
-          //tx.executeSql("select * from usuarios where mail = '" + email + "'", [], (_, { rows }) => {
-                  tx.executeSql("update usuarios set logueado = 1 where id_usuario = '"+id+"'", [], (_, { rows }) => {
-                
-               
-                console.log("logueado");
-              });
-            })
+          tx.executeSql("update usuarios set logueado = 1 where id_usuario = '"+id+"'", [], (_, { rows }) => {      
+          });
+        })
       };
       const recuperar = async (id) =>{
         await obtenerMovimientosServidor(id);
@@ -112,28 +96,23 @@ const Login = ({navigation}) =>{
       };
       const desloguear = async () =>{
         await db.transaction((tx) => { 
-          //tx.executeSql("select * from usuarios where mail = '" + email + "'", [], (_, { rows }) => {
-                  tx.executeSql("update usuarios set logueado = 0;", [], (_, { rows }) => {
-                
-               
-                console.log("deslogueado");
-              });
-            })
+          tx.executeSql("update usuarios set logueado = 0;", [], (_, { rows }) => {        
+          });
+        })
       };
 
       const obtenerMovimientosServidor = async (id) =>{
         const response = await clienteAxios.get('/movimientos/'+id);
-          console.log("obtener del server",response.data.movimientos);
-           for (const movimiento of response.data.movimientos) {
-            db.transaction((tx) => {
-              tx.executeSql(
-                "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [movimiento.fecha, movimiento.detalle, movimiento.monto, movimiento.medio,movimiento.tipo_mov, movimiento.comprobante, movimiento.dia, movimiento.mes, movimiento.anio, movimiento.sem,movimiento.user]
-              ),
-                (_, { rows }) => console.log(JSON.stringify(rows)),
-                (_, { error }) => console.log(JSON.stringify(error));
-            });
-          } 
+        for (const movimiento of response.data.movimientos) {
+          db.transaction((tx) => {
+          tx.executeSql(
+            "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [movimiento.fecha, movimiento.detalle, movimiento.monto, movimiento.medio,movimiento.tipo_mov, movimiento.comprobante, movimiento.dia, movimiento.mes, movimiento.anio, movimiento.sem,movimiento.user]
+          ),
+            (_, { rows }) => console.log(JSON.stringify(rows)),
+            (_, { error }) => console.log(JSON.stringify(error));
+          });
+        } 
       };
       const obtenerInversionesServidor = async (id) =>{
         const response = await clienteAxios.get(`/inversiones/`+id);
@@ -201,10 +180,7 @@ const Login = ({navigation}) =>{
         }
       };
    
-    
-    //if(usuarios.logueado)
-        //const { navigation } = this.props;
-        return (
+      return (
             
             <View style={styles.container}>
                 <Text style={styles.logo}>Budget GO</Text>
