@@ -32,12 +32,21 @@ import DynamicDataTable from "@langleyfoxall/react-dynamic-data-table";
 import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import clienteAxios from "../../axios";
 const screenWidth = Dimensions.get("window").width;
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 
 const Backup = ({ navigation }) => {
-  const [ingresos, setIngresos] = useState([]);
+  const [movimientos, setMovimientos] = useState([]);
+  const [movimientosServer, setMovimientosServer] = useState([]);
+  const [inversiones, setInversiones] = useState([]);
+  const [prestamos, setPrestamos] = useState([]);
+  const [presupuestos, setPresupuestos] = useState([]);
+  const [medios, setMedios] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+
+
   //const isFocused = useIsFocused();
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
@@ -153,23 +162,75 @@ const Backup = ({ navigation }) => {
     
   }, []); */
   useEffect(() => {
-    console.log("ingresos",ingresos);
+    console.log("ingresos",movimientos);
     
-  }, [ingresos]);
+  }, [movimientos]);
 
   useEffect(() => {
     if (navigation.isFocused) {
+      obtenerMovimientosServidor();
       console.log("entre al use focus");
-      obtenerIngresosEnMemoria();
+      obtenerMovimientosSqlite();
+      obtenerPrestamosSqlite();
+      obtenerPresupuestosSqlite();
+      obtenerUsuariosSqlite();
+      obtenerMediosSqlite();
+      obtenerInversionesSqlite();
     }
     return () => {};
   }, [navigation]);
 
-  const obtenerIngresosEnMemoria = async () => {
+  const obtenerMovimientosServidor = async () =>{
+    const response = await clienteAxios.get(`/movimientos/1`);
+    setMovimientosServer(response.data.movimientos);
+      console.log(movimientosServer);
+  };
+
+  const obtenerMovimientosSqlite = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from movimientos", [], (_, { rows }) => {
-        setIngresos(rows._array);
-        console.log("carga data"+ingresos);
+      tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 ", [], (_, { rows }) => {
+        setMovimientos(rows._array);
+        console.log("carga data"+movimientos);
+      });
+    });
+  };
+  const obtenerInversionesSqlite = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
+        setInversiones(rows._array);
+        console.log("carga data"+inversiones);
+      });
+    });
+  };
+  const obtenerPrestamosSqlite = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from prestamos inner join usuarios on prestamos.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
+        setPrestamos(rows._array);
+        console.log("carga data"+prestamos);
+      });
+    });
+  };
+  const obtenerPresupuestosSqlite = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from presupuestos inner join usuarios on presupuestos.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
+        setPresupuestos(rows._array);
+        console.log("carga data"+presupuestos);
+      });
+    });
+  };
+  const obtenerMediosSqlite = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
+        setMedios(rows._array);
+        console.log("carga data"+medios);
+      });
+    });
+  };
+  const obtenerUsuariosSqlite = async () => {
+    await db.transaction((tx) => {
+      tx.executeSql("select * from usuarios where logueado = 1", [], (_, { rows }) => {
+        setUsuarios(rows._array);
+        console.log("carga data"+usuarios);
       });
     });
   };
@@ -208,10 +269,41 @@ const Backup = ({ navigation }) => {
       UTI: "com.microsoft.excel.xlsx",
     });
   };
-  const handleDownload =   () => {
-    /*Primer se obtiene la data */
-     //await obtenerIngresosEnMemoria();
-    createExcel(ingresos);
+
+  
+
+  const handlePost = async  () => {
+    
+    console.log("antes del foreach "+ movimientos.length);
+    for (const movimiento of movimientos) {
+      const response = await clienteAxios.post(`/movimientos/`, movimiento);
+      console.log(response);
+    }
+    for (const inversion of inversiones) {
+      const response = await clienteAxios.post(`/inversiones/`, inversion);
+      console.log(response);
+    }
+    for (const presupuesto of presupuestos) {
+      const response = await clienteAxios.post(`/presupuestos/`, presupuesto);
+      console.log(response);
+    }
+    for (const prestamo of prestamos) {
+      const response = await clienteAxios.post(`/prestamos/`, prestamo);
+      console.log(response);
+    }
+    for (const medio of medios) {
+      const response = await clienteAxios.post(`/medios/`, medio);
+      console.log(response);
+    }
+    for (const usuario of usuarios) {
+      const response = await clienteAxios.post(`/usuarios/`, usuario);
+      console.log(response);
+    }
+    
+
+    
+  
+
   };
 
   return (
@@ -232,40 +324,10 @@ const Backup = ({ navigation }) => {
           source={require("../../../assets/images/login.jpeg")}
         />
 
+        
         <TouchableWithoutFeedback
           delayPressIn={1}
-          onPress={() => handleDownload()}
-        >
-          <View
-            style={{
-              marginTop: 10,
-              marginBottom: 20,
-              backgroundColor: "#0e84e6",
-              color: "#FFF",
-              borderRadius: 10,
-              borderColor: "#eee",
-              borderWidth: 2,
-              padding: 10,
-              justifyContent: "center",
-              width: "80%",
-            }}
-          >
-            <Text
-              style={{
-                color: "#FFF",
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                textAlign: "center",
-                fontSize: 18,
-              }}
-            >
-              {"Importar Backup"}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          delayPressIn={1}
-          onPress={() => handleDownload()}
+          onPress={() => handlePost()}
         >
           <View
             style={{
@@ -295,6 +357,8 @@ const Backup = ({ navigation }) => {
           </View>
         </TouchableWithoutFeedback>
       </View>
+
+      
     </Container>
   );
 };

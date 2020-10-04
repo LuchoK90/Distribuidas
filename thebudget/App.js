@@ -28,9 +28,9 @@ export default class App extends React.Component {
     //Tabla de usuarios
     db.transaction((tx) => {
       console.log("creo tabla usuarios")
-       tx.executeSql(
+       /* tx.executeSql(
         "drop table usuarios ;"
-      );  
+      );  */ 
       tx.executeSql(
         "create table if not exists usuarios (id_usuario integer primary key not null, mail text, pass text, logueado integer);"
       );
