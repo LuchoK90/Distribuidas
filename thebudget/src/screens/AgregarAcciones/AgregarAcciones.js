@@ -40,12 +40,9 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const AgregarAcciones = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
   const [variable, setVariable] = useState([]);
-  const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
-  //const navigationOptions = () => { PickList.navigationOptions };
-  const [detalleSelected, setDetalleSelected] = useState();
+  
   let modo = [
     {
       value: "Renovación Automática",

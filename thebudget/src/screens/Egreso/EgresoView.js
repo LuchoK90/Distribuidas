@@ -36,21 +36,6 @@ const EgresoView = ({ navigation }) => {
   const from = page * itemsPerPage;
   const to = (page + 1) * itemsPerPage;
 
-  // const navigationOptions = () => {
-  //   return {
-  //     headerTransparent: 'true',
-  //     title: 'Ingresos',
-  //     headerLeft: () => <BackButton
-  //       onPress={() => {
-  //         navigation.goBack();
-  //       }}
-  //     />
-  //   };
-  // };
-
-  // const  navigationOptions = () => {
-  //   title: 'Ingresos'
-  // };
   const handleSelect = async () => {
     await select();
   };
@@ -60,19 +45,18 @@ const EgresoView = ({ navigation }) => {
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
   const select = () => {
     db.transaction((tx) => {
-      //tx.executeSql("select * from movimientos where tipo_mov = 'Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.tipo_mov='Egreso' and movimientos.mes = '" + getMonth() + "' and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {  
       setVariable(rows._array);
       
@@ -151,15 +135,7 @@ const EgresoView = ({ navigation }) => {
 EgresoView["navigationOptions"] = (screenProps) => ({
   title: "",
 });
-// IngresoView.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {

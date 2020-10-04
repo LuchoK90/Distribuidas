@@ -47,16 +47,16 @@ const Backup = ({ navigation }) => {
   const [usuarios, setUsuarios] = useState([]);
 
 
-  //const isFocused = useIsFocused();
+  
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#08130D",
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
+    strokeWidth: 2, 
     barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
+    useShadowColorFromDataset: false, 
   };
 
   const data = [
@@ -157,19 +157,13 @@ const Backup = ({ navigation }) => {
     ],
   };
 
-  /* useEffect(() => {
-    obtenerIngresosEnMemoria();
-    
-  }, []); */
+  
   useEffect(() => {
-    console.log("ingresos",movimientos);
     
   }, [movimientos]);
 
   useEffect(() => {
     if (navigation.isFocused) {
-      obtenerMovimientosServidor();
-      console.log("entre al use focus");
       obtenerMovimientosSqlite();
       obtenerPrestamosSqlite();
       obtenerPresupuestosSqlite();
@@ -183,14 +177,14 @@ const Backup = ({ navigation }) => {
   const obtenerMovimientosServidor = async () =>{
     const response = await clienteAxios.get(`/movimientos/1`);
     setMovimientosServer(response.data.movimientos);
-      console.log(movimientosServer);
+      
   };
 
   const obtenerMovimientosSqlite = async () => {
     await db.transaction((tx) => {
       tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 ", [], (_, { rows }) => {
         setMovimientos(rows._array);
-        console.log("carga data"+movimientos);
+        
       });
     });
   };
@@ -198,7 +192,7 @@ const Backup = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         setInversiones(rows._array);
-        console.log("carga data"+inversiones);
+        
       });
     });
   };
@@ -206,7 +200,7 @@ const Backup = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from prestamos inner join usuarios on prestamos.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         setPrestamos(rows._array);
-        console.log("carga data"+prestamos);
+        
       });
     });
   };
@@ -214,7 +208,7 @@ const Backup = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from presupuestos inner join usuarios on presupuestos.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         setPresupuestos(rows._array);
-        console.log("carga data"+presupuestos);
+        
       });
     });
   };
@@ -222,7 +216,7 @@ const Backup = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
         setMedios(rows._array);
-        console.log("carga data"+medios);
+        
       });
     });
   };
@@ -230,7 +224,7 @@ const Backup = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from usuarios where logueado = 1", [], (_, { rows }) => {
         setUsuarios(rows._array);
-        console.log("carga data"+usuarios);
+        
       });
     });
   };
@@ -238,30 +232,24 @@ const Backup = ({ navigation }) => {
 
 
   const createExcel = async (ing) => {
-    console.log("createExcel",ing);
+    
     var wb = XLSX.utils.book_new();
-    /*Ingresos */
+    
     var wsIngresos = XLSX.utils.json_to_sheet(ing);
     XLSX.utils.book_append_sheet(wb, wsIngresos, "Ingresos");
 
-    /*Egresos*/
-    // var wsExpenses = XLSX.utils.json_to_sheet(data.expenses);
-    // XLSX.utils.book_append_sheet(wb, wsExpenses, "Egresos");
+    
 
     const wbout = XLSX.write(wb, {
       type: "base64",
       bookType: "xlsx",
     });
     const uri = FileSystem.cacheDirectory + "budgetGo.xlsx";
-    // console.log(`Writing to ${JSON.stringify(uri)} with text: ${wbout}`);
+    
     await FileSystem.writeAsStringAsync(uri, wbout, {
       encoding: FileSystem.EncodingType.Base64,
     });
-    // FileSystem.readAsStringAsync(uri);
-    // FileSystem.downloadAsync();
-    // const a = await FileSystem.getInfoAsync(uri);
-
-    // await downloadFile(uri);
+    
     await Sharing.shareAsync(uri, {
       mimeType:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -274,30 +262,30 @@ const Backup = ({ navigation }) => {
 
   const handlePost = async  () => {
     
-    console.log("antes del foreach "+ movimientos.length);
+    
     for (const movimiento of movimientos) {
       const response = await clienteAxios.post(`/movimientos/`, movimiento);
-      console.log(response);
+      
     }
     for (const inversion of inversiones) {
       const response = await clienteAxios.post(`/inversiones/`, inversion);
-      console.log(response);
+      
     }
     for (const presupuesto of presupuestos) {
       const response = await clienteAxios.post(`/presupuestos/`, presupuesto);
-      console.log(response);
+      
     }
     for (const prestamo of prestamos) {
       const response = await clienteAxios.post(`/prestamos/`, prestamo);
-      console.log(response);
+      
     }
     for (const medio of medios) {
       const response = await clienteAxios.post(`/medios/`, medio);
-      console.log(response);
+      
     }
     for (const usuario of usuarios) {
       const response = await clienteAxios.post(`/usuarios/`, usuario);
-      console.log(response);
+      
     }
     
 
@@ -366,15 +354,7 @@ const Backup = ({ navigation }) => {
 Backup["navigationOptions"] = (screenProps) => ({
   title: "Backup",
 });
-// HomeScreen2.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {

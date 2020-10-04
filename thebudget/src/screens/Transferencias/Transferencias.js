@@ -37,7 +37,7 @@ import CustomMultiPicker from "react-native-multiple-select-list";
 import DatePicker from "react-native-datepicker";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("BASEBASEBASE_2");
+const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const Transferencias = ({ navigation }) => {
   //export default class Ingreso extends React.Component {
@@ -151,15 +151,36 @@ const Transferencias = ({ navigation }) => {
   /* setDate = (newDate) => {
     this.setState({ chosenDate: newDate });
   }; */
-
+  function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+}
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
-
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
     return date + "/" + month + "/" + year;
   };
+
+   
+  const getDate = () => {   
+    var day = new Date().getDate();  
+    return day;
+  };
+
+  const getMonth = () => {   
+    var month = new Date().getMonth() + 1;  
+    return month;
+  };
+
+  const getFullYear = () => {   
+    var year = new Date().getFullYear();  
+    return year;
+  };
+ 
 
   const handleSelect = async () => {
     await select();
@@ -172,25 +193,24 @@ const Transferencias = ({ navigation }) => {
     console.log(monto+ cbu+descripcion+ medioCobro);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante) values (?,?, ?, ?, 'Egreso', '')",
-        [getCurrentDate(), descripcion, monto, medioCobro]
+        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Egreso', ? , ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
+        [getCurrentDate(), descripcion, monto, medioCobro, image, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
     });
-    db.transaction((tx) => {
+  /*  db.transaction((tx) => {
       tx.executeSql(
         "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
         });
-      });
+      });*/
   };
 
   const select = async () => {
     console.log("entre al select")
     await db.transaction((tx) => {
-      tx.executeSql("select * from medios where esCuentaBancaria=1", [], (_, { rows }) => {
+      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and esCuentaBancario = 1", [], (_, { rows }) => {
         setVariable(rows._array);
-        console.log(variable + "medios");
       });
     });
   };

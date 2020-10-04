@@ -41,11 +41,11 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const AgregarPlazoFijo = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+  
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState(' ');
-  //const navigationOptions = () => { PickList.navigationOptions };
+  
   const [detalleSelected, setDetalleSelected] = useState();
   const [monto, setMonto] = useState(' ');
   const [fechaVenc, setFechaVenc] = useState(' ');
@@ -81,24 +81,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
   ];
   
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
+ 
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -130,43 +113,37 @@ const AgregarPlazoFijo = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
 
 
   function getWeekNumber(d) {
-    // Copy date so don't modify original
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-    // Get first day of year
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    // Calculate full weeks to nearest Thursday
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
     return weekNo;
 }
 
@@ -189,12 +166,8 @@ const AgregarPlazoFijo = ({ navigation }) => {
   }, []);
 
   const add=(medioCobro,monto,fechaVenc,rendimiento,Modo, dia, mes, anio, sem) => {
-    console.log(medioCobro+monto+fechaVenc+rendimiento+Modo);
-    /*db.transaction((tx) => {
-      tx.executeSql(
-        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
-       });
-    });*/
+    
+    
     db.transaction((tx) => {
       tx.executeSql(     
         "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem ,user) values ('Plazo Fijo',?,?,?,?,?, ?, ?, ?, ?,(select id_usuario from usuarios where logueado = 1))",
@@ -216,11 +189,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
 
   const addEnCuenta=(medioCobro,monto,fechaVenc,rendimiento,Modo, dia, mes, anio, sem) => {
     console.log(medioCobro+monto+fechaVenc+rendimiento+Modo);
-    /*db.transaction((tx) => {
-      tx.executeSql(
-        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
-       });
-    });*/
+    
     db.transaction((tx) => {
       tx.executeSql(     
         "insert into inversiones ( tipo , flag_deposito , monto , rendimiento , vencimiento , cuenta, dia, mes, anio, sem,user ) values ('Plazo Fijo',?,?,?,?,?,?,?,?,?,(select id_usuario from usuarios where logueado = 1))",
@@ -258,18 +227,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
     });
   };
 
-  /* const componentDidMount=()=> {
-    getPermissionAsync();
-  } */
-
-  /* const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  }; */
+  
 
   const _pickImage =   () => {
     //try {
@@ -285,9 +243,9 @@ const AgregarPlazoFijo = ({ navigation }) => {
       }
 
       console.log(result);
-    //} catch (E) {
+    
       console.log(E);
-   // }
+   
   };
 
   const continuar = () =>{
@@ -295,7 +253,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
         var dateString = fechaVenc;
         var dateParts = dateString.split("/");
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
-        //add(banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen, Number(fechaVencResumen.substring(0,2)), Number(fechaVencResumen.substring(3,5)), Number(fechaVencResumen.substring(6,10)), getWeekNumber(dateObject));
+        
        
           addEnCuenta(medioCobro,monto,fechaVenc,rendimiento,mode,Number(fechaVenc.substring(0,2)), Number(fechaVenc.substring(3,5)), Number(fechaVenc.substring(6,10)), getWeekNumber(dateObject));
 
@@ -308,27 +266,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
     navigation.navigate("Home");
   };
    
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+
 
   return (
     <View style={styles.viewContainer}>
@@ -370,7 +308,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={monto => setMonto( monto )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />
 
       <TextInput
@@ -378,7 +316,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
         placeholder="Fecha Vencimiento (dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVenc => setFechaVenc( fechaVenc )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />
 
       <TextInput
@@ -387,7 +325,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={rendimiento => setRendimiento(rendimiento)}
-        //editable={this.state.TextInputDisableHolder}
+        
       />    
       
       <Text>Deposito en Cuenta</Text>           
@@ -403,7 +341,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+    
   );
 };
 
@@ -422,18 +360,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+   
   },
   drop: {
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },

@@ -11,7 +11,7 @@ import {
 import styles from "./styles";
 import { inversiones } from "../../data/dataArrays";
 import MenuImage from "../../components/MenuImage/MenuImage";
-// import DrawerActions from "react-navigation";
+
 import { getCategoryName } from "../../data/MockDataAPI";
 import BotonRealizarTransferencia from "../../components/botonRealizarTransferencia/botonRealizarTransferencia";
 import BotonAgregarInversion from "../../components/botonAgregarInversion/botonAgregarInversion";
@@ -35,28 +35,28 @@ const CuentaBancaria = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
 
@@ -67,7 +67,7 @@ const CuentaBancaria = ({ navigation }) => {
   const select = async () => {
     await db.transaction((tx) => {
       tx.executeSql("select medios.banco banco, medios.numero numero, medios.cbu cbu, medios.debito debito, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user = movimientos.user where usuarios.logueado = 1 and medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
-        // console.log(rows);
+        
         setInversiones(rows._array);
       });
     });

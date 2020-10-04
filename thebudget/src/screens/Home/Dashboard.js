@@ -62,21 +62,7 @@ const HeadTable = ['Banco', 'N° Cuenta', 'Saldo'];
 
 
 const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
-  // const navigationOptions = () => {
-  //   return {
-  //     headerTransparent: 'true',
-  //     title: 'Ingresos',
-  //     headerLeft: () => <BackButton
-  //       onPress={() => {
-  //         navigation.goBack();
-  //       }}
-  //     />
-  //   };
-  // };
-
-  // const  navigationOptions = () => {
-  //   title: 'Ingresos'
-  // };
+  
   const handleSelect = async () => {
     await select();
   };
@@ -87,21 +73,21 @@ const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
 
@@ -110,7 +96,7 @@ const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
@@ -131,12 +117,12 @@ const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
         tx.executeSql("select medio as name, sum(monto) population, case medio when 'Efectivo' then '#ea4b8f' when 'Mercadopago' then '#523563' when 'Transferencia' then '#a3bf0a' when 'Acción' then '#d14e57' when 'Plazo Fijo' then '#ecb3ff' when 'Titulo' then '#c78164' else '#24a4b1' end color from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and tipo_mov='Egreso' and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' and medio is not null group by medio", [], (_, { rows }) => {
             setVariable1(rows._array);
             console.log(variable1);
-            //console.log(getMonth());
+            
           });
       tx.executeSql("select medios.banco banco, medios.numero numero, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then (-1)*movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user = movimientos.user where usuarios.logueado=1 and medios.esCuentaBancaria=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero", [], (_, { rows }) => {
         let array = rows._array.map(obj => Object.values(obj));
         setVariable2(array);
-        //console.log(getDate());
+        
       });
       tx.executeSql("select distinct tipo_mov x, sum(monto) y from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' group by tipo_mov union select 'Inversion' x, sum(monto*rendimiento) y from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1 and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' union select 'Prestamo' x, sum(monto/cuotas) y from prestamos inner join usuarios on prestamos.user = usuarios.id_usuario where usuarios.logueado = 1 and mes = '" + getMonth() + "' and anio = '" + getFullYear() + "' and tipo = 'Solicitado'", [], (_, { rows }) => {
         setVariable5(rows._array);
@@ -149,7 +135,7 @@ const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
       tx.executeSql("select 'Tarjeta', medios.vencimiento_resumen vencimiento, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user=movimientos.user where usuarios.logueado = 1 and medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') and medios.vencimientoResumenAnio = '"+ getFullYear()+"' and medios.vencimientoResumenSem = '"+ getWeek()+"' group by medios.vencimiento_resumen union select 'Plazo Fijo', vencimiento, sum(monto*rendimiento) from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1 and tipo = 'Plazo Fijo' and anio = '"+ getFullYear()+"' and sem= '"+ getWeek()+"' group by vencimiento   union select 'Prestamo', vencimiento, sum(monto/cuotas) from prestamos inner join usuarios on prestamos.user = usuarios.id_usuario where usuarios.logueado = 1 and tipo = 'Solicitado' and anio = '"+ getFullYear()+"' and sem= '"+ getWeek()+"' group by vencimiento", [], (_, { rows }) => {
         let array = rows._array.map(obj => Object.values(obj));
         setVariable3(array);
-        //console.log(getDate());
+        
       });
     });
   };
@@ -239,15 +225,7 @@ const HeadTable_2 = ['Detalle', 'Fecha', 'Monto'];
 Dashboard_Posta["navigationOptions"] = (screenProps) => ({
   title: "Dashboard",
 });
-// HomeScreen2.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {
