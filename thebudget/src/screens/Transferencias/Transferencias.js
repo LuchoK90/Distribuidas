@@ -181,7 +181,14 @@ const Transferencias = ({ navigation }) => {
     return year;
   };
  
-
+  const getWeek = () =>  {
+    var dd = new Date();
+    var d = new Date(Date.UTC(dd.getFullYear(), dd.getMonth(), dd.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
+};
   const handleSelect = async () => {
     await select();
   };
@@ -193,8 +200,8 @@ const Transferencias = ({ navigation }) => {
     console.log(monto+ cbu+descripcion+ medioCobro);
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Egreso', ? , ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
-        [getCurrentDate(), descripcion, monto, medioCobro, image, getDate(), getMonth(), getFullYear(), getWeek()]
+        "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Egreso', '' , ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
+        [getCurrentDate(), descripcion, monto, medioCobro, getDate(), getMonth(), getFullYear(), getWeek()]
       ),
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
@@ -209,7 +216,7 @@ const Transferencias = ({ navigation }) => {
   const select = async () => {
     console.log("entre al select")
     await db.transaction((tx) => {
-      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and esCuentaBancario = 1", [], (_, { rows }) => {
+      tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and esCuentaBancaria = 1", [], (_, { rows }) => {
         setVariable(rows._array);
       });
     });
@@ -218,7 +225,7 @@ const Transferencias = ({ navigation }) => {
   const continuar = () =>{
     
     add(monto, cbu,descripcion, medioCobro);
-    //navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
 
   /* const componentDidMount=()=> {

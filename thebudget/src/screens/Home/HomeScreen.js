@@ -25,7 +25,7 @@ import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as SQLite from "expo-sqlite";
-//import { useFocusEffect } from "@react-navigation/native";
+
 
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
@@ -33,7 +33,7 @@ const screenWidth = Dimensions.get("window").width;
 
 const HomeScreen = ({ navigation }) => {
   const [ingresos, setIngresos] = useState([]);
-  //const isFocused = useIsFocused();
+
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -143,18 +143,15 @@ const HomeScreen = ({ navigation }) => {
     ],
   };
 
-  /* useEffect(() => {
-    obtenerIngresosEnMemoria();
-    
-  }, []); */
+
   useEffect(() => {
-    console.log("ingresos",ingresos);
+   
     
   }, [ingresos]);
 
   useEffect(() => {
     if (navigation.isFocused) {
-      console.log("entre al use focus");
+      
       obtenerIngresosEnMemoria();
     }
     return () => {};
@@ -164,7 +161,7 @@ const HomeScreen = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from movimientos", [], (_, { rows }) => {
         setIngresos(rows._array);
-        console.log("carga data"+ingresos);
+        
       });
     });
   };
@@ -172,30 +169,24 @@ const HomeScreen = ({ navigation }) => {
 
 
   const createExcel = async (ing) => {
-    console.log("createExcel",ing);
+    
     var wb = XLSX.utils.book_new();
     /*Ingresos */
     var wsIngresos = XLSX.utils.json_to_sheet(ing);
     XLSX.utils.book_append_sheet(wb, wsIngresos, "Ingresos");
 
-    /*Egresos*/
-    // var wsExpenses = XLSX.utils.json_to_sheet(data.expenses);
-    // XLSX.utils.book_append_sheet(wb, wsExpenses, "Egresos");
+
 
     const wbout = XLSX.write(wb, {
       type: "base64",
       bookType: "xlsx",
     });
     const uri = FileSystem.cacheDirectory + "budgetGo.xlsx";
-    // console.log(`Writing to ${JSON.stringify(uri)} with text: ${wbout}`);
+
     await FileSystem.writeAsStringAsync(uri, wbout, {
       encoding: FileSystem.EncodingType.Base64,
     });
-    // FileSystem.readAsStringAsync(uri);
-    // FileSystem.downloadAsync();
-    // const a = await FileSystem.getInfoAsync(uri);
 
-    // await downloadFile(uri);
     await Sharing.shareAsync(uri, {
       mimeType:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -204,8 +195,7 @@ const HomeScreen = ({ navigation }) => {
     });
   };
   const handleDownload =   () => {
-    /*Primer se obtiene la data */
-     //await obtenerIngresosEnMemoria();
+
     createExcel(ingresos);
   };
 
@@ -214,7 +204,7 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           marginHorizontal: 5,
-          // flex: 1,
+
           marginTop: 10,
           flexDirection: "column",
           alignItems: "center",
@@ -245,15 +235,6 @@ HomeScreen["navigationOptions"] = (screenProps) => ({
   ),
 });
 
-// static navigationOptions = ({ navigation }) => ({
-//     title: "Home",
-//     headerLeft: () => (
-//       <MenuImage
-//         onPress={() => {
-//           navigation.openDrawer();
-//         }}
-//       />
-//     ),
-//   });
+
 
 export default HomeScreen;

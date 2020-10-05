@@ -148,18 +148,15 @@ const ExportExcel = ({ navigation }) => {
     ],
   };
 
-  /* useEffect(() => {
-    obtenerIngresosEnMemoria();
-    
-  }, []); */
+
   useEffect(() => {
-    console.log("ingresos",ingresos);
+    
     
   }, [ingresos]);
 
   useEffect(() => {
     if (navigation.isFocused) {
-      console.log("entre al use focus");
+     
       obtenerIngresosEnMemoria();
     }
     return () => {};
@@ -167,7 +164,7 @@ const ExportExcel = ({ navigation }) => {
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
   
@@ -175,7 +172,7 @@ const ExportExcel = ({ navigation }) => {
     await db.transaction((tx) => {
       tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         setIngresos(rows._array);
-        console.log("carga data"+ingresos);
+        
       });
     });
   };
@@ -183,30 +180,24 @@ const ExportExcel = ({ navigation }) => {
 
 
   const createExcel = async (ing) => {
-    console.log("createExcel",ing);
+    
     var wb = XLSX.utils.book_new();
-    /*Ingresos */
+    
     var wsIngresos = XLSX.utils.json_to_sheet(ing);
     XLSX.utils.book_append_sheet(wb, wsIngresos, "Ingresos");
 
-    /*Egresos*/
-    // var wsExpenses = XLSX.utils.json_to_sheet(data.expenses);
-    // XLSX.utils.book_append_sheet(wb, wsExpenses, "Egresos");
+    
 
     const wbout = XLSX.write(wb, {
       type: "base64",
       bookType: "xlsx",
     });
     const uri = FileSystem.cacheDirectory + "budgetGo.xlsx";
-    // console.log(`Writing to ${JSON.stringify(uri)} with text: ${wbout}`);
+    
     await FileSystem.writeAsStringAsync(uri, wbout, {
       encoding: FileSystem.EncodingType.Base64,
     });
-    // FileSystem.readAsStringAsync(uri);
-    // FileSystem.downloadAsync();
-    // const a = await FileSystem.getInfoAsync(uri);
-
-    // await downloadFile(uri);
+    
     await Sharing.shareAsync(uri, {
       mimeType:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -215,8 +206,7 @@ const ExportExcel = ({ navigation }) => {
     });
   };
   const handleDownload =   () => {
-    /*Primer se obtiene la data */
-     //await obtenerIngresosEnMemoria();
+    
     createExcel(ingresos);
   };
 
@@ -225,7 +215,7 @@ const ExportExcel = ({ navigation }) => {
       <View
         style={{
           marginHorizontal: 5,
-          // flex: 1,
+    
           marginTop: 10,
           flexDirection: "column",
           alignItems: "center",
@@ -277,15 +267,7 @@ const ExportExcel = ({ navigation }) => {
 ExportExcel["navigationOptions"] = (screenProps) => ({
   title: "ExportExcel",
 });
-// HomeScreen2.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {
