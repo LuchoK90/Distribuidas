@@ -170,7 +170,7 @@ const ExportExcel = ({ navigation }) => {
   
   const obtenerIngresosEnMemoria = async () => {
     await db.transaction((tx) => {
-      tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {
+      tx.executeSql("select movimientos.fecha, movimientos.detalle, movimientos.monto, movimientos.medio, movimientos.tipo_mov from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         setIngresos(rows._array);
         
       });
