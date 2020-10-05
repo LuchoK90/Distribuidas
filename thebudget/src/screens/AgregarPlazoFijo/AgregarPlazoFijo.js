@@ -209,7 +209,7 @@ const AgregarPlazoFijo = ({ navigation }) => {
     db.transaction((tx) => {
         tx.executeSql(
           "insert into movimientos ( fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem,user) values (?,'Plazo Fijo', ?, ?, 'Ingreso', '', ?, ?, ?, ?,(select id_usuario from usuarios where logueado = 1))",
-          [fechaVenc, monto*rendimiento, medioCobro, dia, mes, anio, sem]
+          [fechaVenc, monto+((monto*rendimiento)/100), medioCobro, dia, mes, anio, sem]
         ),
           (_, { rows }) => console.log(JSON.stringify(rows)),
           (_, { error }) => console.log(JSON.stringify(error));
