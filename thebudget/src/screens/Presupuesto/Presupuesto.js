@@ -141,18 +141,18 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     paddingLeft: 20,
     margin: 10
-    //borderRadius: 20
+    
   },
   drop:{
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10
-    //borderRadius: 20
+    
   },
   boton:{
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10
   },

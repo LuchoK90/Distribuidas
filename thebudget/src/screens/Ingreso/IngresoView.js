@@ -38,21 +38,7 @@ const IngresoView = ({ navigation }) => {
   const to = (page + 1) * itemsPerPage;
  
 
-  // const navigationOptions = () => {
-  //   return {
-  //     headerTransparent: 'true',
-  //     title: 'Ingresos',
-  //     headerLeft: () => <BackButton
-  //       onPress={() => {
-  //         navigation.goBack();
-  //       }}
-  //     />
-  //   };
-  // };
-
-  // const  navigationOptions = () => {
-  //   title: 'Ingresos'
-  // };
+  
   useEffect(() => {
    
     handleSelect();
@@ -65,19 +51,19 @@ const IngresoView = ({ navigation }) => {
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return year;
   };
 
   const select = () => {
-    console.log("entro al select");
+    
     db.transaction((tx) => {
       tx.executeSql("select * from movimientos inner join usuarios on movimientos.user = usuarios.id_usuario where usuarios.logueado = 1 and movimientos.tipo_mov='Ingreso' and movimientos.mes = '" + getMonth() + "' and movimientos.anio = '" + getFullYear() + "'", [], (_, { rows }) => {
         setVariable(rows._array);
@@ -152,15 +138,7 @@ const IngresoView = ({ navigation }) => {
 IngresoView["navigationOptions"] = (screenProps) => ({
   title: "Ingresos",
 });
-// IngresoView.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {

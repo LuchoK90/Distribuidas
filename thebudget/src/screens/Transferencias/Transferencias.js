@@ -40,7 +40,7 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const Transferencias = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+  
   const [variable, setVariable] = useState([]);
   const [medioCobro, setMedioCobro] = useState(' ');
   const [monto, setMonto] = useState(' ');
@@ -114,43 +114,7 @@ const Transferencias = ({ navigation }) => {
   ];
   
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
-/* 
-  const navigationOptions = ({ navigation }) => {
-    return {
-      headerTransparent: "true",
-      headerLeft: () => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      ),
-    };
-  }; */
-
  
-
-  /* setDate = (newDate) => {
-    this.setState({ chosenDate: newDate });
-  }; */
   function getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
@@ -197,7 +161,7 @@ const Transferencias = ({ navigation }) => {
   }, []);
 
   const add=(monto, cbu,descripcion, medioCobro) => {
-    console.log(monto+ cbu+descripcion+ medioCobro);
+    
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Egreso', '' , ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
@@ -206,15 +170,11 @@ const Transferencias = ({ navigation }) => {
         (_, { rows }) => console.log(JSON.stringify(rows)),
         (_, { error }) => console.log(JSON.stringify(error));
     });
-  /*  db.transaction((tx) => {
-      tx.executeSql(
-        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
-        });
-      });*/
+  
   };
 
   const select = async () => {
-    console.log("entre al select")
+    
     await db.transaction((tx) => {
       tx.executeSql("select distinct numero from medios inner join usuarios on medios.user = usuarios.id_usuario where usuarios.logueado = 1 and esCuentaBancaria = 1", [], (_, { rows }) => {
         setVariable(rows._array);
@@ -228,22 +188,10 @@ const Transferencias = ({ navigation }) => {
     navigation.navigate("Home");
   };
 
-  /* const componentDidMount=()=> {
-    getPermissionAsync();
-  } */
 
-  /* const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  }; */
 
   const _pickImage =   () => {
-    //try {
-      //let result = await ImagePicker.launchImageLibraryAsync({
+   
       let result =  ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -254,33 +202,11 @@ const Transferencias = ({ navigation }) => {
         this.setState({ image: result.uri });
       }
 
-      console.log(result);
-    //} catch (E) {
-      console.log(E);
-   // }
+      
+   
   };
    
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -318,7 +244,7 @@ const Transferencias = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={cbu => setCBU( cbu )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />
      
       <TextInput
@@ -327,7 +253,7 @@ const Transferencias = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={monto => setMonto( monto )}
-        //editable={this.state.TextInputDisableHolder}
+        
       />
 
       
@@ -339,13 +265,13 @@ const Transferencias = ({ navigation }) => {
         placeholder="Descripción"
         clearButtonMode="always"
         onChangeText={descripcion => setDescripcion( descripcion )}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
       <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+    
   );
 };
 
@@ -364,18 +290,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+   
   },
   drop: {
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+    
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },

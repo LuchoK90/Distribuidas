@@ -11,7 +11,7 @@ import {
 import styles from "./styles";
 import { inversiones } from "../../data/dataArrays";
 import MenuImage from "../../components/MenuImage/MenuImage";
-// import DrawerActions from "react-navigation";
+
 import { getCategoryName } from "../../data/MockDataAPI";
 import BotonRealizarTransferencia from "../../components/botonRealizarTransferencia/botonRealizarTransferencia";
 import BotonAgregarInversion from "../../components/botonAgregarInversion/botonAgregarInversion";
@@ -37,7 +37,7 @@ const Inversiones = ({ navigation }) => {
   const select = async () => {
     await db.transaction((tx) => {
       tx.executeSql("select * from inversiones inner join usuarios on inversiones.user = usuarios.id_usuario where usuarios.logueado = 1", [], (_, { rows }) => {
-        // console.log(rows);
+        
         setInversiones(rows._array);
       });
     });
@@ -51,7 +51,7 @@ const Inversiones = ({ navigation }) => {
       <Text style={styles.elemento}>RENDIMIENTO: {item.rendimiento} %</Text>
       <Text style={styles.elemento}>VENCIMIENTO: {item.vencimiento}</Text>
       <Text style={styles.elemento}>CUENTA: {item.cuenta}</Text>
-      {/* <Button title={"Ver Detalle"} onPress={() =>  navigation.navigate("InversionDetalle")}/> */}
+      
     </View>
   );
 

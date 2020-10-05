@@ -39,21 +39,7 @@ const PresupuestoView = ({ navigation }) => {
   const from = page * itemsPerPage;
   const to = (page + 1) * itemsPerPage;
 
-  // const navigationOptions = () => {
-  //   return {
-  //     headerTransparent: 'true',
-  //     title: 'Ingresos',
-  //     headerLeft: () => <BackButton
-  //       onPress={() => {
-  //         navigation.goBack();
-  //       }}
-  //     />
-  //   };
-  // };
-
-  // const  navigationOptions = () => {
-  //   title: 'Ingresos'
-  // };
+  
   const handleSelect = async () => {
     await select();
   };
@@ -148,15 +134,7 @@ const PresupuestoView = ({ navigation }) => {
 PresupuestoView["navigationOptions"] = (screenProps) => ({
   title: "Presupuestos",
 });
-// IngresoView.navigationOptions = (screenProps) => ({
-// headerTransparent: 'true',
-// title: 'Ingresos',
-// headerLeft: () => <BackButton
-//   onPress={() => {
-//     navigation.goBack();
-//   }}
-// />
-// });
+
 
 const styles = StyleSheet.create({
   viewContainer: {

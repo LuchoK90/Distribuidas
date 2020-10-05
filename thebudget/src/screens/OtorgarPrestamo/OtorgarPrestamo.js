@@ -40,11 +40,11 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const OtorgarPrestamo = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+  
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
-  //const navigationOptions = () => { PickList.navigationOptions };
+  
   const [detalleSelected, setDetalleSelected] = useState();
   const [monto, setMonto] = useState(' ');
   const [cantCuotas, setCantCuotas] = useState(' ');
@@ -77,24 +77,7 @@ const OtorgarPrestamo = ({ navigation }) => {
   ];
   
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
+  
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -111,34 +94,33 @@ const OtorgarPrestamo = ({ navigation }) => {
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return year;
   };
   function getWeekNumber(d) {
-    // Copy date so don't modify original
+  
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
+  
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-    // Get first day of year
+  
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    // Calculate full weeks to nearest Thursday
+  
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
+  
     return weekNo;
 }
 
@@ -167,7 +149,7 @@ const OtorgarPrestamo = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return date + "/" + month + "/" + year;
   };
 
@@ -180,11 +162,7 @@ const OtorgarPrestamo = ({ navigation }) => {
 
   const add=(medioCobro,monto,cantCuotas) => {
     console.log(medioCobro+monto+cantCuotas);
-  /*  db.transaction((tx) => {
-      tx.executeSql(
-        "update medios set saldo = (select saldo from medios where numero = '" + medioCobro+"') - '"+monto +"'where numero ='"+medioCobro+"'", [], (_, { rows }) => {
-       });
-    });*/
+  
     db.transaction((tx) => {
       tx.executeSql(
         "insert into prestamos ( tipo , monto ,cuenta, cuotas, vencimiento, dia , mes , anio , sem , user ) values ('Otorgado',?,?,?,'','','','','',(select id_usuario from usuarios where logueado = 1))",
@@ -217,22 +195,10 @@ const OtorgarPrestamo = ({ navigation }) => {
     navigation.navigate("Home");
   };
 
-  /* const componentDidMount=()=> {
-    getPermissionAsync();
-  } */
-
-  /* const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  }; */
+  
 
   const _pickImage =   () => {
-    //try {
-      //let result = await ImagePicker.launchImageLibraryAsync({
+  
       let result =  ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -244,32 +210,12 @@ const OtorgarPrestamo = ({ navigation }) => {
       }
 
       console.log(result);
-    //} catch (E) {
+  
       console.log(E);
-   // }
+  
   };
    
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -316,7 +262,7 @@ const OtorgarPrestamo = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={(monto) => setMonto( monto )}
-        //editable={this.state.TextInputDisableHolder}
+  
       />               
 
 <TextInput
@@ -324,7 +270,7 @@ const OtorgarPrestamo = ({ navigation }) => {
         placeholder="Fecha Vencimiento (dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVenc => setFechaVenc(fechaVenc)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
 
@@ -334,7 +280,7 @@ const OtorgarPrestamo = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={(cantCuotas) => setCantCuotas(cantCuotas)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />    
 
       
@@ -344,7 +290,7 @@ const OtorgarPrestamo = ({ navigation }) => {
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+  
   );
 };
 
@@ -363,18 +309,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   drop: {
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
   },

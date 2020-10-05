@@ -40,40 +40,21 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const PresupuestarPrestamos = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+  
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
-  //const navigationOptions = () => { PickList.navigationOptions };
+  
   const [detalleSelected, setDetalleSelected] = useState();
   let detalle = [
     {
       value: "Solicitado",
     },
-    /* {
-      value: "Solicitado",
-    }, */
+  
   ];
   const [monto, setMonto] = useState(0);
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
+  
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -105,7 +86,7 @@ const PresupuestarPrestamos = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return  month;
   };
   const getCurrentYear = () => {
@@ -113,7 +94,7 @@ const PresupuestarPrestamos = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return  year;
   };
 
@@ -125,7 +106,7 @@ const PresupuestarPrestamos = ({ navigation }) => {
   }, []);
 
   const add=(detalleSelected,monto) => {
-    console.log(detalleSelected+monto);
+    
     db.transaction((tx) => {
       tx.executeSql(
         "insert into presupuestos ( mes, anio , rubro ,categoria, monto, user) values (?,?,'Prestamo',?,?, (select id_usuario from usuarios where logueado = 1))",
@@ -141,27 +122,7 @@ const PresupuestarPrestamos = ({ navigation }) => {
     add(detalleSelected,monto);
     navigation.navigate("Home");
   };
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -179,14 +140,14 @@ const PresupuestarPrestamos = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={(monto) => setMonto(monto)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
       <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+  
   );
 };
 
@@ -205,18 +166,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   drop: {
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
   },

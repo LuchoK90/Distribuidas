@@ -40,11 +40,11 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const PresupuestarInversiones = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+  
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
-  //const navigationOptions = () => { PickList.navigationOptions };
+  
   const [detalleSelected, setDetalleSelected] = useState();
   let detalle = [
     {
@@ -59,24 +59,7 @@ const PresupuestarInversiones = ({ navigation }) => {
   ];
   const [monto, setMonto] = useState(0);
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
+  
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -108,7 +91,7 @@ const PresupuestarInversiones = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return  month;
   };
   const getCurrentYear = () => {
@@ -116,7 +99,7 @@ const PresupuestarInversiones = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+  
     return  year;
   };
 
@@ -144,27 +127,7 @@ const PresupuestarInversiones = ({ navigation }) => {
     add(detalleSelected,monto);
     navigation.navigate("Home");
   };
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -182,14 +145,14 @@ const PresupuestarInversiones = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={(monto) => setMonto(monto)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
       <Button title="Guardar" onPress={() => continuar()} />
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+  
   );
 };
 
@@ -208,18 +171,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+
   },
   drop: {
-    //borderColor: 'gray',
+
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+    
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },

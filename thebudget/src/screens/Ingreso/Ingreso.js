@@ -141,7 +141,7 @@ const Ingreso = ({navigation}) => {
   }, []);
 
   const add =  (monto, detalle, medio, fecha, dia, mes, anio, sem) => {
-    console.log("monto: "+monto + " detalle: " + detalle + " medio: " + medio);
+    
     db.transaction((tx) => {
       tx.executeSql(
         "insert into movimientos (fecha, detalle, monto, medio, tipo_mov, comprobante, dia, mes, anio, sem, user) values (?, ?, ?, ?, 'Ingreso', '', ?, ?, ?, ?, (select id_usuario from usuarios where logueado = 1))",
@@ -164,13 +164,13 @@ const Ingreso = ({navigation}) => {
   };
 
   const continuar = () =>{
-    console.log(medioCobro);
+    
     if(medioCobro!=='Efectivo'){
       if(isSelected){
-        console.log("Periodico no efectivo");
+        
 
     
-          console.log("entro al for ");
+        
       
        const addMonths = require('addmonths')
        Moment.locale('en');
@@ -179,7 +179,7 @@ const Ingreso = ({navigation}) => {
     
       for(let i=-1;i<cantMesesPeriodico;i++){
          
-        console.log(addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1);
+        
 
           
           
@@ -193,48 +193,35 @@ const Ingreso = ({navigation}) => {
     
           add(monto, detalleSelected, medioCobro,addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate() + "/" + (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1)+ "/"+addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getDate(), (addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getMonth()+1), addMonths(new Date(getFullYear(),getMonth(),getDate()), i).getFullYear(), getWeekNumber(addMonths(new Date(getFullYear(),getMonth(),getDate()), i)));
          navigation.navigate("Home");
-         navigation.closeDrawer();
+         
        }  
       }else{
     
-          console.log("no Periodico no efectivo");
+          
           add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
           navigation.navigate("Home");
-          navigation.closeDrawer();
+         
       }
     }else{
       if(isSelected){
-        console.log("Periodico  efectivo");
+        
     
-         Alert.alert(
-           
-            "No se pueden hacer ingresos períodicos con Efectivo",
-           
-            [
-           
-            {
-           
-            text: "Cancel",
-           
-            onPress: () => console.log("Cancel Pressed"),
-           
-            style: "cancel"
-           
-            },
-           
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-           
-            ],
-           
-            { cancelable: false }
-           
-            );
+        Alert.alert(
+          `No se pueden realizar ingresos  `,
+          `perdiódicos en efectivo`
+           ,
+           [
+             {
+               text: "Confirmar",
+             },
+           ]
+         )
       }else{
-        console.log("no Periodico efectivo");
+        
     
         add(monto, detalleSelected, medioCobro, getCurrentDate(), getDate(), getMonth(), getFullYear(), getWeek());
         navigation.navigate("Home");
-        navigation.closeDrawer();
+        
       }
     }
 
@@ -347,7 +334,7 @@ const styles = StyleSheet.create({
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },

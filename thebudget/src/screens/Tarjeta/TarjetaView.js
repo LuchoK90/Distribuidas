@@ -11,20 +11,12 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const TarjetaView = ({navigation}) => {
-  // static navigationOptions = ({ navigation }) => ({
-  //   title: 'Tarjetas',
-  //   headerLeft: () => <MenuImage
-  //     onPress={() => {
-  //       navigation.openDrawer();
-  //     }}
-  //   />
-  // });
+  
 
   const [variable, setVariable] = useState([]);
 
   const handleDetail = (item) => {
-    // const resp = await getPaymentTotalAmountService("TRC", item.number); // llamar select para traer info del detalle
-    // console.log("item",item)
+  
 
     Alert.alert(
      `Detalle tarjeta ${item.numero}`,
@@ -43,7 +35,7 @@ const TarjetaView = ({navigation}) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
@@ -66,11 +58,11 @@ const TarjetaView = ({navigation}) => {
  
 
   const select = () => {
-    console.log("entro al select");
+    
     db.transaction((tx) => {
       tx.executeSql("select medios.banco banco, medios.numero numero, medios.entidad entidad, (medios.saldo + Sum(case movimientos.tipo_mov when 'Ingreso' then movimientos.monto when 'Egreso' then movimientos.monto else 0 end)) saldo from medios inner join usuarios on medios.user = usuarios.id_usuario left join movimientos on medios.numero = movimientos.medio and medios.user = movimientos.user where usuarios.logueado = 1 and medios.esTarjetaCredito=1 and (movimientos.anio is null or movimientos.fecha <= '" + getCurrentDate() + "') group by medios.banco, medios.numero, medios.entidad", [], (_, { rows }) => {
         setVariable(rows._array);
-        console.log(rows._array)
+       
       });
     });
   };

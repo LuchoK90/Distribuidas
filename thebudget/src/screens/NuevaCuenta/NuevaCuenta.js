@@ -40,7 +40,7 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const NuevaCuenta = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
@@ -50,7 +50,7 @@ const NuevaCuenta = ({ navigation }) => {
   const [tarjetaAsociada, setTarjetaAsociada] = useState(' ');
   const [saldo, setSaldo] = useState(' ');
   
-  //const navigationOptions = () => { PickList.navigationOptions };
+ 
   
   let emisor=[{
     value: 'Visa',
@@ -63,24 +63,6 @@ const NuevaCuenta = ({ navigation }) => {
   }]
   const [monto, setMonto] = useState(0);
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -101,14 +83,14 @@ const NuevaCuenta = ({ navigation }) => {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+    
     return date + "/" + month + "/" + year;
   };
 
   
 
   const add=(banco, numeroCuenta, cbu, tarjetaAsociada, saldo) => {
-    console.log("insert cuentas " +banco + numeroCuenta + cbu + tarjetaAsociada + saldo);
+   
     db.transaction((tx) => {
       tx.executeSql(
         "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo,  vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem, user ) VALUES(?,?,?,?,?,'','','','',1,0,0, '', '', '', '', (select id_usuario from usuarios where logueado = 1));",
@@ -125,27 +107,7 @@ const NuevaCuenta = ({ navigation }) => {
   };
 
   
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+  
 
   return (
     <View style={styles.viewContainer}>
@@ -154,7 +116,7 @@ const NuevaCuenta = ({ navigation }) => {
         placeholder="Entidad Bancaria"
         clearButtonMode="always"
         onChangeText={banco => setBanco(banco)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
       <TextInput
@@ -162,7 +124,7 @@ const NuevaCuenta = ({ navigation }) => {
         placeholder="Número de Cuenta"
         clearButtonMode="always"
         onChangeText={numeroCuenta => setNumeroCuenta(numeroCuenta)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
       <TextInput
@@ -171,7 +133,7 @@ const NuevaCuenta = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={cbu => setCBU(cbu)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
       
       <TextInput
@@ -180,7 +142,7 @@ const NuevaCuenta = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={tarjetaAsociada => setTarjetaAsociada(tarjetaAsociada)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
 
       <TextInput
@@ -189,7 +151,7 @@ const NuevaCuenta = ({ navigation }) => {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={saldo => setSaldo(saldo)}
-        //editable={this.state.TextInputDisableHolder}
+  
       />
         
         
@@ -198,7 +160,7 @@ const NuevaCuenta = ({ navigation }) => {
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+  
   );
 };
 
@@ -217,18 +179,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   drop: {
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+  
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+  
     paddingLeft: 20,
     margin: 10,
   },

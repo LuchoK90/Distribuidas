@@ -40,7 +40,7 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("BASEBASEBASE_2.db");
 
 const Tarjeta = ({ navigation }) => {
-  //export default class Ingreso extends React.Component {
+
   const [variable, setVariable] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [medioCobro, setMedioCobro] = useState("");
@@ -50,7 +50,7 @@ const Tarjeta = ({ navigation }) => {
   const [fechaVenc, setFechaVenc] = useState(' ');
   const [fechaCierre, setFechaCierre] = useState(' ');
   const [fechaVencResumen, setFechaVencResumen] = useState(' ');
-  //const navigationOptions = () => { PickList.navigationOptions };
+
   const [detalleSelected, setDetalleSelected] = useState();
   let emisor=[{
     value: 'Visa',
@@ -63,24 +63,6 @@ const Tarjeta = ({ navigation }) => {
   }]
   const [monto, setMonto] = useState(0);
 
-  /*   value: 'Sueldo',
-}, {
-  value: 'Facturación Autónomo',
-}, {
-  value: 'Alquiler',
-}, {
-  value: 'Venta Bien Uso Personal',
-}, {
-  value: 'Otro',
-}] */
-
-  /*state = {
-    image: null,
-    monto: 0,
-    detalle: null,
-    medio: null,
-    fecha: null,
-  };*/
 
   const navigationOptions = ({ navigation }) => {
     return {
@@ -110,21 +92,21 @@ const Tarjeta = ({ navigation }) => {
   const getDate = () => {   
     var day = new Date().getDate();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+
     return day;
   };
 
   const getMonth = () => {   
     var month = new Date().getMonth() + 1;  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+
     return month;
   };
 
   const getFullYear = () => {   
     var year = new Date().getFullYear();  
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+
     return year;
   };
 
@@ -139,17 +121,16 @@ const Tarjeta = ({ navigation }) => {
 };
 
 function getWeekNumber(d) {
-    console.log(d);
-    // Copy date so don't modify original
+   
+
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
+
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-    // Get first day of year
+
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    // Calculate full weeks to nearest Thursday
+
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
+
     return weekNo;
 }
 
@@ -159,14 +140,14 @@ function getWeekNumber(d) {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    //console.log(date + '/' + month + '/' + year + "getCurrentDate" + this.state.fecha);
+
     return date + "/" + month + "/" + year;
   };
 
   
 
   const add = (banco, entidadEmisora, ultimosNum, fechaVenc, fechaCierre, fechaVencResumen, dia, mes, anio, sem) => {
-    console.log("insert medios " +banco + entidadEmisora + ultimosNum + fechaVenc + fechaCierre + fechaVencResumen + dia + mes + anio + sem);
+    
     db.transaction((tx) => {
       tx.executeSql(
         "insert into medios (banco , numero , cbu , debito , saldo ,entidad , vencimiento , cierre_resumen , vencimiento_resumen , esCuentaBancaria , esTarjetaCredito , esEfectivo, vencimientoResumenDia, vencimientoResumenMes, vencimientoResumenAnio, vencimientoResumenSem, user) VALUES(?,?,' ',' ',0.0,?,?,?,?,0,1,0,?,?,?,?, (select id_usuario from usuarios where logueado = 1));",
@@ -178,9 +159,7 @@ function getWeekNumber(d) {
   };
 
   const continuar = () =>{
-    console.log(fechaVencResumen.substring(0,2));
-    console.log(fechaVencResumen.substring(3,5));
-    console.log(fechaVencResumen.substring(6,10));
+    
     var dateString = fechaVencResumen;
     var dateParts = dateString.split("/");
     var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
@@ -189,27 +168,7 @@ function getWeekNumber(d) {
   };
 
   
-  //const { navigation } = this.props;
-  /* let medioCobro = [{
-    value: '74144/78998',
-  }, {
-    value: '74889/12321',
-  }, {
-    value: '46546/45645',
-  }, {
-    value: 'Efectivo',
-  },]*/
-  /*let detalle = [{
-    value: 'Sueldo',
-  }, {
-    value: 'Facturación Autónomo',
-  }, {
-    value: 'Alquiler',
-  }, {
-    value: 'Venta Bien Uso Personal',
-  }, {
-    value: 'Otro',
-  }]*/
+
 
   return (
     <View style={styles.viewContainer}>
@@ -218,7 +177,7 @@ function getWeekNumber(d) {
         placeholder="Banco"
         clearButtonMode="always"
         onChangeText={banco => setBanco(banco)}
-        //editable={this.state.TextInputDisableHolder}
+
       />
 
       <Dropdown
@@ -236,7 +195,7 @@ function getWeekNumber(d) {
         clearButtonMode="always"
         keyboardType="number-pad"
         onChangeText={ultimosNum => setUltimosNum(ultimosNum)}
-        //editable={this.state.TextInputDisableHolder}
+
       />
       
         
@@ -245,7 +204,7 @@ function getWeekNumber(d) {
         placeholder="Fecha Vencimiento (mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVenc => setFechaVenc(fechaVenc)}
-        //editable={this.state.TextInputDisableHolder}
+
       />
 
       <TextInput
@@ -253,7 +212,7 @@ function getWeekNumber(d) {
         placeholder="Fecha Cierre Resumen (dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaCierre => setFechaCierre(fechaCierre)}
-        //editable={this.state.TextInputDisableHolder}
+
       />
 
       <TextInput
@@ -261,14 +220,14 @@ function getWeekNumber(d) {
         placeholder="Fecha Vencimiento Resumen(dd/mm/aaaa)"
         clearButtonMode="always"
         onChangeText={fechaVencResumen => setFechaVencResumen(fechaVencResumen)}
-        //editable={this.state.TextInputDisableHolder}
+
       />
 
       <Button title="Guardar" onPress={() => continuar() } />
       
     </View>
 
-    //, navigation.navigate('IngresoView')
+
   );
 };
 
@@ -287,18 +246,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+    
   },
   drop: {
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
-    //borderRadius: 20
+    
   },
   boton: {
     height: 40,
     borderWidth: 1,
-    //borderColor: 'gray',
+    
     paddingLeft: 20,
     margin: 10,
   },
